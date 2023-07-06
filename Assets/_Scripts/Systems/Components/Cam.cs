@@ -37,8 +37,7 @@ public class Cam
                 Camera c = Object.FindObjectOfType<Camera>() != null ? Object.FindObjectOfType<Camera>() :
                     new GameObject(nameof(Camera)).AddComponent<Camera>();
                 Object.DontDestroyOnLoad(c);
-                c.orthographic = true;
-                c.orthographicSize = 5;
+                c.orthographic = false;
                 c.transform.position = Vector3.back * 10;
                 c.backgroundColor = new Color(Random.value * .25f, Random.value * .15f, Random.value * .2f);
 
