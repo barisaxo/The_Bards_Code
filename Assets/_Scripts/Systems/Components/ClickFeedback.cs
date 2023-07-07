@@ -4,6 +4,7 @@ using System;
 using UnityEngine.InputSystem;
 using System.Threading.Tasks;
 using UnityEngine.InputSystem.EnhancedTouch;
+using TMPro;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class Clickable : MonoBehaviour { }
@@ -34,7 +35,8 @@ internal sealed class ClickFeedback
     private static void AutoInit() => InputKey.MouseClickEvent += Io.Clicked;
 
     private bool holding;
-    private readonly List<(SpriteRenderer spriteRenderer, Color nativeColor)> feedback = new();
+    private readonly List<(SpriteRenderer sr, Color nativeColor)> spriteFeedback = new();
+    private readonly List<(TextMeshProUGUI tmp, Color nativeColor)> tmpFeedback = new();
 
     private GameObject _clickedGO;
     private GameObject ClickedGO
@@ -57,7 +59,12 @@ internal sealed class ClickFeedback
 
                 foreach (SpriteRenderer sr in _clickedGO.GetComponentsInChildren<SpriteRenderer>())
                 {
-                    feedback.Add((sr, sr.color));
+                    spriteFeedback.Add((sr, sr.color));
+                }
+
+                foreach (TextMeshProUGUI tmp in _clickedGO.GetComponentsInChildren<TextMeshProUGUI>())
+                {
+                    tmpFeedback.Add((tmp, tmp.color));
                 }
 
                 AlterColor();
@@ -78,7 +85,7 @@ internal sealed class ClickFeedback
                 holding = true;
                 // LHolding();
 
-                RaycastHit2D hit = Physics2D.Raycast(Cam.Io.Camera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero);
 
                 if (hit.collider != null && hit.collider.gameObject.TryGetComponent<Clickable>(out _))
                 {
@@ -129,19 +136,29 @@ internal sealed class ClickFeedback
 
     private void AlterColor()
     {
-        for (int i = 0; i < feedback.Count; i++)
+        for (int i = 0; i < spriteFeedback.Count; i++)
         {
-            feedback[i].spriteRenderer.color *= Color.gray;
+            spriteFeedback[i].sr.color *= Color.gray;
+        }
+
+        for (int i = 0; i < tmpFeedback.Count; i++)
+        {
+            tmpFeedback[i].tmp.color *= new Color(1, 1, 1, .65f);
         }
     }
 
     private void RestoreColor()
     {
-        for (int i = 0; i < feedback.Count; i++)
+        for (int i = 0; i < spriteFeedback.Count; i++)
         {
-            feedback[i].spriteRenderer.color = feedback[i].nativeColor;
+            spriteFeedback[i].sr.color = spriteFeedback[i].nativeColor;
         }
-        feedback.Clear();
+        for (int i = 0; i < tmpFeedback.Count; i++)
+        {
+            tmpFeedback[i].tmp.color = tmpFeedback[i].nativeColor;
+        }
+        spriteFeedback.Clear();
+        tmpFeedback.Clear();
     }
 
 }
@@ -151,7 +168,6 @@ public static class ClickableSystems
     public static GameObject GetClickable(this Card c)
     {
         var clickable = c.CardGO.GetComponentInChildren<Clickable>();
-        Debug.Log(clickable);
         return clickable.gameObject != null ? clickable.gameObject : null;
     }
 }

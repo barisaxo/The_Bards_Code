@@ -9,13 +9,16 @@ public static class CardSystems
     public static Card SetCanvasSortingOrder(this Card Card, int i) { Card.Canvas.sortingOrder = i; return Card; }
 
     public static Card SetFont(this Card Card, TMP_FontAsset f) { Card.TMP.font = f; return Card; }
+
     public static Card SetFontStyle(this Card Card, FontStyles f) { Card.TMP.fontStyle = f; return Card; }
+
     public static Card SetFontScale(this Card Card, float f) { Card.TMP.fontSizeMax = Card.CanvasScaler.referenceResolution.x * .043125f * f; return Card; }
+
     public static Card AutoSizeFont(this Card Card, bool tf) { Card.TMP.enableAutoSizing = tf; return Card; }
     public static Card WordWrap(this Card Card, bool tf) { Card.TMP.enableWordWrapping = tf; return Card; }
+
     public static Card SetTextString(this Card Card, string s) { Card.TMP.text = s; return Card; }
     public static Card SetTextColor(this Card Card, Color c) { Card.TMP.color = c; return Card; }
-    public static Card AutoSizeTextContainer(this Card Card, bool tf) { Card.TMP.autoSizeTextContainer = tf; return Card; }
     public static Card SetTextAlignment(this Card Card, TextAlignmentOptions a) { Card.TMP.alignment = a; return Card; }
     public static Card SetTMPRectPivot(this Card Card, Vector2 piv) { Card.TMP.rectTransform.pivot = piv; return Card; }
     public static Card SetTMPRectAnchor(this Card Card, Vector2 anc)
@@ -24,13 +27,14 @@ public static class CardSystems
         Card.TMP.rectTransform.anchorMax = anc;
         return Card;
     }
+    public static Card AutoSizeTextContainer(this Card Card, bool tf) { Card.TMP.autoSizeTextContainer = tf; return Card; }
 
     /// <summary>
     /// Use this to set the TMP Size.
     /// </summary>
     public static Card SetTMPSize(this Card Card, Vector2 v)
     {
-        Card.TMP.rectTransform.sizeDelta = .45f * Card.CanvasScaler.referenceResolution.y * v / Cam.Io.Camera.orthographicSize;
+        Card.TMP.rectTransform.sizeDelta = .5f * Card.CanvasScaler.referenceResolution.y * v / Cam.Io.Camera.orthographicSize;
         return Card;
     }
 
@@ -45,7 +49,7 @@ public static class CardSystems
     public static Card SetSizeAll(this Card Card, Vector2 v)
     {
         Card.SetGOSize(v);
-        return Card.SetTMPSize(v);
+        return Card.SetTMPPosition(v);
     }
 
     /// <summary>
@@ -83,6 +87,7 @@ public static class CardSystems
     public static Card SpriteClickable(this Card Card)
     {
         Card.Clickable = Card.CardGO.AddComponent<Clickable>();
+        Card.CardGO.gameObject.GetComponent<BoxCollider2D>().size = Card.CardGO.transform.localScale;
         return Card;
     }
 

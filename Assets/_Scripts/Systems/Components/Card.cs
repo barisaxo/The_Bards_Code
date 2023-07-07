@@ -29,25 +29,39 @@ public class Card
                 canvas.transform.SetParent(CardGO.transform, false);
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 canvas.sortingOrder = 1;
-                _cs = SetUpCanvasScaler(canvas);
+
+                if (_cs == null)
+                {
+                    _cs = SetUpCanvasScaler(canvas);
+                }
+
                 return canvas;
             }
         }
     }
 
     private CanvasScaler _cs;
-    public CanvasScaler CanvasScaler => _cs;//todo this is code smell
+    public CanvasScaler CanvasScaler
+    {
+        get
+        {
+            if (_cs == null) { _ = Canvas; _cs = SetUpCanvasScaler(Canvas); }
+            return _cs;
+        }
+    }
 
     CanvasScaler SetUpCanvasScaler(Canvas canvas)
     {
+        if (canvas.gameObject.TryGetComponent<CanvasScaler>(out CanvasScaler ca)) { return ca; }
+
         CanvasScaler cs = canvas.gameObject.AddComponent<CanvasScaler>();
         cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         cs.matchWidthOrHeight = 1;
 
-        //This keeps text the same size on every screen regardless of aspect or resolution;
+        //This keeps text the same size on every screen regardless of aspect or resolution. Chose 1024x768 arbitrarily.
         cs.referenceResolution = new Vector2(1024 * Cam.Io.Camera.aspect, 768);
 
-        //This set's the reference to act like orthographic
+        //This set's the reference size to act like orthographic
         cs.referencePixelsPerUnit = cs.referenceResolution.y / (Cam.Io.Camera.orthographicSize * 2);
 
         return cs;
