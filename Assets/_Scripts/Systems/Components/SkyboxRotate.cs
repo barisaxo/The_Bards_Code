@@ -17,10 +17,9 @@ public sealed class SkyboxRotate
     {
         while (Application.isPlaying)
         {
-            if (!Application.isPlaying) return;
-
-            skybox.SetFloat("_Rotation", skybox.GetFloat("_Rotation") + Time.deltaTime * rotSpeed);
             await Task.Yield();
+            if (!Application.isPlaying) return;
+            skybox.SetFloat("_Rotation", skybox.GetFloat("_Rotation") + Time.deltaTime * rotSpeed);
         }
     }
 }

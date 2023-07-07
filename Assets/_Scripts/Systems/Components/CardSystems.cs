@@ -36,14 +36,14 @@ public static class CardSystems
     /// <summary>
     /// Use this to set the sprites size.
     /// </summary>
-    public static Card SetSpriteSize(this Card Card, Vector2 v) { Card.Parent.transform.localScale = v; return Card; }
+    public static Card SetGOSize(this Card Card, Vector2 v) { Card.CardGO.transform.localScale = v; return Card; }
 
     /// <summary>
     /// Use this to set the sprite & TMP size. Don't use if there is no TMP or the call will create an empty canvas etc.
     /// </summary>
     public static Card SetSizeAll(this Card Card, Vector2 v)
     {
-        Card.Parent.transform.localScale = v;
+        Card.CardGO.transform.localScale = v;
         Card.TMP.rectTransform.sizeDelta = .45f * Card.CanvasScaler.referenceResolution.y * v / Cam.Io.Camera.orthographicSize;
         return Card;
     }
@@ -51,7 +51,7 @@ public static class CardSystems
     /// <summary>
     /// Use this to set the sprites position.
     /// </summary>
-    public static Card SetSpritePosition(this Card Card, Vector3 v) { Card.Parent.transform.position = v; return Card; }
+    public static Card SetGOPosition(this Card Card, Vector3 v) { Card.CardGO.transform.position = v; return Card; }
 
     /// <summary>
     /// Use this to set the TMP position.
@@ -73,7 +73,7 @@ public static class CardSystems
         Vector2 spos = Cam.Io.Camera.WorldToScreenPoint(v);
         Vector2 ssize = new Vector2(Cam.Io.Camera.pixelWidth, Cam.Io.Camera.pixelHeight);
 
-        Card.Parent.transform.position = v;
+        Card.CardGO.transform.position = v;
         Card.TMP.rectTransform.localPosition = new Vector2(spos.x - (ssize.x * .5f), spos.y - (ssize.y * .5f));
         return Card;
     }

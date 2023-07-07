@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class BootStrap_State : State
 {
+    private BootStrap_State() { }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Initialize()
     {
@@ -10,11 +12,6 @@ public class BootStrap_State : State
 
         state.SetStateDirectly(state);
     }
-
-    //public BootStrap_State()
-    //{
-
-    //}
 
     protected override void PrepareState(Action callback)
     {
@@ -24,6 +21,6 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
-        SetStateDirectly(new InputTest_State());
+        SetStateDirectly(new MainMenu_State());
     }
 }

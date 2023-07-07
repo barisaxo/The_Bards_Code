@@ -6,11 +6,11 @@ public class Card
 {
     public Card(string name, Transform parent)
     {
-        Parent = new GameObject(name);
-        Parent.transform.SetParent(parent, false);
+        CardGO = new GameObject(name);
+        CardGO.transform.SetParent(parent, false);
     }
 
-    public GameObject Parent { get; private set; }
+    public GameObject CardGO { get; private set; }
 
     private SpriteRenderer _sr;
     public SpriteRenderer SpriteRenderer
@@ -21,7 +21,7 @@ public class Card
 
             SpriteRenderer SetUpSR()
             {
-                SpriteRenderer sr = Parent.AddComponent<SpriteRenderer>();
+                SpriteRenderer sr = CardGO.AddComponent<SpriteRenderer>();
                 return sr;
             }
         }
@@ -37,7 +37,7 @@ public class Card
             Canvas SetUpCanvas()
             {
                 Canvas canvas = new GameObject(nameof(Canvas)).AddComponent<Canvas>();
-                canvas.transform.SetParent(Parent.transform, false);
+                canvas.transform.SetParent(CardGO.transform, false);
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 canvas.sortingOrder = 1;
                 _cs = SetUpCanvasScaler(canvas);
