@@ -54,9 +54,9 @@ public class Cam
 
 public static class CameraSystems
 {
-    public static float OrthoX(this Cam _)
+    public static float OrthoX(this Cam cam)
     {
-        return 5 * Cam.Io.Camera.aspect;
+        return cam.Camera.orthographicSize * cam.Camera.aspect;
     }
 
 }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using TMPro;
 
-namespace Menus.Main
+namespace Menus.MainMenu
 {
     public static class MainMenu_Systems
     {

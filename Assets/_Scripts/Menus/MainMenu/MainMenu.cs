@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-namespace Menus.Main
+namespace Menus.MainMenu
 {
     public class MainMenu
     {

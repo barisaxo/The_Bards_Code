@@ -1,4 +1,4 @@
-using Menus.Main;
+using Menus.MainMenu;
 using UnityEngine;
 
 public class MainMenu_State : State
