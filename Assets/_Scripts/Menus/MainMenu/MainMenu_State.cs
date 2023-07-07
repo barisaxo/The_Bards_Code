@@ -20,9 +20,6 @@ public class MainMenu_State : State
 
     protected override void ClickedOn(GameObject go)
     {
-
-        // if (go.transform.IsChildOf(MainMenu.NewGame.CardGO.transform)) ConfirmPressed();
-
         MainMenu.CurrItem = go switch
         {
             _ when go.transform.IsChildOf(MainMenu.NewGame.CardGO.transform) => MainMenuItem.NewGame,
@@ -35,15 +32,6 @@ public class MainMenu_State : State
         };
 
         ConfirmPressed();
-        // if (clicked != null)
-        // {
-        //     ConfirmPressed(clicked switch
-        //     {
-        //         MainMenu.Continue => MainMenuItem.Continue,
-
-        //     });
-        // }
-
     }
 
     protected override void DirectionPressed(Dir dir)
@@ -73,9 +61,6 @@ public class MainMenu_State : State
                 break;
             case MainMenuItem.Quit:
                 //SetStateDirectly(new QuitGameMenu_State());
-                break;
-            case null:
-                // MainMenu.ColorTexts();
                 break;
         }
 

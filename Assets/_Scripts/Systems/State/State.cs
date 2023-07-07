@@ -196,7 +196,7 @@ public abstract class State
     protected virtual void StartPressed() { }
 
     ///FIXME I have to ask that we don't use the Select button in this game because macOS
-    ///FIXME has some how bound that key on my controler to open a game search screen, and I can't disable it. =/ -Pino
+    ///FIXME has some how bound that key on my controller to open a game search screen, and I can't disable it. =/ -Pino
     //protected virtual void SelectPressed() { }
 
     protected virtual void LStickInput(Vector2 v2) { }

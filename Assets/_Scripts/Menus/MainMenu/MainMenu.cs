@@ -57,11 +57,15 @@ namespace Menus.Main
         private Card _continue;
         public Card Continue => _continue ??= new Card(nameof(Continue), Parent)
             .SetTextString(_continueString)
+            // .SetSizeAll(new Vector2(4, 1))
+            // .SetPositionAll(new Vector2(Cam.Io.OrthoX() - 2.5f, .8f))
             .SetTMPSize(new Vector2(4, 1))
+            .SetTMPPosition(new Vector2(Cam.Io.OrthoX() - 2.5f, 0.8f))
             .SetTextAlignment(TextAlignmentOptions.Right)
             .WordWrap(false)
-            .SetTMPPosition(new Vector2(Cam.Io.OrthoX() - 2.5f, .8f))
             .TMPClickable()
+            // .SetSprite(Assets.White)
+            // .SetSpriteColor(new Color(.5f, .5f, .5f, .5f))
             .SetFontScale(1);
 
         private Card _loadGame;

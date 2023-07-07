@@ -8,20 +8,6 @@ namespace Menus.Main
     {
         static MainMenuItem ItemCount => (MainMenuItem)Enum.GetNames(typeof(MainMenuItem)).Length;
 
-        //public static void Engage(this MainMenu mm)
-        //{
-        //    _ = mm;
-
-        //    SetActiveItems();
-        //    mm.ColorTexts();
-        //    mm.ScrollMenuOptions(Dir.Reset);
-        //}
-
-        //public static void Disengage(this MainMenu mm)
-        //{
-        //    mm.SelfDestruct();
-        //}
-
         public static void RotateLighthouse(this MainMenu mm)
         {
             mm.LightRotY += Time.deltaTime * 25;
