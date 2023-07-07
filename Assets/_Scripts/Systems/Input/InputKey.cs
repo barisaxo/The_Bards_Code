@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Collections;
+using System.Threading.Tasks;
 
 public static class InputKey
 {
@@ -10,6 +12,7 @@ public static class InputKey
     public static event Action<GamePadButton, Vector2> StickEvent;
     public static event Action<float> RStickAltXEvent;
     public static event Action<float> RStickAltYEvent;
+    public static event Action<MouseAction, Vector2> MouseClickEvent;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoInit()
@@ -68,10 +71,25 @@ public static class InputKey
         InputActions.Map.RStickAltY.performed += _ => RStickAltYEvent?.Invoke(-_.ReadValue<float>());
         InputActions.Map.RStickAltY.canceled += _ => RStickAltYEvent?.Invoke(0);
 
+        CheckForMouseClick();
+
         InputActions.Map.Enable();
     }
 
+    public static async void CheckForMouseClick()
+    {
+        while (Application.isPlaying)
+        {
+            await Task.Yield();
+            if (Input.GetMouseButtonDown(0)) { MouseClickEvent?.Invoke(MouseAction.LDown, Input.mousePosition); }
+            else if (Input.GetMouseButtonUp(0)) { MouseClickEvent?.Invoke(MouseAction.LUp, Input.mousePosition); }
+            else if (Input.GetMouseButton(0)) { MouseClickEvent?.Invoke(MouseAction.LHold, Input.mousePosition); }
+        }
+    }
+
 }
+
+public enum MouseAction { LDown, LUp, LHold }
 
 /// <summary>
 /// GamePad Buttons

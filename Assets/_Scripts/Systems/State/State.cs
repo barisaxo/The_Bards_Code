@@ -20,6 +20,7 @@ public abstract class State
         InputKey.StickEvent -= GPStickInput;
         InputKey.RStickAltXEvent -= RAltXInput;
         InputKey.RStickAltYEvent -= RAltYInput;
+        InputKey.MouseClickEvent -= Clicked;
         ReadRStickAlt = false;
     }
 
@@ -42,6 +43,7 @@ public abstract class State
         InputKey.StickEvent += GPStickInput;
         InputKey.RStickAltXEvent += RAltXInput;
         InputKey.RStickAltYEvent += RAltYInput;
+        InputKey.MouseClickEvent += Clicked;
         RStickAltReadLoop();
     }
 
@@ -114,6 +116,26 @@ public abstract class State
 
 
     #region INPUT HANDLING
+
+
+    protected virtual void Clicked(MouseAction action, Vector2 position)
+    {
+        if (action == MouseAction.LUp)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero);
+            if (hit.collider != null) ClickedOn(hit.collider.gameObject);
+        }
+    }
+
+    protected virtual void ClickedOn(GameObject go)
+    {
+        Debug.Log(go.name);
+    }
+
+    protected virtual void Holding(GameObject go) { }
+
+    protected virtual void UnClicked() { }
+
 
     private void GPInput(GamePadButton gpb)
     {

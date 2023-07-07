@@ -18,8 +18,37 @@ public class MainMenu_State : State
         MainMenu.SelfDestruct();
     }
 
+    protected override void ClickedOn(GameObject go)
+    {
+
+        // if (go.transform.IsChildOf(MainMenu.NewGame.CardGO.transform)) ConfirmPressed();
+
+        MainMenu.CurrItem = go switch
+        {
+            _ when go.transform.IsChildOf(MainMenu.NewGame.CardGO.transform) => MainMenuItem.NewGame,
+            _ when go.transform.IsChildOf(MainMenu.Continue.CardGO.transform) => MainMenuItem.Continue,
+            _ when go.transform.IsChildOf(MainMenu.LoadGame.CardGO.transform) => MainMenuItem.LoadGame,
+            _ when go.transform.IsChildOf(MainMenu.Quit.CardGO.transform) => MainMenuItem.Quit,
+            _ when go.transform.IsChildOf(MainMenu.Options.CardGO.transform) => MainMenuItem.Options,
+            _ when go.transform.IsChildOf(MainMenu.HowToPlay.CardGO.transform) => MainMenuItem.HowToPlay,
+            _ => null
+        };
+
+        ConfirmPressed();
+        // if (clicked != null)
+        // {
+        //     ConfirmPressed(clicked switch
+        //     {
+        //         MainMenu.Continue => MainMenuItem.Continue,
+
+        //     });
+        // }
+
+    }
+
     protected override void DirectionPressed(Dir dir)
     {
+        if (dir == Dir.Reset) return;
         MainMenu.ScrollMenuOptions(dir);
     }
 
@@ -30,22 +59,27 @@ public class MainMenu_State : State
             case MainMenuItem.Continue:
                 //FadeToState(new Aether.AetherExploreState());
                 break;
-            case MainMenuItem.Load:
+            case MainMenuItem.LoadGame:
                 //SetStateDirectly(new LoadSlotSelection_State());
                 break;
-                //case MainMenuItem.New:
-                //    //SetStateDirectly(new SaveSlotSelection_State());
-                //    break;
-                //case MainMenuItem.Options:
-                //    //SetStateDirectly(new OptionsMenu_State());
-                //    break;
-                //case MainMenuItem.HowToPlay:
-                //    //SetStateDirectly(new HowToPlay_State());
-                //    break;
-                //case MainMenuItem.Quit:
-                //    //SetStateDirectly(new QuitGameMenu_State());
-                //    break;
+            case MainMenuItem.NewGame:
+                //    SetStateDirectly(new SaveSlotSelection_State());
+                break;
+            case MainMenuItem.Options:
+                //SetStateDirectly(new OptionsMenu_State());
+                break;
+            case MainMenuItem.HowToPlay:
+                //SetStateDirectly(new HowToPlay_State());
+                break;
+            case MainMenuItem.Quit:
+                //SetStateDirectly(new QuitGameMenu_State());
+                break;
+            case null:
+                // MainMenu.ColorTexts();
+                break;
         }
+
+        MainMenu.ColorTexts();
     }
 
     protected override void StartPressed() { IsActive = !IsActive; RotateLightHouse(); }

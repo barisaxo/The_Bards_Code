@@ -36,44 +36,49 @@ namespace Menus.Main
 
         public static void ScrollMenuOptions(this MainMenu mm, Dir dir)
         {
+            Debug.Log(mm.CurrItem);
             switch (dir)
             {
-                case Dir.Up: mm.CurrItem = PrevItem(); mm.ColorTexts(); break;
-                case Dir.Down: mm.CurrItem = NextItem(); mm.ColorTexts(); break;
+                case Dir.Up: mm.CurrItem = PrevItem(); break;
+                case Dir.Down: mm.CurrItem = NextItem(); break;
             }
             DontScrollDisabledOptions();
             mm.ColorTexts();
 
             void DontScrollDisabledOptions()
             {
-                if (!mm.ItemText(mm.CurrItem).CardGO.activeInHierarchy)
+                if (!mm.GetCardItem(mm.CurrItem).CardGO.activeInHierarchy)
                 {
-                    mm.ScrollMenuOptions(Dir.Down); return;
+                    mm.ScrollMenuOptions(Dir.Down);
+                    return;
                 }
             }
 
-            MainMenuItem PrevItem() => mm.CurrItem == 0 ? 0 : mm.CurrItem - 1;
-            MainMenuItem NextItem() => mm.CurrItem == ItemCount - 1 ? mm.CurrItem : mm.CurrItem + 1;
+            MainMenuItem? PrevItem() => mm.CurrItem == null ? null : mm.CurrItem <= 0 ? 0 : mm.CurrItem - 1;
+            MainMenuItem? NextItem() => mm.CurrItem == null ? null : mm.CurrItem == ItemCount - 1 ? mm.CurrItem : mm.CurrItem + 1;
         }
 
         public static void ColorTexts(this MainMenu mm)
         {
+            Debug.Log(mm.CurrItem);
             for (MainMenuItem i = 0; i < ItemCount; i++)
             {
-                if (mm.ItemText(i).CardGO.activeInHierarchy)
-                { mm.ItemText(i).SetTextColor(mm.CurrItem == i ? Color.white : Color.gray); }
+                if (mm.GetCardItem(i).CardGO.activeInHierarchy)
+                {
+                    mm.GetCardItem(i).SetTextColor(mm.CurrItem == i ? Color.white : Color.gray);
+                }
             }
         }
 
-        private static Card ItemText(this MainMenu mm, MainMenuItem item) => item switch
+        private static Card GetCardItem(this MainMenu mm, MainMenuItem? item) => item switch
         {
             MainMenuItem.Continue => mm.Continue,
-            MainMenuItem.Load => mm.LoadGame,
-            MainMenuItem.New => mm.NewGame,
+            MainMenuItem.LoadGame => mm.LoadGame,
+            MainMenuItem.NewGame => mm.NewGame,
             MainMenuItem.Options => mm.Options,
             MainMenuItem.HowToPlay => mm.HowToPlay,
             MainMenuItem.Quit => mm.Quit,
-            _ => mm.Quit,
+            _ => null,
         };
 
     }

@@ -12,6 +12,8 @@ public class Card
 
     public GameObject CardGO { get; private set; }
 
+    public Clickable Clickable;
+
     private SpriteRenderer _sr;
     public SpriteRenderer SpriteRenderer
     {
@@ -38,10 +40,10 @@ public class Card
             {
                 Canvas canvas = new GameObject(nameof(Canvas)).AddComponent<Canvas>();
                 canvas.transform.SetParent(CardGO.transform, false);
-                canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                canvas.worldCamera = Cam.Io.UICam;
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                // canvas.worldCamera = Cam.Io.UICam;
                 canvas.sortingOrder = 1;
-                canvas.gameObject.layer = 5;
+                // canvas.gameObject.layer = 5;
                 _cs = SetUpCanvasScaler(canvas);
                 return canvas;
             }
@@ -56,8 +58,8 @@ public class Card
         CanvasScaler cs = canvas.gameObject.AddComponent<CanvasScaler>();
         cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         cs.matchWidthOrHeight = 1;
-        cs.referenceResolution = new Vector2(1024, 768);
-        cs.referencePixelsPerUnit = Cam.Io.Camera.pixelHeight * .2f;//new Vector2(Cam.Io.Camera.pixelWidth, Cam.Io.Camera.pixelHeight);
+        cs.referenceResolution = new Vector2(1024 * Cam.Io.Camera.aspect, 768);
+        cs.referencePixelsPerUnit = cs.referenceResolution.y * .1f;//new Vector2(Cam.Io.Camera.pixelWidth, Cam.Io.Camera.pixelHeight);
         return cs;
     }
 

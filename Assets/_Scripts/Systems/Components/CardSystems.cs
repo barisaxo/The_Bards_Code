@@ -34,7 +34,7 @@ public static class CardSystems
     /// </summary>
     public static Card SetTMPSize(this Card Card, Vector2 v)
     {
-        //Card.TMP.rectTransform.sizeDelta = .45f * Card.CanvasScaler.referenceResolution.y * v / Cam.Io.UICam.orthographicSize;
+        Card.TMP.rectTransform.sizeDelta = .45f * Card.CanvasScaler.referenceResolution.y * v / Cam.Io.Camera.orthographicSize;
         return Card;
     }
 
@@ -62,17 +62,14 @@ public static class CardSystems
     /// </summary>
     public static Card SetTMPPosition(this Card Card, Vector3 v)
     {
-        //  Vector2 Card.CanvasScaler.referenceResolution = Card.CanvasScaler.referenceResolution;
-
-        Vector2 screenPos = Cam.Io.UICam.WorldToScreenPoint(
-            new Vector2(v.x * (Card.CanvasScaler.referenceResolution.x / Cam.Io.UICam.pixelWidth),
-                        v.y * (Card.CanvasScaler.referenceResolution.y / Cam.Io.UICam.pixelHeight)));
-        Debug.Log(v + " " + screenPos);
-        //new Vector2(Cam.Io.UICam.pixelWidth, Cam.Io.UICam.pixelHeight);
-        Card.TMP.rectTransform.localPosition =
-        new Vector2(screenPos.x - (Cam.Io.UICam.pixelWidth * .5f),
-                    screenPos.y - (Cam.Io.UICam.pixelHeight * .5f));
+        Card.TMP.rectTransform.localPosition = Card.CanvasScaler.referencePixelsPerUnit * v;
         return Card;
+    }
+
+    public static Card OffsetTMPPositionBy(this Card card, Vector2 v2)
+    {
+        card.TMP.rectTransform.localPosition += (Vector3)(card.TMP.rectTransform.sizeDelta * v2);
+        return card;
     }
 
     /// <summary>
@@ -87,6 +84,18 @@ public static class CardSystems
     public static Card SetSprite(this Card Card, Sprite s) { Card.SpriteRenderer.sprite = s; return Card; }
     public static Card SetSpriteColor(this Card Card, Color c) { Card.SpriteRenderer.color = c; return Card; }
 
+    public static Card SpriteClickable(this Card Card)
+    {
+        Card.Clickable = Card.CardGO.AddComponent<Clickable>();
+        Card.CardGO.gameObject.GetComponent<BoxCollider2D>().size = Card.CardGO.transform.localScale;
+        return Card;
+    }
+
+    public static Card TMPClickable(this Card Card)
+    {
+        Card.Clickable = Card.TMP.gameObject.AddComponent<Clickable>();
+        Card.TMP.gameObject.GetComponent<BoxCollider2D>().size = Card.TMP.rectTransform.sizeDelta;
+        return Card;
+    }
+
 }
-
-
