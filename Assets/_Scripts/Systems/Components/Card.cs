@@ -48,7 +48,7 @@ public class Card
         cs.referenceResolution = new Vector2(1024 * Cam.Io.Camera.aspect, 768);
 
         //This set's the reference to act like orthographic
-        cs.referencePixelsPerUnit = cs.referenceResolution.y / (Cam.Io.Camera.aspect * 2);
+        cs.referencePixelsPerUnit = cs.referenceResolution.y / (Cam.Io.Camera.orthographicSize * 2);
 
         return cs;
     }
