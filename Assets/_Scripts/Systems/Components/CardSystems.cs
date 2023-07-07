@@ -20,8 +20,13 @@ public static class CardSystems
     public static Card SetTextString(this Card Card, string s) { Card.TMP.text = s; return Card; }
     public static Card SetTextColor(this Card Card, Color c) { Card.TMP.color = c; return Card; }
     public static Card SetTextAlignment(this Card Card, TextAlignmentOptions a) { Card.TMP.alignment = a; return Card; }
-
-
+    public static Card SetTMPRectPivot(this Card Card, Vector2 piv) { Card.TMP.rectTransform.pivot = piv; return Card; }
+    public static Card SetTMPRectAnchor(this Card Card, Vector2 anc)
+    {
+        Card.TMP.rectTransform.anchorMin = anc;
+        Card.TMP.rectTransform.anchorMax = anc;
+        return Card;
+    }
     public static Card AutoSizeTextContainer(this Card Card, bool tf) { Card.TMP.autoSizeTextContainer = tf; return Card; }
 
     /// <summary>
@@ -29,8 +34,8 @@ public static class CardSystems
     /// </summary>
     public static Card SetTMPSize(this Card Card, Vector2 v)
     {
-        Card.TMP.rectTransform.sizeDelta = .45f * Card.CanvasScaler.referenceResolution.y * v / Cam.Io.Camera.orthographicSize;
-        ; return Card;
+        //Card.TMP.rectTransform.sizeDelta = .45f * Card.CanvasScaler.referenceResolution.y * v / Cam.Io.UICam.orthographicSize;
+        return Card;
     }
 
     /// <summary>
@@ -43,9 +48,8 @@ public static class CardSystems
     /// </summary>
     public static Card SetSizeAll(this Card Card, Vector2 v)
     {
-        Card.CardGO.transform.localScale = v;
-        Card.TMP.rectTransform.sizeDelta = .45f * Card.CanvasScaler.referenceResolution.y * v / Cam.Io.Camera.orthographicSize;
-        return Card;
+        Card.SetGOSize(v);
+        return Card.SetTMPPosition(v);
     }
 
     /// <summary>
@@ -58,10 +62,16 @@ public static class CardSystems
     /// </summary>
     public static Card SetTMPPosition(this Card Card, Vector3 v)
     {
-        Vector2 spos = Cam.Io.Camera.WorldToScreenPoint(v);
-        Vector2 ssize = new Vector2(Cam.Io.Camera.pixelWidth, Cam.Io.Camera.pixelHeight);
+        //  Vector2 Card.CanvasScaler.referenceResolution = Card.CanvasScaler.referenceResolution;
 
-        Card.TMP.rectTransform.localPosition = new Vector2(spos.x - (ssize.x * .5f), spos.y - (ssize.y * .5f));
+        Vector2 screenPos = Cam.Io.UICam.WorldToScreenPoint(
+            new Vector2(v.x * (Card.CanvasScaler.referenceResolution.x / Cam.Io.UICam.pixelWidth),
+                        v.y * (Card.CanvasScaler.referenceResolution.y / Cam.Io.UICam.pixelHeight)));
+        Debug.Log(v + " " + screenPos);
+        //new Vector2(Cam.Io.UICam.pixelWidth, Cam.Io.UICam.pixelHeight);
+        Card.TMP.rectTransform.localPosition =
+        new Vector2(screenPos.x - (Cam.Io.UICam.pixelWidth * .5f),
+                    screenPos.y - (Cam.Io.UICam.pixelHeight * .5f));
         return Card;
     }
 
@@ -70,12 +80,8 @@ public static class CardSystems
     /// </summary>
     public static Card SetPositionAll(this Card Card, Vector3 v)
     {
-        Vector2 spos = Cam.Io.Camera.WorldToScreenPoint(v);
-        Vector2 ssize = new Vector2(Cam.Io.Camera.pixelWidth, Cam.Io.Camera.pixelHeight);
-
-        Card.CardGO.transform.position = v;
-        Card.TMP.rectTransform.localPosition = new Vector2(spos.x - (ssize.x * .5f), spos.y - (ssize.y * .5f));
-        return Card;
+        Card.SetGOPosition(v);
+        return Card.SetTMPPosition(v);
     }
 
     public static Card SetSprite(this Card Card, Sprite s) { Card.SpriteRenderer.sprite = s; return Card; }

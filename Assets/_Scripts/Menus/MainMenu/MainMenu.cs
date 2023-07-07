@@ -12,9 +12,6 @@ namespace Menus.Main
         {
             _ = Parent;
 
-            //_ = Canvas;
-            //_ = CanvasScaler;
-
             //_ = Continue_Text;
             //_ = Options_Text;
             //_ = NewGame_Text;
@@ -70,7 +67,7 @@ namespace Menus.Main
 
         public const string _continueString = "CONTINUE";
         public const string _loadString = "LOAD GAME";
-        public const string _newString = "NEW GAME";
+        public const string _newGameString = "NEW GAME";
         public const string _optionsString = "OPTIONS";
         public const string _howToString = "HOW TO PLAY";
         public const string _quitString = "QUIT";
@@ -85,70 +82,59 @@ namespace Menus.Main
         public Card Continue => _continue ??= new Card(nameof(Continue), Parent)
             .SetTextString(_continueString)
             .SetTMPSize(new Vector2(3, 1))
-            .SetTMPPosition(new Vector2(3, 0.8f))
             .SetTextAlignment(TextAlignmentOptions.Right)
+            //.SetTMPRectAnchor(new Vector2(1, .5f))
+            .WordWrap(false)
+            .SetTMPPosition(new Vector2(Cam.Io.OrthoX() - 1, 0.8f))
             .SetFontScale(1);
 
         private Card _loadGame;
         public Card LoadGame => _loadGame ??= new Card(nameof(LoadGame), Parent)
             .SetTextString(_loadString)
             .SetTMPSize(new Vector2(3, 1))
-            .SetTMPPosition(new Vector2(3, 0f))
+            //.SetTMPRectAnchor(new Vector2(1, .5f))
+            .SetTMPPosition(new Vector2(-1, 0f))
             .SetTextAlignment(TextAlignmentOptions.Right)
+            .WordWrap(false)
             .SetFontScale(1);
 
 
-        //private TextMeshProUGUI newGame_Text;
-        //public TextMeshProUGUI NewGame_Text => newGame_Text != null ? newGame_Text :
-        //    newGame_Text = newGame_Text.SetUpText(
-        //        canvas: Canvas,
-        //        canvasScaler: CanvasScaler,
-        //        cam: Camera,
-        //        name: nameof(NewGame_Text),
-        //        text: _new,
-        //        size: new Vector2(3, 1),
-        //        pos: new Vector2(Helper.PerWidth(3, Camera), -.8f),
-        //        alignment: TextAlignmentOptions.Right,
-        //        fontScale: 1f);
+        private Card _newGame;
+        public Card NewGame => _newGame ??= new Card(nameof(NewGame), Parent)
+            .SetTextString(_newGameString)
+            .SetTMPSize(new Vector2(3, 1))
+            .SetTMPPosition(new Vector2(6, -.8f))
+            .SetTextAlignment(TextAlignmentOptions.Right)
+            .WordWrap(false)
+            .SetFontScale(1);
 
-        //private TextMeshProUGUI options_Text;
-        //public TextMeshProUGUI Options_Text => options_Text != null ? options_Text :
-        //    options_Text = options_Text.SetUpText(
-        //        canvas: Canvas,
-        //        canvasScaler: CanvasScaler,
-        //        cam: Camera,
-        //        name: nameof(Options_Text),
-        //        text: _options,
-        //        size: new Vector2(3, 1),
-        //        pos: new Vector2(Helper.PerWidth(3, Camera), -1.6f),
-        //        alignment: TextAlignmentOptions.Right,
-        //        fontScale: 1f);
+        private Card _options;
+        public Card Options => _options ??= new Card(nameof(Options), Parent)
+            .SetTextString(_optionsString)
+            .SetTMPSize(new Vector2(3, 1))
+            .SetTMPPosition(new Vector2(6, -1.6f))
+            .SetTextAlignment(TextAlignmentOptions.Right)
+            .WordWrap(false)
+            .SetFontScale(1);
 
-        //private TextMeshProUGUI howTo_Text;
-        //public TextMeshProUGUI HowTo_Text => howTo_Text != null ? howTo_Text :
-        //    howTo_Text = howTo_Text.SetUpText(
-        //        canvas: Canvas,
-        //        canvasScaler: CanvasScaler,
-        //        cam: Camera,
-        //        name: nameof(HowTo_Text),
-        //        text: _howTo,
-        //        size: new Vector2(3, 1),
-        //        pos: new Vector2(Helper.PerWidth(3, Camera), -2.4f),
-        //        alignment: TextAlignmentOptions.Right,
-        //        fontScale: 1f);
 
-        //private TextMeshProUGUI quit_Text;
-        //public TextMeshProUGUI Quit_Text => quit_Text != null ? quit_Text :
-        //    quit_Text = quit_Text.SetUpText(
-        //        canvas: Canvas,
-        //        canvasScaler: CanvasScaler,
-        //        cam: Camera,
-        //        name: nameof(Quit_Text),
-        //        text: _quit,
-        //        size: new Vector2(3, 1),
-        //        pos: new Vector2(Helper.PerWidth(3, Camera), -4f),
-        //        alignment: TextAlignmentOptions.Right,
-        //        fontScale: 1f);
+        private Card _howToPlay;
+        public Card HowToPlay => _howToPlay ??= new Card(nameof(HowToPlay), Parent)
+            .SetTextString(_howToString)
+            .SetTMPSize(new Vector2(3, 1))
+            .SetTMPPosition(new Vector2(6, -2.4f))
+            .SetTextAlignment(TextAlignmentOptions.Right)
+            .WordWrap(false)
+            .SetFontScale(1);
+
+        private Card _quit;
+        public Card Quit => _quit ??= new Card(nameof(Quit), Parent)
+            .SetTextString(_quitString)
+            .SetTMPSize(new Vector2(3, 1))
+            .SetTMPPosition(new Vector2(6, -4f))
+            .SetTextAlignment(TextAlignmentOptions.Right)
+            .WordWrap(false)
+            .SetFontScale(1);
 
         #endregion MENU OBJECTS
 
@@ -244,9 +230,59 @@ namespace Menus.Main
         #endregion LIGHTHOUSES
     }
 
-    public enum MainMenuItem { Continue, Load }//, New, Options, HowToPlay, Quit }
+    public enum MainMenuItem { Continue, Load, New, Options, HowToPlay, Quit }//  }
 }
 
+//private TextMeshProUGUI quit_Text;
+//public TextMeshProUGUI Quit_Text => quit_Text != null ? quit_Text :
+//    quit_Text = quit_Text.SetUpText(
+//        canvas: Canvas,
+//        canvasScaler: CanvasScaler,
+//        cam: Camera,
+//        name: nameof(Quit_Text),
+//        text: _quit,
+//        size: new Vector2(3, 1),
+//        pos: new Vector2(Helper.PerWidth(3, Camera), -4f),
+//        alignment: TextAlignmentOptions.Right,
+//        fontScale: 1f);
+
+//private TextMeshProUGUI howTo_Text;
+//public TextMeshProUGUI HowTo_Text => howTo_Text != null ? howTo_Text :
+//    howTo_Text = howTo_Text.SetUpText(
+//        canvas: Canvas,
+//        canvasScaler: CanvasScaler,
+//        cam: Camera,
+//        name: nameof(HowTo_Text),
+//        text: _howTo,
+//        size: new Vector2(3, 1),
+//        pos: new Vector2(Helper.PerWidth(3, Camera), -2.4f),
+//        alignment: TextAlignmentOptions.Right,
+//        fontScale: 1f);
+//private TextMeshProUGUI options_Text;
+//public TextMeshProUGUI Options_Text => options_Text != null ? options_Text :
+//    options_Text = options_Text.SetUpText(
+//        canvas: Canvas,
+//        canvasScaler: CanvasScaler,
+//        cam: Camera,
+//        name: nameof(Options_Text),
+//        text: _options,
+//        size: new Vector2(3, 1),
+//        pos: new Vector2(Helper.PerWidth(3, Camera), -1.6f),
+//        alignment: TextAlignmentOptions.Right,
+//        fontScale: 1f);
+
+//private TextMeshProUGUI newGame_Text;
+//public TextMeshProUGUI NewGame_Text => newGame_Text != null ? newGame_Text :
+//    newGame_Text = newGame_Text.SetUpText(
+//        canvas: Canvas,
+//        canvasScaler: CanvasScaler,
+//        cam: Camera,
+//        name: nameof(NewGame_Text),
+//        text: _new,
+//        size: new Vector2(3, 1),
+//        pos: new Vector2(Helper.PerWidth(3, Camera), -.8f),
+//        alignment: TextAlignmentOptions.Right,
+//        fontScale: 1f);
 
 //private TextMeshProUGUI loadGame_Text;
 //public TextMeshProUGUI LoadGame_Text => loadGame_Text != null ? loadGame_Text :

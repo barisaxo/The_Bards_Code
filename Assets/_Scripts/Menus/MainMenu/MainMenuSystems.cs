@@ -69,12 +69,11 @@ namespace Menus.Main
         {
             MainMenuItem.Continue => mm.Continue,
             MainMenuItem.Load => mm.LoadGame,
-            //MainMenuItem.New => mm.NewGame_Text,
-            //MainMenuItem.Options => mm.Options_Text,
-            //MainMenuItem.HowToPlay => mm.HowTo_Text,
-            //MainMenuItem.Quit => mm.Quit_Text,
-            //_ => mm.Quit_Text,
-            _ => mm.Continue,
+            MainMenuItem.New => mm.NewGame,
+            MainMenuItem.Options => mm.Options,
+            MainMenuItem.HowToPlay => mm.HowToPlay,
+            MainMenuItem.Quit => mm.Quit,
+            _ => mm.Quit,
         };
 
     }
