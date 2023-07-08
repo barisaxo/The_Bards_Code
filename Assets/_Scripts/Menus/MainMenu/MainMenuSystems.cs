@@ -22,7 +22,6 @@ namespace Menus.MainMenu
 
         public static void ScrollMenuOptions(this MainMenu mm, Dir dir)
         {
-            Debug.Log(mm.CurrItem);
             switch (dir)
             {
                 case Dir.Up: mm.CurrItem = PrevItem(); break;
@@ -46,7 +45,6 @@ namespace Menus.MainMenu
 
         public static void ColorTexts(this MainMenu mm)
         {
-            Debug.Log(mm.CurrItem);
             for (MainMenuItem i = 0; i < ItemCount; i++)
             {
                 if (mm.GetCardItem(i).CardGO.activeInHierarchy)

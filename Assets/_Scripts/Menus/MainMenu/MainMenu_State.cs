@@ -3,18 +3,17 @@ using UnityEngine;
 
 public class MainMenu_State : State
 {
-    static MainMenu MainMenu;
-    bool IsActive = true;
+    MainMenu MainMenu;
 
     protected override void EngageState()
     {
         MainMenu = new MainMenu();
-        RotateLightHouse();
+        MonoHelper.OnUpdate += RotateLightHouse;
     }
 
     protected override void DisengageState()
     {
-        IsActive = false;
+        MonoHelper.OnUpdate -= RotateLightHouse;
         MainMenu.SelfDestruct();
     }
 
@@ -67,18 +66,22 @@ public class MainMenu_State : State
         MainMenu.ColorTexts();
     }
 
-    protected override void StartPressed() { IsActive = !IsActive; RotateLightHouse(); }
+    protected override void LStickInput(Vector2 v2)
+    {
+        MainMenu.CatBoat.transform.Rotate(new Vector3(0, v2.x, 0), Space.World);
+    }
+
+    protected override void RStickInput(Vector2 v2)
+    {
+        MainMenu.CatBoat.transform.localScale = (Vector3.one * 3) + ((Vector3)v2 * 2);
+    }
+
+    protected override void StartPressed() { }
     //protected override void SelectPressed() { }
 
-    async void RotateLightHouse()
+    void RotateLightHouse()
     {
-        while (IsActive)
-        {
-            await System.Threading.Tasks.Task.Yield();
-            if (!Application.isPlaying) return;
-
-            MainMenu.LightRotY += Time.deltaTime * 25;
-            MainMenu.LightHouse.transform.rotation = Quaternion.Euler(0, MainMenu.LightRotY, 0);
-        }
+        MainMenu.LightRotY += Time.deltaTime * 25;
+        MainMenu.LightHouse.transform.rotation = Quaternion.Euler(0, MainMenu.LightRotY, 0);
     }
 }

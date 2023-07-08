@@ -9,7 +9,6 @@ public class BootStrap_State : State
     private static void Initialize()
     {
         BootStrap_State state = new();
-
         state.SetStateDirectly(state);
     }
 
@@ -21,6 +20,6 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
-        SetStateDirectly(new MainMenu_State());
+        SetStateDirectly(new MainMenu_State());//new InputTest_State());//
     }
 }

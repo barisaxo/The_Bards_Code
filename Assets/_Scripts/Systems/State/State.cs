@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 
 public abstract class State
@@ -21,7 +21,8 @@ public abstract class State
         InputKey.RStickAltXEvent -= RAltXInput;
         InputKey.RStickAltYEvent -= RAltYInput;
         InputKey.MouseClickEvent -= Clicked;
-        ReadRStickAlt = false;
+        MonoHelper.OnUpdate -= RStickAltReadLoop;
+        MonoHelper.OnUpdate -= UpdateStickInput;
     }
 
     /// <summary>
@@ -44,7 +45,8 @@ public abstract class State
         InputKey.RStickAltXEvent += RAltXInput;
         InputKey.RStickAltYEvent += RAltYInput;
         InputKey.MouseClickEvent += Clicked;
-        RStickAltReadLoop();
+        MonoHelper.OnUpdate += RStickAltReadLoop;
+        MonoHelper.OnUpdate += UpdateStickInput;
     }
 
     /// <summary>
@@ -57,12 +59,11 @@ public abstract class State
         DisableInput();
         DisengageState();
 
-        newState.PrepareState(Initiate);
+        newState.PrepareState(Initiate().StartCoroutine);
 
-        async void Initiate()
+        IEnumerator Initiate()
         {
-            await Task.Yield();
-
+            yield return null;
             newState.EnableInput();
             newState.EngageState();
         }
@@ -70,39 +71,38 @@ public abstract class State
 
     protected void FadeToState(State newState)
     {
-        ScreenFader fader = new ScreenFader();
-        InitiateFade(newState);
+        ScreenFader fader = new();
+        InitiateFade(newState).StartCoroutine();
         return;
 
-        async void InitiateFade(State newState)
+        IEnumerator InitiateFade(State newState)
         {
             DisableInput();
-            await Task.Yield();
-            FadeOutToBlack(newState);
+            yield return null;
+            FadeOutToBlack(newState).StartCoroutine();
         }
 
-        async void FadeOutToBlack(State newState)
+        IEnumerator FadeOutToBlack(State newState)
         {
             while (fader.Screen.color.a < .99f)
             {
-                await Task.Yield();
-                if (!Application.isPlaying) return;
+                yield return null;
                 fader.Screen.color += new Color(0, 0, 0, Time.deltaTime * 1.25f);
             }
 
             fader.Screen.color = Color.black;
-            await Task.Yield();
-            newState.PrepareState(FadeInToScene);
+
+            yield return null;
+            newState.PrepareState(FadeInToScene().StartCoroutine);
         }
 
-        async void FadeInToScene()
+        IEnumerator FadeInToScene()
         {
             DisengageState();
 
             while (fader.Screen.color.a > .01f)
             {
-                await Task.Yield();
-                if (!Application.isPlaying) return;
+                yield return null;
                 fader.Screen.color -= new Color(0, 0, 0, Time.deltaTime * 2.0f);
             }
 
@@ -176,15 +176,6 @@ public abstract class State
         };
     }
 
-    private void GPStickInput(GamePadButton gpi, Vector2 v2)
-    {
-        switch (gpi)
-        {
-            case GamePadButton.LStick: LStickInput(v2); break;
-            case GamePadButton.RStick: RStickInput(v2); break;
-        }
-    }
-
     protected virtual void DirectionPressed(Dir dir) { }
 
     protected virtual void ConfirmPressed() { }
@@ -203,8 +194,25 @@ public abstract class State
 
     protected virtual void RStickInput(Vector2 v2) { }
 
+    private Vector2 LStick;
+    private Vector2 RStick;
+
+    private void GPStickInput(GamePadButton gpi, Vector2 v2)
+    {
+        switch (gpi)
+        {
+            case GamePadButton.LStick: LStick = v2; break;
+            case GamePadButton.RStick: RStick = v2; break;
+        }
+    }
+
+    private void UpdateStickInput()
+    {
+        if (LStick != Vector2.zero) LStickInput(LStick);
+        if (RStick != Vector2.zero) RStickInput(RStick);
+    }
+
     ///nintendo switch R stick
-    private bool ReadRStickAlt;
     private bool NewRStickAltThisFrame;
 
     private float _rStickAltX;
@@ -217,24 +225,11 @@ public abstract class State
     private void RAltXInput(float f) => RStickAltX = f;
     private void RAltYInput(float f) => RStickAltY = f;
 
-    private async void RStickAltReadLoop()
+    private void RStickAltReadLoop()
     {
-        ReadRStickAlt = true;
-        while (ReadRStickAlt)
-        {
-            if (!NewRStickAltThisFrame)
-            {
-                await Task.Yield();
-                if (!Application.isPlaying) return;
-                continue;
-            }
-
-            RStickInput(RStickAlt);
-            NewRStickAltThisFrame = false;
-
-            await Task.Yield();
-            if (!Application.isPlaying) return;
-        }
+        if (!NewRStickAltThisFrame) return;
+        RStickInput(RStickAlt);
+        NewRStickAltThisFrame = false;
     }
 
 

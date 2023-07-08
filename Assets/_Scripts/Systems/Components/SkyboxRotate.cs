@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Threading.Tasks;
+//using System;
 
 public sealed class SkyboxRotate
 {
@@ -8,18 +8,15 @@ public sealed class SkyboxRotate
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void AutoInit()
     {
-        Material skybox = RenderSettings.skybox = Assets.Stars;
-        skybox.SetFloat("_Rotation", Random.Range(-180, 180));
-        Rotate(.04f * Random.value < .5f ? 1 : -1, skybox);
+        Skybox = RenderSettings.skybox = Assets.Stars;
+        Skybox.SetFloat("_Rotation", Random.Range(-180, 180));
+        RotSpeed = .04f * Random.value < .5f ? 1 : -1;
+        MonoHelper.OnUpdate += Rotate;
     }
 
-    static async void Rotate(float rotSpeed, Material skybox)
-    {
-        while (Application.isPlaying)
-        {
-            await Task.Yield();
-            if (!Application.isPlaying) return;
-            skybox.SetFloat("_Rotation", skybox.GetFloat("_Rotation") + Time.deltaTime * rotSpeed);
-        }
-    }
+    static Material Skybox;
+    static float RotSpeed;
+
+    static void Rotate() =>
+        Skybox.SetFloat("_Rotation", Skybox.GetFloat("_Rotation") + Time.deltaTime * RotSpeed);
 }

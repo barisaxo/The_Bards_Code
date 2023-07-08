@@ -58,5 +58,9 @@ public static class CameraSystems
     {
         return cam.Camera.orthographicSize * cam.Camera.aspect;
     }
+    public static float OrthoY(this Cam cam)
+    {
+        return cam.Camera.orthographicSize;
+    }
 
 }

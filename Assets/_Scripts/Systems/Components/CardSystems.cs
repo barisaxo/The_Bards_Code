@@ -87,7 +87,7 @@ public static class CardSystems
     public static Card SpriteClickable(this Card Card)
     {
         Card.Clickable = Card.CardGO.AddComponent<Clickable>();
-        Card.CardGO.gameObject.GetComponent<BoxCollider2D>().size = Card.CardGO.transform.localScale;
+        Card.CardGO.GetComponent<BoxCollider2D>().size = Card.CardGO.transform.localScale;
         return Card;
     }
 

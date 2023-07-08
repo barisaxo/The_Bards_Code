@@ -204,6 +204,7 @@ namespace Menus.MainMenu
                     go.transform.SetParent(Parent.transform);
                     go.transform.position = new Vector3(-2, -1.5f, 0);
                     go.transform.localScale = Vector3.one * 3;
+                    go.transform.localRotation = Quaternion.Euler(new Vector3(0, -35, 100));
                     //go.AddComponent<RockTheBoat>();
                     return go;
                 }
