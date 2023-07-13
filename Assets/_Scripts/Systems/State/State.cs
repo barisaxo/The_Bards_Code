@@ -5,8 +5,10 @@ using UnityEngine;
 public abstract class State
 {
     #region REFERENCES
-
+    protected DataManager Data => DataManager.Io;
     #endregion REFERENCES
+
+
 
     #region STATE SYSTEMS
     ///These state systems are organized in order of execution
@@ -115,32 +117,57 @@ public abstract class State
 
 
 
+    #region INPUT
+    protected virtual void ClickedOn(GameObject go) { }
+    protected virtual void DirectionPressed(Dir dir) { }
+    protected virtual void ConfirmPressed() { }
+    protected virtual void InteractPressed() { }
+    protected virtual void CancelPressed() { }
+    protected virtual void StartPressed() { }
+    protected virtual void SelectPressed() { }
+    protected virtual void R1Pressed() { }
+    protected virtual void L1Pressed() { }
+    protected virtual void R2Pressed() { }
+    protected virtual void L2Pressed() { }
+    protected virtual void R3Pressed() { }
+    protected virtual void L3Pressed() { }
+    protected virtual void LStickInput(Vector2 v2) { }
+    protected virtual void RStickInput(Vector2 v2) { }
+    #endregion INPUT
+
+
+
     #region INPUT HANDLING
-
-
-    protected virtual void Clicked(MouseAction action, Vector2 position)
+    protected virtual void Clicked(MouseAction action, Vector3 mousePos)
     {
-        if (action == MouseAction.LUp)
+        if (action != MouseAction.LUp) return;
+
+        if (Cam.Io.Camera.orthographic)
         {
-            RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero);
+            RaycastHit2D hit = Physics2D.Raycast(Cam.Io.Camera.ScreenToWorldPoint(mousePos), Vector2.zero);
             if (hit.collider != null) ClickedOn(hit.collider.gameObject);
         }
+        else
+        {
+            RaycastHit2D hit = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
+            RaycastHit2D hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
+
+            if (hit.collider != null)
+            {
+                ClickedOn(hit.collider.gameObject);
+            }
+            else if (hitUI.collider != null)
+            {
+                ClickedOn(hitUI.collider.gameObject);
+            }
+        }
     }
-
-    protected virtual void ClickedOn(GameObject go)
-    {
-        Debug.Log(go.name);
-    }
-
-    protected virtual void Holding(GameObject go) { }
-
-    protected virtual void UnClicked() { }
-
 
     private void GPInput(GamePadButton gpb)
     {
         switch (gpb)
         {
+            #region BUTTON PRESSED
             case GamePadButton.Up_Press: DirectionPressed(Dir.Up); break;
             case GamePadButton.Down_Press: DirectionPressed(Dir.Down); break;
             case GamePadButton.Left_Press: DirectionPressed(Dir.Left); break;
@@ -149,15 +176,15 @@ public abstract class State
             case GamePadButton.East_Press: ConfirmPressed(); break;
             case GamePadButton.South_Press: CancelPressed(); break;
             case GamePadButton.Start_Press: StartPressed(); break;
-            //case GamePadButton.Select_Press: SelectPressed(); break;
-            case GamePadButton.R1_Press: break;
-            case GamePadButton.R2_Press: break;
-            case GamePadButton.R3_Press: break;
-            case GamePadButton.L1_Press: break;
-            case GamePadButton.L2_Press: break;
-            case GamePadButton.L3_Press: break;
-
-
+            case GamePadButton.Select_Press: SelectPressed(); break;
+            case GamePadButton.R1_Press: R1Pressed(); break;
+            case GamePadButton.R2_Press: R2Pressed(); break;
+            case GamePadButton.R3_Press: R3Pressed(); break;
+            case GamePadButton.L1_Press: L1Pressed(); break;
+            case GamePadButton.L2_Press: L2Pressed(); break;
+            case GamePadButton.L3_Press: L3Pressed(); break;
+            #endregion BUTTON PRESSED
+            #region BUTTON RELEASED
             case GamePadButton.Up_Release: DirectionPressed(Dir.Reset); break;
             case GamePadButton.Down_Release: DirectionPressed(Dir.Reset); break;
             case GamePadButton.Left_Release: DirectionPressed(Dir.Reset); break;
@@ -166,33 +193,16 @@ public abstract class State
             case GamePadButton.East_Release: break;
             case GamePadButton.South_Release: break;
             case GamePadButton.Start_Release: break;
-            //case GamePadButton.Select_Release: break;
+            case GamePadButton.Select_Release: break;
             case GamePadButton.R1_Release: break;
             case GamePadButton.R2_Release: break;
             case GamePadButton.R3_Release: break;
             case GamePadButton.L1_Release: break;
             case GamePadButton.L2_Release: break;
             case GamePadButton.L3_Release: break;
+                #endregion BUTTON RELEASED
         };
     }
-
-    protected virtual void DirectionPressed(Dir dir) { }
-
-    protected virtual void ConfirmPressed() { }
-
-    protected virtual void InteractPressed() { }
-
-    protected virtual void CancelPressed() { }
-
-    protected virtual void StartPressed() { }
-
-    ///FIXME I have to ask that we don't use the Select button in this game because macOS
-    ///FIXME has some how bound that key on my controller to open a game search screen, and I can't disable it. =/ -Pino
-    //protected virtual void SelectPressed() { }
-
-    protected virtual void LStickInput(Vector2 v2) { }
-
-    protected virtual void RStickInput(Vector2 v2) { }
 
     private Vector2 LStick;
     private Vector2 RStick;
@@ -212,15 +222,13 @@ public abstract class State
         if (RStick != Vector2.zero) RStickInput(RStick);
     }
 
-    ///nintendo switch R stick
+    ///nintendo switch R sticks are weird
     private bool NewRStickAltThisFrame;
-
+    private Vector2 RStickAlt => new(RStickAltX, RStickAltY);
     private float _rStickAltX;
     private float RStickAltX { get => _rStickAltX; set { NewRStickAltThisFrame = true; _rStickAltX = value; } }
     private float _rStickAltY;
     private float RStickAltY { get => _rStickAltY; set { NewRStickAltThisFrame = true; _rStickAltY = value; } }
-
-    private Vector2 RStickAlt => new(RStickAltX, RStickAltY);
 
     private void RAltXInput(float f) => RStickAltX = f;
     private void RAltYInput(float f) => RStickAltY = f;
@@ -231,7 +239,5 @@ public abstract class State
         RStickInput(RStickAlt);
         NewRStickAltThisFrame = false;
     }
-
-
     #endregion INPUT HANDLING
 }

@@ -29,6 +29,8 @@ public class MonoHelper : MonoBehaviour
 
     public static event Action OnUpdate;
     private void Update() => OnUpdate?.Invoke();
+    public static event Action OnLateUpdate;
+    private void LateUpdate() => OnLateUpdate?.Invoke();
 }
 
 public static class MonoSystems

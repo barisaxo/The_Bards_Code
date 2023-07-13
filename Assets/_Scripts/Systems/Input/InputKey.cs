@@ -10,7 +10,7 @@ public static class InputKey
     public static event Action<GamePadButton, Vector2> StickEvent;
     public static event Action<float> RStickAltXEvent;
     public static event Action<float> RStickAltYEvent;
-    public static event Action<MouseAction, Vector2> MouseClickEvent;
+    public static event Action<MouseAction, Vector3> MouseClickEvent;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoInit()

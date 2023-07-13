@@ -4,35 +4,47 @@ using TMPro;
 
 public class Card
 {
+    /// <summary>
+    /// The basis for any simple 2D sprite and/or text.
+    /// </summary>
     public Card(string name, Transform parent)
     {
-        CardGO = new GameObject(name);
-        CardGO.transform.SetParent(parent, false);
+        GO = new GameObject(name);
+        GO.transform.SetParent(parent, false);
     }
 
-    public GameObject CardGO { get; private set; }
+    /// <summary>
+    /// The parent GameObject. SpriteRenderer will be attatched to this, Canvas & TMP will be children.
+    /// </summary>
+    public GameObject GO { get; private set; }
 
+    /// <summary>
+    /// Do you want this card and/or Text to be clickable?
+    /// </summary>
     public Clickable Clickable;
 
     private SpriteRenderer _sr;
-    public SpriteRenderer SpriteRenderer => _sr != null ? _sr : _sr = CardGO.AddComponent<SpriteRenderer>();
+    /// <summary>
+    /// Lives on GO (the parent GameObject).
+    /// </summary>
+    public SpriteRenderer SpriteRenderer => _sr != null ? _sr : _sr = GO.AddComponent<SpriteRenderer>();
 
-    private Canvas _c;
+    private Canvas _canvas;
     public Canvas Canvas
     {
         get
         {
-            return _c != null ? _c : _c = SetUpCanvas();
+            return _canvas != null ? _canvas : _canvas = SetUpCanvas();
             Canvas SetUpCanvas()
             {
                 Canvas canvas = new GameObject(nameof(Canvas)).AddComponent<Canvas>();
-                canvas.transform.SetParent(CardGO.transform, false);
+                canvas.transform.SetParent(GO.transform, false);
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 canvas.sortingOrder = 1;
 
-                if (_cs == null)
+                if (_canvasScaler == null)
                 {
-                    _cs = SetUpCanvasScaler(canvas);
+                    _canvasScaler = SetUpCanvasScaler(canvas);
                 }
 
                 return canvas;
@@ -40,13 +52,13 @@ public class Card
         }
     }
 
-    private CanvasScaler _cs;
+    private CanvasScaler _canvasScaler;
     public CanvasScaler CanvasScaler
     {
         get
         {
-            if (_cs == null) { _ = Canvas; _cs = SetUpCanvasScaler(Canvas); }
-            return _cs;
+            if (_canvasScaler == null) { _canvasScaler = SetUpCanvasScaler(Canvas); }
+            return _canvasScaler;
         }
     }
 
@@ -57,12 +69,7 @@ public class Card
         CanvasScaler cs = canvas.gameObject.AddComponent<CanvasScaler>();
         cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         cs.matchWidthOrHeight = 1;
-
-        //This keeps text the same size on every screen regardless of aspect or resolution. Chose 1024x768 arbitrarily.
-        cs.referenceResolution = new Vector2(1024 * Cam.Io.Camera.aspect, 768);
-
-        //This set's the reference size to act like orthographic
-        cs.referencePixelsPerUnit = cs.referenceResolution.y / (Cam.Io.Camera.orthographicSize * 2);
+        cs.referenceResolution = new Vector2(Cam.Io.Camera.pixelWidth, Cam.Io.Camera.pixelHeight);
 
         return cs;
     }
@@ -87,9 +94,6 @@ public class Card
     }
 
     public string TextString { get => TMP.text; set => TMP.text = value; }
-
-
-
 }
 
 

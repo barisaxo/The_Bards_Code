@@ -60,27 +60,36 @@ internal sealed class ClickFeedback
         }
     }
 
-    private void Clicked(MouseAction action, Vector2 position)
+    private void Clicked(MouseAction action, Vector3 mousePos)
     {
-        switch (action)
+        if (action == MouseAction.LUp)
         {
-            case MouseAction.LUp:
-                Io.ClickedGO = null;
-                break;
+            ClickedGO = null;
+            return;
+        }
 
-            case MouseAction.LHold:
+        if (Cam.Io.Camera.orthographic)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(Cam.Io.Camera.ScreenToWorldPoint(mousePos), Vector2.zero);
+            if (hit.collider != null) ClickedGO = hit.collider.gameObject;
+        }
+        else
+        {
+            RaycastHit2D hitTMP = Physics2D.Raycast(mousePos, Vector2.zero);
+            RaycastHit2D hitGO = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
 
-                RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero);
-
-                if (hit.collider != null && hit.collider.gameObject.TryGetComponent<Clickable>(out _))
-                {
-                    Io.ClickedGO = hit.collider.gameObject;
-                }
-                else
-                {
-                    Io.ClickedGO = null;
-                }
-                break;
+            if (hitTMP.collider != null && hitTMP.collider.gameObject.TryGetComponent<Clickable>(out _))
+            {
+                ClickedGO = hitTMP.collider.gameObject;
+            }
+            else if (hitGO.collider != null && hitGO.collider.gameObject.TryGetComponent<Clickable>(out _))
+            {
+                ClickedGO = hitGO.collider.gameObject;
+            }
+            else
+            {
+                ClickedGO = null;
+            }
         }
     }
 
@@ -110,14 +119,13 @@ internal sealed class ClickFeedback
         spriteFeedback.Clear();
         tmpFeedback.Clear();
     }
-
 }
 
 public static class ClickableSystems
 {
     public static GameObject GetClickable(this Card c)
     {
-        var clickable = c.CardGO.GetComponentInChildren<Clickable>();
+        var clickable = c.GO.GetComponentInChildren<Clickable>();
         return clickable.gameObject != null ? clickable.gameObject : null;
     }
 }
