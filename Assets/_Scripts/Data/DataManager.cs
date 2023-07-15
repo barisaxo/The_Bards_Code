@@ -26,8 +26,8 @@ public class DataManager
     //private PlayerData _playerData;
     //public PlayerData PlayerData => _playerData ??= new();
 
-    //private GameplayData _gameplayData;
-    //public GameplayData GameplayData => _gameplayData ??= new();
+    private GameplayData _gameplayData;
+    public GameplayData GamePlay => _gameplayData ??= new();
 
     private VolumeData _volume;
     public VolumeData Volume => _volume ??= new();

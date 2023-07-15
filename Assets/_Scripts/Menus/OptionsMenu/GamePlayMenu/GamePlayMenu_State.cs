@@ -16,8 +16,8 @@ public class GamePlayMenu_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Options = new OptionsMenu().Initialize(OptionsMenu.OptionsItem.GamePlay);
-        GamePlayMenu = new GamePlayMenu().Initialize();
+        Options = (OptionsMenu)new OptionsMenu().Initialize(OptionsMenu.OptionsItem.GamePlay);
+        GamePlayMenu = (GamePlayMenu)new GamePlayMenu().Initialize(Data.GamePlay);
         callback();
     }
 
@@ -53,13 +53,13 @@ public class GamePlayMenu_State : State
             {
                 if (GamePlayMenu.Selection == GamePlayMenu.MenuItems[i])
                 {
-                    //VolumeMenu.Interact(optionsData);
+                    IncreaseItem(GamePlayMenu.Selection);
                     return;
                 }
                 else
                 {
                     GamePlayMenu.Selection = GamePlayMenu.MenuItems[i];
-                    GamePlayMenu.ColorTexts();
+                    GamePlayMenu.UpdateTextColors();
                     return;
                 }
             }
@@ -88,15 +88,21 @@ public class GamePlayMenu_State : State
         {
             SetStateDirectly(new VolumeMenu_State(RestoreState));
         }
-        else if (Options.Selection == Options.MenuItems[OptionsMenu.OptionsItem.Controls])
-        {
-            SetStateDirectly(new ShowControls_State(RestoreState));
-        }
+        // else if (Options.Selection == Options.MenuItems[OptionsMenu.OptionsItem.Controls])
+        // {
+        //     SetStateDirectly(new ShowControls_State(RestoreState));
+        // }
     }
 
     protected override void ConfirmPressed()
     {
+        IncreaseItem(GamePlayMenu.Selection);
+    }
 
+    void IncreaseItem(MenuItem<GameplayData.DataItem> item)
+    {
+        Data.GamePlay.IncreaseItem(item.Item);
+        item.Card.SetTextString(item.Item.DisplayData(Data.GamePlay));
     }
 
     protected override void CancelPressed()

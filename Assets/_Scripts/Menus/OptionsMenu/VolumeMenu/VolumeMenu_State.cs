@@ -16,8 +16,8 @@ public class VolumeMenu_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Options = new OptionsMenu().Initialize(OptionsMenu.OptionsItem.Volume);
-        VolumeMenu = new VolumeMenu().Initialize(Data.Volume);
+        Options = (OptionsMenu)new OptionsMenu().Initialize(OptionsMenu.OptionsItem.Volume);
+        VolumeMenu = (VolumeMenu)new VolumeMenu().Initialize(Data.Volume);
         callback();
     }
 
@@ -60,7 +60,7 @@ public class VolumeMenu_State : State
                 else
                 {
                     VolumeMenu.Selection = VolumeMenu.MenuItems[i];
-                    VolumeMenu.ColorTexts();
+                    VolumeMenu.UpdateTextColors();
                     return;
                 }
             }
@@ -99,16 +99,17 @@ public class VolumeMenu_State : State
     void IncreaseItem(MenuItem<VolumeData.DataItem> item)
     {
         Data.Volume.IncreaseLevel(item.Item);
-        item.Card.SetTextString(item.Item.DisplayVolLVL(Data.Volume));
+        item.Card.SetTextString(item.Item.DisplayData(Data.Volume));
     }
 
     private void UpdateMenu()
     {
-        if (Options.Selection == OptionsMenu.OptionsItem.Controls)
-        {
-            SetStateDirectly(new ShowControls_State(ConsequentState));
-        }
-        else if (Options.Selection == OptionsMenu.OptionsItem.GamePlay)
+        // if (Options.Selection == OptionsMenu.OptionsItem.Controls)
+        // {
+        //     SetStateDirectly(new ShowControls_State(ConsequentState));
+        // }
+        // else
+        if (Options.Selection == OptionsMenu.OptionsItem.GamePlay)
         {
             SetStateDirectly(new GamePlayMenu_State(ConsequentState));
         }

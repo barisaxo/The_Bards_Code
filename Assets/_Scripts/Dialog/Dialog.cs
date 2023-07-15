@@ -80,9 +80,9 @@ namespace Dialog
             .SetTextAlignment(TMPro.TextAlignmentOptions.TopLeft)
             .SetSizeAll(new Vector2(3.5f * Cam.Io.Camera.aspect * 2, 4f))
             .SetPositionAll(new Vector3(0, 2.5f, -1.5f))
-            .SetFontScale(.65f)
+            .SetFontScale(.65f, .65f)
             .AutoSizeFont(true)
-            .WordWrap(true)
+            .AllowWordWrap(true)
             .SetSprite(Assets.White)
             .SetSpriteColor(new Color(.15f, .15f, .15f, .65f))
             .SpriteClickable();

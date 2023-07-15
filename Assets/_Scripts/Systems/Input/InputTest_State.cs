@@ -110,9 +110,9 @@ public class TestObject
                        "Interact (North) = SetStateDirectly(new InputTestState());\n" +
                        "Cancel (South) = FadeToState(new InputTestState());\n" +
                        "Confirm (East) = Randomly Color Square\n")
-        .SetFontScale(3)
+        .SetFontScale(3, 3)
         .SetTMPSize(new Vector2(4, 8))
         .SetTMPPosition(new Vector2(-7, -6))
-        .WordWrap(false);
+        .AllowWordWrap(false);
 
 }

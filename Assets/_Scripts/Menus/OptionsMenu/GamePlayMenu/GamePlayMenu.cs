@@ -1,42 +1,33 @@
-﻿using UnityEngine;
-
+﻿
 namespace Menus.OptionsMenu
 {
-    public class GamePlayMenu : Menu<GamePlayMenu.MenuItem>
+    public class GamePlayMenu : Menu<GameplayData.DataItem, GamePlayMenu>
     {
-        #region INSTANCE
         public GamePlayMenu() : base(nameof(GamePlayMenu)) { }
 
-        public GamePlayMenu Initialize()
+        public Menu<GameplayData.DataItem, GamePlayMenu> Initialize(GameplayData data)
         {
-            Selection = MenuItems[0];
-            this.ColorTexts();
-            this.ScrollMenuOptions(Dir.Reset);
-            return this;
+            this.UpdateAllItems(data);
+            return base.Initialize();
         }
-
-        public void SelfDestruct()
-        {
-            GameObject.Destroy(_parent.gameObject);
-            Resources.UnloadUnusedAssets();
-        }
-
-        #endregion INSTANCE
-
-
-        #region MENU OBJECTS
 
         public override MenuLayoutStyle Style => MenuLayoutStyle.AlignLeft;
-
-        public class MenuItem : Enumeration
-        {
-            public MenuItem() : base(0, "") { }
-            public MenuItem(int id, string name) : base(id, name) { }
-            public static MenuItem Transpose = new(0, "TRANSPOSE");
-            public static MenuItem Tuning = new(1, "TUNING");
-        }
-
-        #endregion MENU OBJECTS
     }
 
+    public static class GamePlayMenuSystems
+    {
+        public static string DisplayData(this GameplayData.DataItem item, GameplayData data)
+        {
+            UnityEngine.Debug.Log(data.GetData(item));
+            return item.Name + ": " + data.GetData(item);
+        }
+
+        public static void UpdateAllItems(this GamePlayMenu menu, GameplayData data)
+        {
+            foreach (var item in menu.MenuItems)
+            {
+                item.Card.SetTextString(item.Item.DisplayData(data));
+            }
+        }
+    }
 }

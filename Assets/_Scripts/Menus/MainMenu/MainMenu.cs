@@ -2,39 +2,28 @@ using UnityEngine;
 
 namespace Menus.MainMenu
 {
-    public class MainMenu : Menu<MainMenu.MainMenuItem>
+    public class MainMenu : Menu<MainMenu.MainMenuItem, MainMenu>
     {
-        #region INSTANCE
-
         public MainMenu() : base(nameof(MainMenu)) { }
 
-        public MainMenu Initialize()
+        public override Menu<MainMenuItem, MainMenu> Initialize()
         {
             _ = Scene;
-            Selection = MenuItems[0];
-            //this.SetUpMenuCards(Parent, Style);
-            this.ColorTexts();
-            this.ScrollMenuOptions(Dir.Reset);
-            return this;
+            return base.Initialize();
         }
 
-        public void SelfDestruct()
+        public override void SelfDestruct()
         {
             Scene.SelfDestruct();
-            GameObject.Destroy(_parent.gameObject);
-            Resources.UnloadUnusedAssets();
+            base.SelfDestruct();
         }
 
         private MainMenuScene _scene;
         public MainMenuScene Scene => _scene ??= new();
 
-        #endregion INSTANCE
-
-        #region MENU OBJECTS
-
         public override MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;
 
-        public class MainMenuItem : Enumeration
+        public class MainMenuItem : DataEnum
         {
             public MainMenuItem() : base(0, "") { }
             public MainMenuItem(int id, string name) : base(id, name) { }
@@ -46,6 +35,5 @@ namespace Menus.MainMenu
             public static MainMenuItem Quit = new(5, "Quit");
         }
 
-        #endregion MENU OBJECTS
     }
 }

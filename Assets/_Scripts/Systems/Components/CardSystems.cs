@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public static class CardSystems
 {
@@ -10,9 +11,14 @@ public static class CardSystems
 
     public static Card SetFont(this Card Card, TMP_FontAsset f) { Card.TMP.font = f; return Card; }
     public static Card SetFontStyle(this Card Card, FontStyles f) { Card.TMP.fontStyle = f; return Card; }
-    public static Card SetFontScale(this Card Card, float f) { Card.TMP.fontSizeMax = Card.CanvasScaler.referenceResolution.x * .043125f * f; return Card; }
+    public static Card SetFontScale(this Card Card, float min, float max)
+    {
+        Card.TMP.fontSizeMin = Card.CanvasScaler.referenceResolution.x * .043125f * min;
+        Card.TMP.fontSizeMax = Card.CanvasScaler.referenceResolution.x * .043125f * max;
+        return Card;
+    }
     public static Card AutoSizeFont(this Card Card, bool tf) { Card.TMP.enableAutoSizing = tf; return Card; }
-    public static Card WordWrap(this Card Card, bool tf) { Card.TMP.enableWordWrapping = tf; return Card; }
+    public static Card AllowWordWrap(this Card Card, bool tf) { Card.TMP.enableWordWrapping = tf; return Card; }
     public static Card SetTextString(this Card Card, string s) { Card.TMP.text = s; return Card; }
     public static Card SetTextColor(this Card Card, Color c) { Card.TMP.color = c; return Card; }
     public static Card SetTextAlignment(this Card Card, TextAlignmentOptions a) { Card.TMP.alignment = a; return Card; }
@@ -23,7 +29,13 @@ public static class CardSystems
         Card.TMP.rectTransform.anchorMax = anc;
         return Card;
     }
+
+
     public static Card AutoSizeTextContainer(this Card Card, bool tf) { Card.TMP.autoSizeTextContainer = tf; return Card; }
+    /// <summary>
+    /// Use this to set the TMP Size.
+    /// </summary>
+    public static Card SetTMPSize(this Card Card, float x, float y) => Card.SetTMPSize(new Vector2(x, y));
     /// <summary>
     /// Use this to set the TMP Size.
     /// </summary>
@@ -44,6 +56,10 @@ public static class CardSystems
     /// Use this to set the sprites position.
     /// </summary>
     public static Card SetGOPosition(this Card Card, Vector3 v) { Card.GO.transform.position = v; return Card; }
+    /// <summary>
+    /// Use this to set the TMP position.
+    /// </summary>
+    public static Card SetTMPPosition(this Card Card, float x, float y) => Card.SetTMPPosition(new Vector3(x, y, 0));
     /// <summary>
     /// Use this to set the TMP position.
     /// </summary>
@@ -78,9 +94,15 @@ public static class CardSystems
     }
     public static Card TMPClickable(this Card Card)
     {
-        Card.Clickable = Card.TMP.gameObject.AddComponent<Clickable>();
-        Card.TMP.gameObject.GetComponent<BoxCollider2D>().size = Card.TMP.rectTransform.sizeDelta;
+        WaitAStep().StartCoroutine();
         return Card;
+        IEnumerator WaitAStep()
+        {
+            yield return null;
+            Card.Clickable = Card.TMP.gameObject.AddComponent<Clickable>();
+            var bc = Card.TMP.gameObject.GetComponent<BoxCollider2D>();
+            bc.size = Card.TMP.rectTransform.sizeDelta;
+            bc.offset = new Vector2(Card.TMP.rectTransform.sizeDelta.x * (-Card.TMP.rectTransform.pivot.x + .5f), 0);
+        }
     }
-
 }

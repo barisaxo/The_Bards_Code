@@ -6,14 +6,15 @@ using UnityEngine;
 public class MainMenu_State : State
 {
     MainMenu MainMenu;
-    bool SaveDataExists = true;
+    private bool SaveDataExists = true;
 
-    public RockTheBoat RockTheBoat = new();
-    public float LightRotY = -40;
+    private readonly RockTheBoat RockTheBoat = new();
+    private float LightRotY = -40;
+    readonly float RotSpeed = 25;
 
     protected override void PrepareState(Action callback)
     {
-        MainMenu = new MainMenu().Initialize();
+        MainMenu = (MainMenu)new MainMenu().Initialize();
         MainMenu.MenuItems[0].Card.GO.SetActive(SaveDataExists);
         MainMenu.MenuItems[1].Card.GO.SetActive(SaveDataExists);
         RockTheBoat.AddBoat(MainMenu.Scene.CatBoat.transform);
@@ -30,7 +31,7 @@ public class MainMenu_State : State
             MainMenu.Selection == MainMenu.MainMenuItem.LoadGame))
         {
             MainMenu.Selection = MainMenu.MenuItems[MainMenu.MainMenuItem.NewGame];
-            MainMenu.ColorTexts();
+            MainMenu.UpdateTextColors();
         }
     }
 
@@ -66,13 +67,13 @@ public class MainMenu_State : State
             MainMenu.Selection.Item == MainMenu.MainMenuItem.LoadGame))
         {
             MainMenu.Selection = MainMenu.MenuItems[MainMenu.MainMenuItem.NewGame];
-            MainMenu.ColorTexts();
+            MainMenu.UpdateTextColors();
         }
     }
 
     protected override void ConfirmPressed()
     {
-        MainMenu.ColorTexts();
+        MainMenu.UpdateTextColors();
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Continue) { return; }
 
@@ -89,7 +90,7 @@ public class MainMenu_State : State
 
     protected override void LStickInput(Vector2 v2)
     {
-        MainMenu.Scene.CatBoat.transform.Rotate(new Vector3(0, v2.x, 0), Space.World);
+        MainMenu.Scene.CatBoat.transform.Rotate(new Vector3(0, v2.x, 0) * Time.deltaTime * RotSpeed, Space.World);
     }
 
     protected override void RStickInput(Vector2 v2)
@@ -104,7 +105,7 @@ public class MainMenu_State : State
         SaveDataExists = !SaveDataExists;
         MainMenu.MenuItems[0].Card.GO.SetActive(SaveDataExists);
         MainMenu.MenuItems[1].Card.GO.SetActive(SaveDataExists);
-        MainMenu.ColorTexts();
+        MainMenu.UpdateTextColors();
     }
 
     public void RotateLightHouse()

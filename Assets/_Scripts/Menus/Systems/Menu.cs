@@ -7,20 +7,48 @@ using System.Linq;
 
 namespace Menus
 {
-    public abstract class Menu<T> : IMenu<T> where T : Enumeration, new()
+    public abstract class Menu<T, TMenu> : IMenu<T> where T : DataEnum, new() where TMenu : Menu<T, TMenu>
     {
         public Menu(string name) { Name = name; }
         private readonly string Name;
         protected Transform _parent;
         public Transform Parent => _parent != null ? _parent : _parent = new GameObject(Name).transform;
-        public MenuItem<T> Selection { get; set; }
+        private MenuItem<T> _selection { get; set; }
+        public MenuItem<T> Selection { get => _selection; set { _selection = value; ItemDescriptionText = value.Item.Description; } }
         public List<T> DataItems => Enumeration.List<T>();
         private List<MenuItem<T>> _menuItems;
-        public List<MenuItem<T>> MenuItems => _menuItems ??= this.SetUpMenuCards(Parent, Style, DataItems);
+        public List<MenuItem<T>> MenuItems => _menuItems ??= this.SetUpMenuCards(Parent, Style);
         public virtual MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;
+        public string ItemDescriptionText { set => ItemDescription.TMP.text = value; }
+        private Card _itemDescription;
+        public Card ItemDescription => _itemDescription ??= new Card(nameof(ItemDescription), Parent)
+            .SetFontScale(.6f, .6f)
+            .SetTMPPosition(0, -Cam.Io.OrthoY() * .5f)
+            .SetTMPSize(Cam.Io.OrthoX() * 1.7f, 1)
+            .AllowWordWrap(false)
+            .AutoSizeFont(true);
+
+        public virtual Menu<T, TMenu> Initialize()
+        {
+            return Initialize(null);
+        }
+
+        public virtual Menu<T, TMenu> Initialize(T t)
+        {
+            Selection = MenuItems[t ?? 0];
+            this.UpdateTextColors();
+            this.ScrollMenuOptions(Dir.Reset);
+            return this;
+        }
+
+        public virtual void SelfDestruct()
+        {
+            GameObject.Destroy(_parent.gameObject);
+            Resources.UnloadUnusedAssets();
+        }
     }
 
-    public struct MenuItem<T> where T : Enumeration, new()
+    public struct MenuItem<T> where T : DataEnum, new()
     {
         public T Item;
         public Card Card;
@@ -29,23 +57,16 @@ namespace Menus
         public static int operator -(MenuItem<T> a, int b) => a.Item.Id - b;
         public static int operator +(MenuItem<T> a, MenuItem<T> b) => a.Item.Id + b.Item.Id;
         public static int operator -(MenuItem<T> a, MenuItem<T> b) => a.Item.Id - b.Item.Id;
-        //public static int operator +(MenuItem<T> a, Enumeration b) => a.Item.Id + b.Id;
-        //public static int operator -(MenuItem<T> a, Enumeration b) => a.Item.Id - b.Id;
 
         public static bool operator ==(MenuItem<T> a, int b) => a.Item.Id == b;
         public static bool operator !=(MenuItem<T> a, int b) => a.Item.Id != b;
         public static bool operator ==(MenuItem<T> a, MenuItem<T> b) => a.Item.Id == b.Item.Id;
         public static bool operator !=(MenuItem<T> a, MenuItem<T> b) => a.Item.Id != b.Item.Id;
-        //public static bool operator ==(MenuItem<T> a, Enumeration b) => a.Item.Id == b.Id;
-        //public static bool operator !=(MenuItem<T> a, Enumeration b) => a.Item.Id != b.Id;
 
         public static bool operator <=(MenuItem<T> a, int b) => a.Item.Id <= b;
         public static bool operator >=(MenuItem<T> a, int b) => a.Item.Id >= b;
         public static bool operator <=(MenuItem<T> a, MenuItem<T> b) => a.Item.Id <= b.Item.Id;
         public static bool operator >=(MenuItem<T> a, MenuItem<T> b) => a.Item.Id >= b.Item.Id;
-        //public static bool operator <=(MenuItem<T> a, Enumeration b) => a.Item.Id <= b.Id;
-        //public static bool operator >=(MenuItem<T> a, Enumeration b) => a.Item.Id >= b.Id;
-
 
         public static implicit operator int(MenuItem<T> a) => a.Item.Id;
 

@@ -16,7 +16,7 @@ public class ShowControls_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Options = new OptionsMenu().Initialize(OptionsMenu.OptionsItem.Controls);
+        // Options = new OptionsMenu().Initialize(OptionsMenu.OptionsItem.Controls);
 
         callback();
     }

@@ -2,12 +2,13 @@ using System.Collections.Generic;
 
 namespace Menus
 {
-    public interface IMenu<T> where T : Enumeration, new()
+    public interface IMenu<T> where T : DataEnum, new()
     {
         public MenuItem<T> Selection { get; set; }
-        //public List<T> DataItems { get; }
+        public Card ItemDescription { get; }
         public List<MenuItem<T>> MenuItems { get; }
         public MenuLayoutStyle Style { get; }
+        public List<T> DataItems { get; }
     }
 
 }

@@ -9,6 +9,7 @@ namespace Menus.MainMenu
         public MainMenuScene()
         {
             _ = LightHouse;
+            _ = CatBoat;
         }
 
         public void SelfDestruct()
@@ -59,11 +60,11 @@ namespace Menus.MainMenu
             }
         }
 
-        private GameObject catBoat; public GameObject CatBoat
+        private GameObject _catBoat; public GameObject CatBoat
         {
             get
             {
-                return catBoat != null ? catBoat : catBoat = SetUpCatBoat();
+                return _catBoat != null ? _catBoat : _catBoat = SetUpCatBoat();
 
                 GameObject SetUpCatBoat()
                 {
