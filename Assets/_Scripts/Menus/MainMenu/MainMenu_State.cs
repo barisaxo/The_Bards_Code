@@ -70,7 +70,11 @@ public class MainMenu_State : State
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.LoadGame) return;
 
-        if (MainMenu.Selection.Item == MainMenu.MainMenuItem.NewGame) return;
+        if (MainMenu.Selection.Item == MainMenu.MainMenuItem.NewGame)
+        {
+            SetStateDirectly(new NewGameSelectSlot_State());
+            return;
+        }
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Options)
         {

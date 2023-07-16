@@ -3,26 +3,28 @@ using UnityEngine;
 
 public class RockTheBoat
 {
+    private readonly List<(Transform transform, float amp, float period)> Boats = new();
     private bool _rocking;
+
     public bool Rocking
     {
         get => _rocking;
         set
         {
-            if (_rocking = value) MonoHelper.OnLateUpdate += SetNewSwayPos;
-            else MonoHelper.OnLateUpdate -= SetNewSwayPos;
+            if (_rocking = value) MonoHelper.OnUpdate += SetNewSwayPos;
+            else MonoHelper.OnUpdate -= SetNewSwayPos;
         }
     }
 
-    readonly List<(Transform transform, float amp, float period)> Boats = new();
-
-    public void AddBoat(Transform t) =>
+    public void AddBoat(Transform t)
+    {
         Boats.Add((
-                transform: t,
-                amp: Random.Range(7f, 9f),
-                period: Random.value + .5f));
+            transform: t,
+            amp: Random.Range(7f, 9f),
+            period: Random.value + .5f));
+    }
 
-    void SetNewSwayPos()
+    private void SetNewSwayPos()
     {
         foreach (var (transform, amp, period) in Boats)
             transform.rotation =

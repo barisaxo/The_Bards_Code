@@ -30,7 +30,6 @@ public class HowToPlayMenu_State : State
         {
             if (!go.transform.IsChildOf(HowToPlay.MenuItems[i].Card.GO.transform)) continue;
             HowToPlay.Selection = HowToPlay.MenuItems[i];
-            HowToPlay.UpdateTextColors();
             ConfirmPressed();
             return;
         }

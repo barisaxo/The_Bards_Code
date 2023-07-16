@@ -1,41 +1,41 @@
 using System.Collections;
-using System.Threading.Tasks;
-using UnityEngine;
 using Audio;
-using Menus.OptionsMenu;
+using UnityEngine;
 
 public sealed class BGMusic_AudioSystem : AudioSystem
 {
-    public BGMusic_AudioSystem(VolumeData data) : base(numOfAudioSources: 1, name: nameof(BGMusic_AudioSystem))
+    public BGMusic_AudioSystem(VolumeData data) : base(1, nameof(BGMusic_AudioSystem))
     {
         Loop = true;
         VolumeLevelSetting = data.GetScaledLevel(VolumeData.DataItem.BGMusic);
-        foreach (AudioSource a in AudioSources) a.playOnAwake = true;
+        foreach (var a in AudioSources) a.playOnAwake = true;
 
-        foreach (AudioSource a in AudioSources) a.clip = Random.Range(1, 5) switch
-        {
-            //2 => Assets.BGMus2,
-            //3 => Assets.BGMus3,
-            //4 => Assets.BGMus4,
-            //_ => Assets.BGMus1,
-        };
+        foreach (var a in AudioSources)
+            a.clip = Random.Range(1, 5) switch
+            {
+                //2 => Assets.BGMus2,
+                //3 => Assets.BGMus3,
+                //4 => Assets.BGMus4,
+                //_ => Assets.BGMus1,
+            };
     }
 
     public void NextSong()
     {
-        foreach (AudioSource a in AudioSources) a.clip = a.clip switch
-        {
-            //_ when a.clip == Assets.BGMus1 => Random.value < .5f ? Assets.BGMus2 : Assets.BGMus3,
-            //_ when a.clip == Assets.BGMus2 => Random.value < .5f ? Assets.BGMus4 : Assets.BGMus3,
-            //_ when a.clip == Assets.BGMus3 => Random.value < .5f ? Assets.BGMus4 : Assets.BGMus1,
-            //_ when a.clip == Assets.BGMus4 => Random.value < .5f ? Assets.BGMus2 : Assets.BGMus1,
-            //_ => Assets.BGMus1,
-        };
+        foreach (var a in AudioSources)
+            a.clip = a.clip switch
+            {
+                //_ when a.clip == Assets.BGMus1 => Random.value < .5f ? Assets.BGMus2 : Assets.BGMus3,
+                //_ when a.clip == Assets.BGMus2 => Random.value < .5f ? Assets.BGMus4 : Assets.BGMus3,
+                //_ when a.clip == Assets.BGMus3 => Random.value < .5f ? Assets.BGMus4 : Assets.BGMus1,
+                //_ when a.clip == Assets.BGMus4 => Random.value < .5f ? Assets.BGMus2 : Assets.BGMus1,
+                //_ => Assets.BGMus1,
+            };
     }
 
     public void Pause()
     {
-        foreach (AudioSource a in AudioSources) a.Pause();
+        foreach (var a in AudioSources) a.Pause();
         // MonoHelper.Io.StartCoroutine(FadeOutAndPause());
         // IEnumerator FadeOutAndPause()
         // {
@@ -59,22 +59,21 @@ public sealed class BGMusic_AudioSystem : AudioSystem
         //    foreach (AudioSource a in AudioSources) { if (a.isPlaying) return; }
 
 
-        FadeInAndResume();// MonoHelper.Io.StartCoroutine();
-        async void FadeInAndResume()
-        {
-            if (!Application.isPlaying) return;
+        FadeInAndResume().StartCoroutine();
+        ;
 
-            await Task.Yield();
-            //yield return new WaitForEndOfFrame();
+        IEnumerator FadeInAndResume()
+        {
+            yield return null;
             if (CurrentVolumeLevel < VolumeLevelSetting)
             {
                 CurrentVolumeLevel += Time.deltaTime * 1.75f;
-                FadeInAndResume();// MonoHelper.Io.StartCoroutine();
+                FadeInAndResume().StartCoroutine();
             }
             else
             {
                 CurrentVolumeLevel = VolumeLevelSetting;
-                foreach (AudioSource a in AudioSources) a.UnPause();
+                foreach (var a in AudioSources) a.UnPause();
             }
         }
     }

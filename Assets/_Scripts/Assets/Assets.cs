@@ -2,6 +2,8 @@ using UnityEngine;
 
 public static class Assets
 {
+    public static AudioClip TypingClicks => Resources.Load<AudioClip>("Audio/SFX/Typing Clicks");
+
 
     public static Material Video_Mat => Resources.Load<Material>("Materials/Video_Mat");
 
@@ -16,5 +18,4 @@ public static class Assets
     public static GameObject BigBoat => Resources.Load<GameObject>("Prefabs/BigBoat");
 
     public static GameObject CatBoat => Resources.Load<GameObject>("Prefabs/CatBoat");
-
 }

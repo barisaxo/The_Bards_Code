@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using System.Collections;
 using Dialog;
 using UnityEngine;
 using UnityEngine.Video;
@@ -23,7 +23,7 @@ public class DialogPrinting_State : State
         {
             var width = Cam.Io.Camera.orthographicSize * Cam.Io.Camera.aspect * 1.65f;
             Dialog.VideoPlayer.transform.localScale = new Vector3(width,
-                width / (Dialog.CurrentLine.VideoClip.width / Dialog.CurrentLine.VideoClip.height), 1);
+                width / ((float)Dialog.CurrentLine.VideoClip.width / Dialog.CurrentLine.VideoClip.height), 1);
             Dialog.VideoPlayer.gameObject.SetActive(true);
             Dialog.VideoPlayer.playOnAwake = false;
             Dialog.VideoPlayer.waitForFirstFrame = false;
@@ -31,7 +31,7 @@ public class DialogPrinting_State : State
             Dialog.VideoPlayer.clip = Dialog.CurrentLine.VideoClip;
             Dialog.VideoPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
             Dialog.VideoPlayer.Prepare();
-            LoadVideo(callback);
+            LoadVideo(callback).StartCoroutine();
             return;
         }
 
@@ -39,13 +39,9 @@ public class DialogPrinting_State : State
         callback();
     }
 
-    private async void LoadVideo(Action callback)
+    private IEnumerator LoadVideo(Action callback)
     {
-        while (!Dialog.VideoPlayer.isPrepared)
-        {
-            if (!Application.isPlaying) return;
-            await Task.Yield();
-        }
+        while (!Dialog.VideoPlayer.isPrepared) yield return null;
 
         callback();
     }
@@ -53,7 +49,7 @@ public class DialogPrinting_State : State
     protected override void EngageState()
     {
         if (Dialog.CurrentLine.VideoClip != null) Dialog.VideoPlayer.Play();
-        //if (Dialog.Dialogue.PlayTypingSounds) { Audio.SoundFX.PlayClip(Assets.TypingClicks); }
+        if (Dialog.Dialogue.PlayTypingSounds) Audio.SFX.PlayClip(Assets.TypingClicks);
         Dialog.NPCIcon(Dialog.CurrentLine);
         Dialog.PrintDialog(FinishedPrinting);
     }
@@ -62,8 +58,9 @@ public class DialogPrinting_State : State
     {
         if (action != MouseAction.LUp) return;
 
+        Audio.SFX.StopClip();
         if (Dialog.LetType) Dialog.LetType = false;
-        //Audio.SoundFX.StopClip();
+        
         if (!waitingForInput) return;
 
         if (Dialog.HasNextLine())
@@ -96,7 +93,7 @@ public class DialogPrinting_State : State
 
     private void FinishedPrinting()
     {
-        //Audio.SoundFX.StopClip();
+        Audio.SFX.StopClip();
         if (Dialog.HasResponses())
         {
             Debug.Log("Dialog.HasResponses");

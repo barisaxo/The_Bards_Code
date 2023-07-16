@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Audio;
 using UnityEngine;
 
 public abstract class State
@@ -7,6 +8,7 @@ public abstract class State
     #region REFERENCES
 
     protected DataManager Data => DataManager.Io;
+    protected AudioManager Audio => AudioManager.Io;
 
     #endregion REFERENCES
 
