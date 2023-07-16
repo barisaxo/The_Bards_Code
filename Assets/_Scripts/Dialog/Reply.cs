@@ -32,18 +32,30 @@ namespace Dialog
                 int fifoI = Responses.Length - i - 1;
 
                 textCards[i] = new Card(nameof(ResponseCards) + i, Parent.transform)
-                    .SetSizeAll(new Vector2(7f, 1f))
-                    .SetPositionAll(new Vector3(Cam.Io.Camera.aspect * 2, -4 + (fifoI * 1.15f), -1.5f))
+                    .SetTextString(Responses[i].Text)
+                    .AutoSizeTextContainer(true)
+                    .SetPositionAll(new Vector2(Cam.Io.OrthoX() - 2.5f, -Cam.Io.OrthoY() + 1 + (fifoI * 1.15f)))
                     .SetTextAlignment(TextAlignmentOptions.Right)
                     .AutoSizeFont(true)
-                    .SetSprite(Assets.White)
-                    .SetSpriteColor(new Color(.15f, .15f, .15f, .65f))
+                    .SetTMPRectPivot(new Vector2(1, .5f))
+                    .SetImageSprite(GetSprite(fifoI))
                     .SetFontScale(.6f, .6f)
-                    .SetTextString(Responses[i].Text)
-                    .SpriteClickable();
+                    .SetImageSize(Vector2.one * .6f)
+                    .OffsetImagePosition(Vector2.right)
+                    .ImageClickable()
+                    .TMPClickable();
             }
 
             _responseCards = textCards;
+
+            Sprite GetSprite(int i) => i switch
+            {
+                0 => Assets.SouthButton,
+                1 => Assets.EastButton,
+                2 => Assets.NorthButton,
+                3 => Assets.WestButton,
+                _ => Assets.White,
+            };
         }
     }
 }

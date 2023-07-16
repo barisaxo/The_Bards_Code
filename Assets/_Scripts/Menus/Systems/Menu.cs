@@ -9,10 +9,10 @@ namespace Menus
 {
     public abstract class Menu<T, TMenu> : IMenu<T> where T : DataEnum, new() where TMenu : Menu<T, TMenu>
     {
-        public Menu(string name) { Name = name; }
+        protected Menu(string name) { Name = name; }
         private readonly string Name;
-        protected Transform _parent;
-        public Transform Parent => _parent != null ? _parent : _parent = new GameObject(Name).transform;
+        private Transform _parent;
+        protected Transform Parent => _parent != null ? _parent : _parent = new GameObject(Name).transform;
         private MenuItem<T> _selection { get; set; }
         public MenuItem<T> Selection { get => _selection; set { _selection = value; ItemDescriptionText = value.Item.Description; } }
         public List<T> DataItems => Enumeration.List<T>();
@@ -37,13 +37,13 @@ namespace Menus
         {
             Selection = MenuItems[t ?? 0];
             this.UpdateTextColors();
-            this.ScrollMenuOptions(Dir.Reset);
+            this.ScrollMenuItems(Dir.Reset);
             return this;
         }
 
         public virtual void SelfDestruct()
         {
-            GameObject.Destroy(_parent.gameObject);
+            UnityEngine.Object.Destroy(_parent.gameObject);
             Resources.UnloadUnusedAssets();
         }
     }

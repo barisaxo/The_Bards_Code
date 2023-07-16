@@ -5,16 +5,17 @@ using UnityEngine;
 public abstract class State
 {
     #region REFERENCES
+
     protected DataManager Data => DataManager.Io;
+
     #endregion REFERENCES
 
 
-
     #region STATE SYSTEMS
-    ///These state systems are organized in order of execution
 
+    /// These state systems are organized in order of execution
     /// <summary>
-    /// Called by SetStateDirectly() and InitiateFade().
+    ///     Called by SetStateDirectly() and InitiateFade().
     /// </summary>
     protected void DisableInput()
     {
@@ -28,17 +29,22 @@ public abstract class State
     }
 
     /// <summary>
-    /// Called by SetStateDirectly() and FadeOutToBlack().
+    ///     Called by SetStateDirectly() and FadeOutToBlack().
     /// </summary>
-    protected virtual void DisengageState() { }
+    protected virtual void DisengageState()
+    {
+    }
 
     /// <summary>
-    /// Called by SetStateDirectly() and FadeOutToBlack(). Don't set new states here.
+    ///     Called by SetStateDirectly() and FadeOutToBlack(). Don't set new states here.
     /// </summary>
-    protected virtual void PrepareState(Action callback) { callback(); }
+    protected virtual void PrepareState(Action callback)
+    {
+        callback();
+    }
 
     /// <summary>
-    /// Called by SetSceneDirectly() and FadeInToScene().
+    ///     Called by SetSceneDirectly() and FadeInToScene().
     /// </summary>
     protected void EnableInput()
     {
@@ -52,9 +58,11 @@ public abstract class State
     }
 
     /// <summary>
-    /// Called by SetStateDirectly() and FadeInToScene(). OK to set new states here.
+    ///     Called by SetStateDirectly() and FadeInToScene(). OK to set new states here.
     /// </summary>
-    protected virtual void EngageState() { }
+    protected virtual void EngageState()
+    {
+    }
 
     protected void SetStateDirectly(State newState)
     {
@@ -74,17 +82,17 @@ public abstract class State
     protected void FadeToState(State newState)
     {
         ScreenFader fader = new();
-        InitiateFade(newState).StartCoroutine();
+        InitiateFade().StartCoroutine();
         return;
 
-        IEnumerator InitiateFade(State newState)
+        IEnumerator InitiateFade()
         {
             DisableInput();
             yield return null;
-            FadeOutToBlack(newState).StartCoroutine();
+            FadeOutToBlack().StartCoroutine();
         }
 
-        IEnumerator FadeOutToBlack(State newState)
+        IEnumerator FadeOutToBlack()
         {
             while (fader.Screen.color.a < .99f)
             {
@@ -108,58 +116,103 @@ public abstract class State
                 fader.Screen.color -= new Color(0, 0, 0, Time.deltaTime * 2.0f);
             }
 
-            fader?.SelfDestruct();
+            fader.SelfDestruct();
             newState.EnableInput();
             newState.EngageState();
         }
     }
+
     #endregion STATE SYSTEMS
 
 
-
     #region INPUT
-    protected virtual void ClickedOn(GameObject go) { }
-    protected virtual void DirectionPressed(Dir dir) { }
-    protected virtual void ConfirmPressed() { }
-    protected virtual void InteractPressed() { }
-    protected virtual void CancelPressed() { }
-    protected virtual void StartPressed() { }
-    protected virtual void SelectPressed() { }
-    protected virtual void R1Pressed() { }
-    protected virtual void L1Pressed() { }
-    protected virtual void R2Pressed() { }
-    protected virtual void L2Pressed() { }
-    protected virtual void R3Pressed() { }
-    protected virtual void L3Pressed() { }
-    protected virtual void LStickInput(Vector2 v2) { }
-    protected virtual void RStickInput(Vector2 v2) { }
+
+    protected virtual void ClickedOn(GameObject go)
+    {
+    }
+
+    protected virtual void DirectionPressed(Dir dir)
+    {
+    }
+
+    protected virtual void WestPressed()
+    {
+    }
+
+    protected virtual void ConfirmPressed()
+    {
+    }
+
+    protected virtual void InteractPressed()
+    {
+    }
+
+    protected virtual void CancelPressed()
+    {
+    }
+
+    protected virtual void StartPressed()
+    {
+    }
+
+    protected virtual void SelectPressed()
+    {
+    }
+
+    protected virtual void R1Pressed()
+    {
+    }
+
+    protected virtual void L1Pressed()
+    {
+    }
+
+    protected virtual void R2Pressed()
+    {
+    }
+
+    protected virtual void L2Pressed()
+    {
+    }
+
+    protected virtual void R3Pressed()
+    {
+    }
+
+    protected virtual void L3Pressed()
+    {
+    }
+
+    protected virtual void LStickInput(Vector2 v2)
+    {
+    }
+
+    protected virtual void RStickInput(Vector2 v2)
+    {
+    }
+
     #endregion INPUT
 
 
-
     #region INPUT HANDLING
+
     protected virtual void Clicked(MouseAction action, Vector3 mousePos)
     {
         if (action != MouseAction.LUp) return;
 
         if (Cam.Io.Camera.orthographic)
         {
-            RaycastHit2D hit = Physics2D.Raycast(Cam.Io.Camera.ScreenToWorldPoint(mousePos), Vector2.zero);
+            var hit = Physics2D.Raycast(Cam.Io.Camera.ScreenToWorldPoint(mousePos), Vector2.zero);
             if (hit.collider != null) ClickedOn(hit.collider.gameObject);
         }
         else
         {
-            RaycastHit2D hit = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
-            RaycastHit2D hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
+            var hit = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
+            var hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
 
             if (hit.collider != null)
-            {
                 ClickedOn(hit.collider.gameObject);
-            }
-            else if (hitUI.collider != null)
-            {
-                ClickedOn(hitUI.collider.gameObject);
-            }
+            else if (hitUI.collider != null) ClickedOn(hitUI.collider.gameObject);
         }
     }
 
@@ -168,27 +221,72 @@ public abstract class State
         switch (gpb)
         {
             #region BUTTON PRESSED
-            case GamePadButton.Up_Press: DirectionPressed(Dir.Up); break;
-            case GamePadButton.Down_Press: DirectionPressed(Dir.Down); break;
-            case GamePadButton.Left_Press: DirectionPressed(Dir.Left); break;
-            case GamePadButton.Right_Press: DirectionPressed(Dir.Right); break;
-            case GamePadButton.North_Press: InteractPressed(); break;
-            case GamePadButton.East_Press: ConfirmPressed(); break;
-            case GamePadButton.South_Press: CancelPressed(); break;
-            case GamePadButton.Start_Press: StartPressed(); break;
-            case GamePadButton.Select_Press: SelectPressed(); break;
-            case GamePadButton.R1_Press: R1Pressed(); break;
-            case GamePadButton.R2_Press: R2Pressed(); break;
-            case GamePadButton.R3_Press: R3Pressed(); break;
-            case GamePadButton.L1_Press: L1Pressed(); break;
-            case GamePadButton.L2_Press: L2Pressed(); break;
-            case GamePadButton.L3_Press: L3Pressed(); break;
+
+            case GamePadButton.Up_Press:
+                DirectionPressed(Dir.Up);
+                break;
+            case GamePadButton.Down_Press:
+                DirectionPressed(Dir.Down);
+                break;
+            case GamePadButton.Left_Press:
+                DirectionPressed(Dir.Left);
+                break;
+            case GamePadButton.Right_Press:
+                DirectionPressed(Dir.Right);
+                break;
+            case GamePadButton.North_Press:
+                InteractPressed();
+                break;
+            case GamePadButton.East_Press:
+                ConfirmPressed();
+                break;
+            case GamePadButton.South_Press:
+                CancelPressed();
+                break;
+            case GamePadButton.West_Press:
+                WestPressed();
+                break;
+            case GamePadButton.Start_Press:
+                StartPressed();
+                break;
+            case GamePadButton.Select_Press:
+                SelectPressed();
+                break;
+            case GamePadButton.R1_Press:
+                R1Pressed();
+                break;
+            case GamePadButton.R2_Press:
+                R2Pressed();
+                break;
+            case GamePadButton.R3_Press:
+                R3Pressed();
+                break;
+            case GamePadButton.L1_Press:
+                L1Pressed();
+                break;
+            case GamePadButton.L2_Press:
+                L2Pressed();
+                break;
+            case GamePadButton.L3_Press:
+                L3Pressed();
+                break;
+
             #endregion BUTTON PRESSED
+
             #region BUTTON RELEASED
-            case GamePadButton.Up_Release: DirectionPressed(Dir.Reset); break;
-            case GamePadButton.Down_Release: DirectionPressed(Dir.Reset); break;
-            case GamePadButton.Left_Release: DirectionPressed(Dir.Reset); break;
-            case GamePadButton.Right_Release: DirectionPressed(Dir.Reset); break;
+
+            case GamePadButton.Up_Release:
+                DirectionPressed(Dir.Reset);
+                break;
+            case GamePadButton.Down_Release:
+                DirectionPressed(Dir.Reset);
+                break;
+            case GamePadButton.Left_Release:
+                DirectionPressed(Dir.Reset);
+                break;
+            case GamePadButton.Right_Release:
+                DirectionPressed(Dir.Reset);
+                break;
             case GamePadButton.North_Release: break;
             case GamePadButton.East_Release: break;
             case GamePadButton.South_Release: break;
@@ -200,8 +298,11 @@ public abstract class State
             case GamePadButton.L1_Release: break;
             case GamePadButton.L2_Release: break;
             case GamePadButton.L3_Release: break;
-                #endregion BUTTON RELEASED
-        };
+
+            #endregion BUTTON RELEASED
+        }
+
+        ;
     }
 
     private Vector2 LStick;
@@ -211,8 +312,12 @@ public abstract class State
     {
         switch (gpi)
         {
-            case GamePadButton.LStick: LStick = v2; break;
-            case GamePadButton.RStick: RStick = v2; break;
+            case GamePadButton.LStick:
+                LStick = v2;
+                break;
+            case GamePadButton.RStick:
+                RStick = v2;
+                break;
         }
     }
 
@@ -224,14 +329,41 @@ public abstract class State
 
     ///nintendo switch R sticks are weird
     private bool NewRStickAltThisFrame;
+
     private Vector2 RStickAlt => new(RStickAltX, RStickAltY);
     private float _rStickAltX;
-    private float RStickAltX { get => _rStickAltX; set { NewRStickAltThisFrame = true; _rStickAltX = value; } }
-    private float _rStickAltY;
-    private float RStickAltY { get => _rStickAltY; set { NewRStickAltThisFrame = true; _rStickAltY = value; } }
 
-    private void RAltXInput(float f) => RStickAltX = f;
-    private void RAltYInput(float f) => RStickAltY = f;
+    private float RStickAltX
+    {
+        get => _rStickAltX;
+        set
+        {
+            NewRStickAltThisFrame = true;
+            _rStickAltX = value;
+        }
+    }
+
+    private float _rStickAltY;
+
+    private float RStickAltY
+    {
+        get => _rStickAltY;
+        set
+        {
+            NewRStickAltThisFrame = true;
+            _rStickAltY = value;
+        }
+    }
+
+    private void RAltXInput(float f)
+    {
+        RStickAltX = f;
+    }
+
+    private void RAltYInput(float f)
+    {
+        RStickAltY = f;
+    }
 
     private void RStickAltReadLoop()
     {
@@ -239,5 +371,6 @@ public abstract class State
         RStickInput(RStickAlt);
         NewRStickAltThisFrame = false;
     }
+
     #endregion INPUT HANDLING
 }

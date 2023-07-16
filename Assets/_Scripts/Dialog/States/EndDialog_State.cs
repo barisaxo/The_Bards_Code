@@ -1,7 +1,7 @@
-﻿public class EndDialog_State : State
+﻿
+public class EndDialog_State : State
 {
     readonly Dialog.Dialog Dialog;
-    // bool preventDouble;
     readonly State SubsequentState;
     readonly bool Fade;
 

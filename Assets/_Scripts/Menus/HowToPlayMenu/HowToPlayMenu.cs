@@ -1,25 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Menus;
 namespace Menus.HowToPlayMenu
 {
     public class HowToPlayMenu : Menu<HowToPlayMenu.HowToPlayItem, HowToPlayMenu>
     {
-        public HowToPlayMenu() : base(nameof(HowToPlayMenu)) { }
+        private BackButton _back;
 
-        //public HowToPlayMenu Initialize()
-        //{
-        //    return this;
-        //}
+        public HowToPlayMenu() : base(nameof(HowToPlayMenu))
+        {
+        }
+
+        public BackButton Back => _back ??= new BackButton(Parent);
+
+        public override Menu<HowToPlayItem, HowToPlayMenu> Initialize()
+        {
+            _ = Back;
+            return base.Initialize();
+        }
 
         public class HowToPlayItem : DataEnum
         {
-            public HowToPlayItem() : base(0, "") { }
-            public HowToPlayItem(int id, string name) : base(id, name) { }
-            public static HowToPlayItem Volume = new(0, "VOLUME");
-            public static HowToPlayItem GamePlay = new(1, "GAME PLAY");
-            // public static HowToPlayItem Controls = new(2, "CONTROLS");
+            public static readonly HowToPlayItem Bard = new(0, "About 'The Bards Code'");
+            public static readonly HowToPlayItem Muscopa = new(1, "About 'Muscopa'");
+            public static readonly HowToPlayItem Battery = new(2, "About 'Battery'");
+            public static readonly HowToPlayItem RhythmCell = new(3, "Rhythm cell tutorial");
+
+            public HowToPlayItem() : base(0, "")
+            {
+            }
+
+            private HowToPlayItem(int id, string name) : base(id, name)
+            {
+            }
         }
     }
 }

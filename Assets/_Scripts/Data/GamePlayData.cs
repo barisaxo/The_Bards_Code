@@ -2,51 +2,58 @@ using MusicTheory;
 
 public class GameplayData
 {
-    public GameplayData() { }
+    private BatteryDifficulty _battery_Difficulty;
+
+    private CadenceDifficulty _cadence_Difficulty;
+
+    private KeyOf _currentKey = KeyOf.C;
+
+    private int _latency = 5;
+
+    public bool EasyModeWon = false;
 
     public bool ExplainBattery = true;
 
-    private BatteryDifficulty _battery_Difficulty;
+    public GameDifficulty GameDifficulty = 0;
+    public bool MediumModeWon = false;
+
     public BatteryDifficulty Battery_Difficulty
     {
         get => _battery_Difficulty;
-        set => _battery_Difficulty = _battery_Difficulty + (int)value < 0 || (int)(_battery_Difficulty + (int)value) > 5 ? _battery_Difficulty : value;
+        set => _battery_Difficulty = _battery_Difficulty + (int)value < 0 || (int)(_battery_Difficulty + (int)value) > 5
+            ? _battery_Difficulty
+            : value;
     }
 
-    private CadenceDifficulty _cadence_Difficulty;
     public CadenceDifficulty Cadence_Difficulty
     {
         get => _cadence_Difficulty;
-        set => _cadence_Difficulty = _cadence_Difficulty + (int)value < 0 || (int)(_cadence_Difficulty + (int)value) > 3 ? _cadence_Difficulty : value;
+        set => _cadence_Difficulty = _cadence_Difficulty + (int)value < 0 || (int)(_cadence_Difficulty + (int)value) > 3
+            ? _cadence_Difficulty
+            : value;
     }
 
-    private int _latency = 5;
     public int Latency
     {
         get => _latency;
         set => _latency = value > 25 ? 0 : value;
     }
 
-    public GameDifficulty GameDifficulty = 0;
-
-    public bool EasyModeWon = false;
-    public bool MediumModeWon = false;
-
-    private KeyOf _currentKey = KeyOf.C;
     public KeyOf CurrentKey
     {
         get => _currentKey;
-        set => _currentKey = value > KeyOf.B ?
-            KeyOf.C : value < KeyOf.C ?
-            KeyOf.B : value;
+        set => _currentKey = value > KeyOf.B ? KeyOf.C : value < KeyOf.C ? KeyOf.B : value;
     }
 
-    public string GetData(DataItem item) => item switch
+    public string GetData(DataItem item)
     {
-        _ when item == DataItem.Transpose => CurrentKey.ToString(),
-        _ when item == DataItem.Latency => Latency.ToString(),
-        _ => "",
-    };
+        return item switch
+        {
+            _ when item == DataItem.Transpose => CurrentKey.ToString(),
+            _ when item == DataItem.Latency => Latency.ToString(),
+            _ => ""
+        };
+    }
 
     public void IncreaseItem(DataItem item)
     {
@@ -56,20 +63,32 @@ public class GameplayData
 
     public class DataItem : DataEnum
     {
-        public DataItem() : base(0, "") { }
-        public DataItem(int id, string name) : base(id, name) { }
-        public DataItem(int id, string name, string description) : base(id, name) => Description = description;
-        public static DataItem Transpose = new(0, "KEY TRANSPOSITION",
-                                    "C: CONCERT PITCH: FLUTE, PIANO, GUITAR, VIOLIN etc..." +
-                                    "\nEb: ALTO & BARITONE SAXOPHONE" +
-                                    "\nF: FRENCH HORN" +
-                                    "\nBb: CLARINET, TRUMPET, SOPRANO & TENOR SAXOPHONE" +
-                                    "\nB: GUITAR IN Eb STANDARD TUNING");
+        public static readonly DataItem Transpose = new(0, "KEY TRANSPOSITION",
+            "C: Concert pitch: flute, piano, guitar, violin, etc..." +
+            "\nEb: Alto & baritone saxophone" +
+            "\nF: French horn" +
+            "\nBb: Clarinet, trumpet, soprano & tenor saxophone" +
+            "\nB: Guitar in Eb standard tuning");
+
         public static DataItem Tuning = new(1, "TUNING NOTE: A 440",
-                                    "If your 'A' note doesn't match this \nyou might be out of tune, or in the wrong key");
-        public static DataItem Latency = new(2, "LATENCY",
-                                    "Lag offset for rhythm input. The margin for an accurate hit is +- 15." +
-                                    "\nIf you are missing beats try adjusting this latency. Default setting is 0.04");
+            "If your 'A' note doesn't match this \nyou might be out of tune, or in the wrong key");
+
+        public static readonly DataItem Latency = new(2, "LATENCY",
+            "Lag offset for rhythm input. The margin for an accurate hit is +- 15." +
+            "\nIf you are missing beats try adjusting this latency. Default setting is 0.04");
+
+        public DataItem() : base(0, "")
+        {
+        }
+
+        public DataItem(int id, string name) : base(id, name)
+        {
+        }
+
+        private DataItem(int id, string name, string description) : base(id, name)
+        {
+            Description = description;
+        }
         //public static DataItem ShowControls = new(3, "SHOW CONTROLS", "Shows current controls in the HUD");
     }
 
@@ -157,12 +176,28 @@ public class GameplayData
     // }
 
     // public TestPhase TestPhase = TestPhase.None;
-
-
 }
 
 // public enum TestPhase { None, Battery }
-public enum BatteryDifficulty { LVL1, LVL2, LVL3, LVL4, LVL5, }
-public enum CadenceDifficulty { I_II_V, I_IV_V_VI, ALL,/* LVL4, LVL5, LVL6 */}
-public enum GameDifficulty { Easy, Medium, Hard }
+public enum BatteryDifficulty
+{
+    LVL1,
+    LVL2,
+    LVL3,
+    LVL4,
+    LVL5
+}
 
+public enum CadenceDifficulty
+{
+    I_II_V,
+    I_IV_V_VI,
+    ALL /* LVL4, LVL5, LVL6 */
+}
+
+public enum GameDifficulty
+{
+    Easy,
+    Medium,
+    Hard
+}

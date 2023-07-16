@@ -18,7 +18,6 @@ namespace Menus.OptionsMenu
     {
         public static string DisplayData(this GameplayData.DataItem item, GameplayData data)
         {
-            UnityEngine.Debug.Log(data.GetData(item));
             return item.Name + ": " + data.GetData(item);
         }
 

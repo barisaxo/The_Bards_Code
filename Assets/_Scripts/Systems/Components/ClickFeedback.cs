@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -25,6 +26,7 @@ internal sealed class ClickFeedback
 
     private readonly List<(SpriteRenderer sr, Color nativeColor)> spriteFeedback = new();
     private readonly List<(TextMeshProUGUI tmp, Color nativeColor)> tmpFeedback = new();
+    private readonly List<(Image img, Color nativeColor)> imageFeedback = new();
 
     private GameObject _clickedGO;
     private GameObject ClickedGO
@@ -55,6 +57,12 @@ internal sealed class ClickFeedback
                     tmpFeedback.Add((tmp, tmp.color));
                 }
 
+                foreach (Image img in _clickedGO.GetComponentsInChildren<Image>())
+                {
+                    imageFeedback.Add((img, img.color));
+                }
+
+
                 AlterColor();
             }
         }
@@ -75,12 +83,12 @@ internal sealed class ClickFeedback
         }
         else
         {
-            RaycastHit2D hitTMP = Physics2D.Raycast(mousePos, Vector2.zero);
+            RaycastHit2D hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
             RaycastHit2D hitGO = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
 
-            if (hitTMP.collider != null && hitTMP.collider.gameObject.TryGetComponent<Clickable>(out _))
+            if (hitUI.collider != null && hitUI.collider.gameObject.TryGetComponent<Clickable>(out _))
             {
-                ClickedGO = hitTMP.collider.gameObject;
+                ClickedGO = hitUI.collider.gameObject;
             }
             else if (hitGO.collider != null && hitGO.collider.gameObject.TryGetComponent<Clickable>(out _))
             {
@@ -104,6 +112,11 @@ internal sealed class ClickFeedback
         {
             tmpFeedback[i].tmp.color *= new Color(1, 1, 1, .65f);
         }
+
+        for (int i = 0; i < imageFeedback.Count; i++)
+        {
+            imageFeedback[i].img.color *= new Color(1, 1, 1, .65f);
+        }
     }
 
     private void RestoreColor()
@@ -116,8 +129,13 @@ internal sealed class ClickFeedback
         {
             tmpFeedback[i].tmp.color = tmpFeedback[i].nativeColor;
         }
+        for (int i = 0; i < imageFeedback.Count; i++)
+        {
+            imageFeedback[i].img.color = imageFeedback[i].nativeColor;
+        }
         spriteFeedback.Clear();
         tmpFeedback.Clear();
+        imageFeedback.Clear();
     }
 }
 

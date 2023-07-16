@@ -29,22 +29,22 @@ public class Card
     /// </summary>
     public SpriteRenderer SpriteRenderer => _sr != null ? _sr : _sr = GO.AddComponent<SpriteRenderer>();
 
-    private Canvas _canvas;
-    public Canvas Canvas
+    private Canvas _tmpCanvas;
+    public Canvas TMPCanvas
     {
         get
         {
-            return _canvas != null ? _canvas : _canvas = SetUpCanvas();
+            return _tmpCanvas != null ? _tmpCanvas : _tmpCanvas = SetUpCanvas();
             Canvas SetUpCanvas()
             {
-                Canvas canvas = new GameObject(nameof(Canvas)).AddComponent<Canvas>();
+                Canvas canvas = new GameObject(nameof(TMPCanvas)).AddComponent<Canvas>();
                 canvas.transform.SetParent(GO.transform, false);
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                canvas.sortingOrder = 1;
+                canvas.sortingOrder = 10;
 
-                if (_canvasScaler == null)
+                if (_tmpCanvasScaler == null)
                 {
-                    _canvasScaler = SetUpCanvasScaler(canvas);
+                    _tmpCanvasScaler = SetUpCanvasScaler(canvas);
                 }
 
                 return canvas;
@@ -52,13 +52,13 @@ public class Card
         }
     }
 
-    private CanvasScaler _canvasScaler;
-    public CanvasScaler CanvasScaler
+    private CanvasScaler _tmpCanvasScaler;
+    public CanvasScaler TMPCanvasScaler
     {
         get
         {
-            if (_canvasScaler == null) { _canvasScaler = SetUpCanvasScaler(Canvas); }
-            return _canvasScaler;
+            if (_tmpCanvasScaler == null) { _tmpCanvasScaler = SetUpCanvasScaler(TMPCanvas); }
+            return _tmpCanvasScaler;
         }
     }
 
@@ -84,7 +84,7 @@ public class Card
             TextMeshProUGUI SetUpTMP()
             {
                 TextMeshProUGUI t = new GameObject(nameof(TMP)).AddComponent<TextMeshProUGUI>();
-                t.transform.SetParent(Canvas.transform, true);
+                t.transform.SetParent(TMPCanvas.transform, true);
                 t.fontSizeMin = 8;
                 t.fontSizeMax = 300;
 
@@ -92,6 +92,57 @@ public class Card
             }
         }
     }
+
+    private Image _image;
+    public Image Image
+    {
+        get
+        {
+            return _image = _image != null ? _image : SetUpImage();
+
+            Image SetUpImage()
+            {
+                Image i = new GameObject(nameof(Image)).AddComponent<Image>();
+                i.transform.SetParent(ImageCanvas.transform, true);
+                i.sprite = null;
+                return i;
+            }
+        }
+    }
+
+    private Canvas _imageCanvas;
+    public Canvas ImageCanvas
+    {
+        get
+        {
+            return _imageCanvas != null ? _imageCanvas : _imageCanvas = SetUpCanvas();
+            Canvas SetUpCanvas()
+            {
+                Canvas canvas = new GameObject(nameof(ImageCanvas)).AddComponent<Canvas>();
+                canvas.transform.SetParent(GO.transform, false);
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.sortingOrder = 5;
+
+                if (_imageCanvasScaler == null)
+                {
+                    _imageCanvasScaler = SetUpCanvasScaler(canvas);
+                }
+
+                return canvas;
+            }
+        }
+    }
+
+    private CanvasScaler _imageCanvasScaler;
+    public CanvasScaler ImageCanvasScaler
+    {
+        get
+        {
+            if (_imageCanvasScaler == null) { _imageCanvasScaler = SetUpCanvasScaler(ImageCanvas); }
+            return _imageCanvasScaler;
+        }
+    }
+
 
     public string TextString { get => TMP.text; set => TMP.text = value; }
 }

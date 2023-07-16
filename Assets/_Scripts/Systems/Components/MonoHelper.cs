@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MonoHelper : MonoBehaviour
@@ -27,10 +28,23 @@ public class MonoHelper : MonoBehaviour
     }
     #endregion INSTANCE
 
-    public static event Action OnUpdate;
-    private void Update() => OnUpdate?.Invoke();
-    public static event Action OnLateUpdate;
-    private void LateUpdate() => OnLateUpdate?.Invoke();
+    [SerializeField] private List<string> actions = new();
+
+    private static event Action ToUpdate;
+    private void Update() => ToUpdate?.Invoke();
+    public static event Action OnUpdate
+    {
+        add { ToUpdate += value; Io.actions.Add(value.Method.ToString()); }
+        remove { ToUpdate -= value; foreach (var a in Io.actions) { if (a == value.Method.ToString()) { Io.actions.Remove(a); return; } } }
+    }
+
+    public static event Action ToLateUpdate;
+    private void LateUpdate() => ToLateUpdate?.Invoke();
+    public static event Action OnLateUpdate
+    {
+        add { ToLateUpdate += value; Io.actions.Add(value.Method.ToString() + " Late"); }
+        remove { ToLateUpdate -= value; foreach (var a in Io.actions) { if (a == value.Method.ToString() + " Late") { Io.actions.Remove(a); return; } } }
+    }
 }
 
 public static class MonoSystems

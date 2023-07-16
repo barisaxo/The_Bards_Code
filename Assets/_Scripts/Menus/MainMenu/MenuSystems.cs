@@ -6,7 +6,7 @@ namespace Menus
 {
     public static class Menu_Systems
     {
-        public static void ScrollMenuOptions<T>(this IMenu<T> menu, Dir dir) where T : DataEnum, new()
+        public static void ScrollMenuItems<T>(this IMenu<T> menu, Dir dir) where T : DataEnum, new()
         {
             switch (menu.Style)
             {

@@ -7,14 +7,14 @@ public static class CardSystems
     /// <summary>
     /// Higher Number is displayed on top. Default number is 1.
     /// </summary>
-    public static Card SetCanvasSortingOrder(this Card Card, int i) { Card.Canvas.sortingOrder = i; return Card; }
+    public static Card SetCanvasSortingOrder(this Card Card, int i) { Card.TMPCanvas.sortingOrder = i; return Card; }
 
     public static Card SetFont(this Card Card, TMP_FontAsset f) { Card.TMP.font = f; return Card; }
     public static Card SetFontStyle(this Card Card, FontStyles f) { Card.TMP.fontStyle = f; return Card; }
     public static Card SetFontScale(this Card Card, float min, float max)
     {
-        Card.TMP.fontSizeMin = Card.CanvasScaler.referenceResolution.x * .043125f * min;
-        Card.TMP.fontSizeMax = Card.CanvasScaler.referenceResolution.x * .043125f * max;
+        Card.TMP.fontSizeMin = Card.TMPCanvasScaler.referenceResolution.x * .043125f * min;
+        Card.TMP.fontSizeMax = Card.TMPCanvasScaler.referenceResolution.x * .043125f * max;
         return Card;
     }
     public static Card AutoSizeFont(this Card Card, bool tf) { Card.TMP.enableAutoSizing = tf; return Card; }
@@ -29,7 +29,37 @@ public static class CardSystems
         Card.TMP.rectTransform.anchorMax = anc;
         return Card;
     }
+    public static Card OffsetImagePosition(this Card card, Vector2 v)
+    {
+        card.Image.rectTransform.localPosition += (Vector3)(card.Image.rectTransform.sizeDelta * v);
+        return card;
+    }
+    public static Card SetImageLayer(this Card card, int l) { card.Image.canvas.sortingOrder = l; return card; }
+    public static Card SetImageColor(this Card card, Color c) { card.Image.color = c; return card; }
+    public static Card SetImagePosition(this Card card, Vector3 pos)
+    {
+        Vector2 spos = Cam.Io.Camera.WorldToScreenPoint(pos);
+        Vector2 ssize = new Vector2(Cam.Io.Camera.pixelWidth, Cam.Io.Camera.pixelHeight);
 
+        card.Image.rectTransform.localPosition = new Vector2(spos.x - (ssize.x * .5f), spos.y - (ssize.y * .5f));
+        return card;
+    }
+    public static Card ScaleImageSizeToTMP(this Card card, float scale)
+    {
+        card.Image.rectTransform.sizeDelta = card.TMP.rectTransform.sizeDelta * scale;
+        return card;
+    }
+    public static Card SetImageSize(this Card card, float x, float y) => card.SetImageSize(new Vector2(x, y));
+    public static Card SetImageSize(this Card card, Vector2 v2)
+    {
+        card.Image.rectTransform.sizeDelta = .45f * card.ImageCanvasScaler.referenceResolution.y * v2 / Cam.Io.Camera.orthographicSize;
+        return card;
+    }
+    public static Card SetImageSprite(this Card card, Sprite s)
+    {
+        card.Image.sprite = s;
+        return card;
+    }
 
     public static Card AutoSizeTextContainer(this Card Card, bool tf) { Card.TMP.autoSizeTextContainer = tf; return Card; }
     /// <summary>
@@ -41,7 +71,7 @@ public static class CardSystems
     /// </summary>
     public static Card SetTMPSize(this Card Card, Vector2 v)
     {
-        Card.TMP.rectTransform.sizeDelta = .45f * Card.CanvasScaler.referenceResolution.y * v / Cam.Io.Camera.orthographicSize;
+        Card.TMP.rectTransform.sizeDelta = .45f * Card.TMPCanvasScaler.referenceResolution.y * v / Cam.Io.Camera.orthographicSize;
         return Card;
     }
     /// <summary>
@@ -51,7 +81,12 @@ public static class CardSystems
     /// <summary>
     /// Use this to set the sprite & TMP size. Don't use if there is no TMP or the call will create an empty canvas etc.
     /// </summary>
-    public static Card SetSizeAll(this Card Card, Vector2 v) { Card.SetGOSize(v); return Card.SetTMPPosition(v); }
+    public static Card SetSizeAll(this Card Card, Vector2 v)
+    {
+        Card.SetGOSize(v);
+        Card.SetImageSize(v);
+        return Card.SetTMPSize(v);
+    }
     /// <summary>
     /// Use this to set the sprites position.
     /// </summary>
@@ -71,7 +106,7 @@ public static class CardSystems
         Card.TMP.rectTransform.localPosition = new Vector2(spos.x - (ssize.x * .5f), spos.y - (ssize.y * .5f));
         return Card;
     }
-    public static Card OffsetTMPPositionBy(this Card card, Vector2 v2)
+    public static Card OffsetTMPPosition(this Card card, Vector2 v2)
     {
         card.TMP.rectTransform.localPosition += (Vector3)(card.TMP.rectTransform.sizeDelta * v2);
         return card;
@@ -81,7 +116,9 @@ public static class CardSystems
     /// </summary>
     public static Card SetPositionAll(this Card Card, Vector3 v)
     {
+
         Card.SetGOPosition(v);
+        Card.SetImagePosition(v);
         return Card.SetTMPPosition(v);
     }
     public static Card SetSprite(this Card Card, Sprite s) { Card.SpriteRenderer.sprite = s; return Card; }
@@ -89,9 +126,24 @@ public static class CardSystems
     public static Card SpriteClickable(this Card Card)
     {
         Card.Clickable = Card.GO.AddComponent<Clickable>();
-        Card.GO.GetComponent<BoxCollider2D>().size = Card.GO.transform.localScale;
+        //Card.GO.GetComponent<BoxCollider2D>().size = Card.GO.transform.localScale;
         return Card;
     }
+
+    public static Card ImageClickable(this Card Card)
+    {
+        WaitAStep().StartCoroutine();
+        return Card;
+        IEnumerator WaitAStep()
+        {
+            yield return null;
+            Card.Clickable = Card.Image.gameObject.AddComponent<Clickable>();
+            var bc = Card.Image.gameObject.GetComponent<BoxCollider2D>();
+            bc.size = Card.Image.rectTransform.sizeDelta;
+            bc.offset = new Vector2(Card.Image.rectTransform.sizeDelta.x * (-Card.Image.rectTransform.pivot.x + .5f), 0);
+        }
+    }
+
     public static Card TMPClickable(this Card Card)
     {
         WaitAStep().StartCoroutine();

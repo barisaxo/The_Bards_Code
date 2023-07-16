@@ -6,16 +6,13 @@ namespace Dialog
         public Response(string text, Line goToLine) { Text = text; GoToLine = goToLine; }
         public Response(string text, State nextState) { Text = text; NextState = nextState; }
         public Response(string text, Dialogue dialogue) { Text = text; GoToDialogue = dialogue; }
-        //public Response(string text, PlayerAction action) { Text = text; PlayerAction = action; }
 
         public string Text { get; private set; } = null;
         public Line GoToLine { get; private set; } = null;
         public State NextState { get; private set; } = null;
         public Dialogue GoToDialogue { get; private set; } = null;
-        //public PlayerAction? PlayerAction { get; private set; } = null;
         public bool FadeOut { get; private set; } = false;
 
-        //public Response SetPlayerAction(PlayerAction action) { PlayerAction = action; return this; }
         public Response SetGoToLine(Line gotoLine) { GoToLine = gotoLine; return this; }
         public Response FadeToNextState() { FadeOut = true; return this; }
     }

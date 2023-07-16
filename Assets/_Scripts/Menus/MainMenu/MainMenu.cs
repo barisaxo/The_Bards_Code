@@ -1,10 +1,16 @@
-using UnityEngine;
-
 namespace Menus.MainMenu
 {
     public class MainMenu : Menu<MainMenu.MainMenuItem, MainMenu>
     {
-        public MainMenu() : base(nameof(MainMenu)) { }
+        private MainMenuScene _scene;
+
+        public MainMenu() : base(nameof(MainMenu))
+        {
+        }
+
+        public MainMenuScene Scene => _scene ??= new MainMenuScene();
+
+        public override MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;
 
         public override Menu<MainMenuItem, MainMenu> Initialize()
         {
@@ -18,22 +24,23 @@ namespace Menus.MainMenu
             base.SelfDestruct();
         }
 
-        private MainMenuScene _scene;
-        public MainMenuScene Scene => _scene ??= new();
-
-        public override MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;
-
         public class MainMenuItem : DataEnum
         {
-            public MainMenuItem() : base(0, "") { }
-            public MainMenuItem(int id, string name) : base(id, name) { }
-            public static MainMenuItem Continue = new(0, "Continue");
-            public static MainMenuItem LoadGame = new(1, "Load Game");
-            public static MainMenuItem NewGame = new(2, "New Game");
-            public static MainMenuItem Options = new(3, "Options");
-            public static MainMenuItem HowToPlay = new(4, "How To Play");
-            public static MainMenuItem Quit = new(5, "Quit");
-        }
+            public static readonly MainMenuItem Continue = new(0, "Continue");
+            public static readonly MainMenuItem LoadGame = new(1, "Load Game");
+            public static readonly MainMenuItem NewGame = new(2, "New Game");
+            public static readonly MainMenuItem Options = new(3, "Options");
+            public static readonly MainMenuItem HowToPlay = new(4, "How To Play");
+            public static readonly MainMenuItem PracticeRoom = new(5, "Practice Room");
+            public static readonly MainMenuItem Quit = new(6, "Quit");
 
+            public MainMenuItem() : base(0, "")
+            {
+            }
+
+            private MainMenuItem(int id, string name) : base(id, name)
+            {
+            }
+        }
     }
 }

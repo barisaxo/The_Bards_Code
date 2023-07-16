@@ -1,18 +1,18 @@
 using System;
-using Menus.OptionsMenu;
 using Menus;
+using Menus.OptionsMenu;
 using UnityEngine;
 
 public class VolumeMenu_State : State
 {
+    private readonly State ConsequentState;
+    private OptionsMenu Options;
+    private VolumeMenu VolumeMenu;
+
     public VolumeMenu_State(State consequentState)
     {
         ConsequentState = consequentState;
     }
-
-    readonly State ConsequentState;
-    OptionsMenu Options;
-    VolumeMenu VolumeMenu;
 
     protected override void PrepareState(Action callback)
     {
@@ -30,25 +30,22 @@ public class VolumeMenu_State : State
 
     protected override void ClickedOn(GameObject go)
     {
-        if (go.transform.IsChildOf(Options.Back.GO.transform))
+        if (go.transform.IsChildOf(Options.Back.Button.GO.transform))
         {
             SetStateDirectly(ConsequentState);
             return;
         }
 
-        for (int i = 0; i < Options.MenuItems.Count; i++)
-        {
+        for (var i = 0; i < Options.MenuItems.Count; i++)
             if (go.transform.IsChildOf(Options.MenuItems[i].Card.GO.transform))
             {
-                if (i == Options.Selection) { return; }
+                if (i == Options.Selection) return;
                 Options.Selection = Options.MenuItems[i];
                 UpdateMenu();
                 return;
             }
-        }
 
-        for (int i = 0; i < VolumeMenu.MenuItems.Count; i++)
-        {
+        for (var i = 0; i < VolumeMenu.MenuItems.Count; i++)
             if (go.transform.IsChildOf(VolumeMenu.MenuItems[i].Card.GO.transform))
             {
                 if (VolumeMenu.Selection.Item == i)
@@ -57,32 +54,27 @@ public class VolumeMenu_State : State
                     return;
                 }
 
-                else
-                {
-                    VolumeMenu.Selection = VolumeMenu.MenuItems[i];
-                    VolumeMenu.UpdateTextColors();
-                    return;
-                }
+                VolumeMenu.Selection = VolumeMenu.MenuItems[i];
+                VolumeMenu.UpdateTextColors();
+                return;
             }
-        }
-
     }
 
     protected override void DirectionPressed(Dir dir)
     {
         if (dir == Dir.Reset) return;
-        VolumeMenu.ScrollMenuOptions(dir);
+        VolumeMenu.ScrollMenuItems(dir);
     }
 
     protected override void L1Pressed()
     {
-        Options.ScrollMenuOptions(Dir.Left);
+        Options.ScrollMenuItems(Dir.Left);
         UpdateMenu();
     }
 
     protected override void R1Pressed()
     {
-        Options.ScrollMenuOptions(Dir.Right);
+        Options.ScrollMenuItems(Dir.Right);
         UpdateMenu();
     }
 
@@ -96,7 +88,7 @@ public class VolumeMenu_State : State
         SetStateDirectly(ConsequentState);
     }
 
-    void IncreaseItem(MenuItem<VolumeData.DataItem> item)
+    private void IncreaseItem(MenuItem<VolumeData.DataItem> item)
     {
         Data.Volume.IncreaseLevel(item.Item);
         item.Card.SetTextString(item.Item.DisplayData(Data.Volume));
@@ -110,8 +102,6 @@ public class VolumeMenu_State : State
         // }
         // else
         if (Options.Selection == OptionsMenu.OptionsItem.GamePlay)
-        {
             SetStateDirectly(new GamePlayMenu_State(ConsequentState));
-        }
     }
 }

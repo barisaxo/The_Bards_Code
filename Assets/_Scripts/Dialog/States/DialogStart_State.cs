@@ -23,15 +23,6 @@ public class DialogStart_State : State
         //Audio.BGMusic.Pause();
 
         Dialog = new(_dialogue.Initiate());
-
-        //Board.Parent.gameObject.SetActive(false);
-        //Board.BoardHUD.Parent.gameObject.SetActive(false);
-
-        //BHUD.Parent.gameObject.SetActive(false);
-        //BHUD.InfoButton.Parent.SetActive(false);
-        //BHUD.MuteButton.Parent.SetActive(false);
-        //BHUD.QuitButton.Parent.SetActive(false);
-
         callback();
     }
 

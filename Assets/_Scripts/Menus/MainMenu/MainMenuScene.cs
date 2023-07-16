@@ -4,26 +4,11 @@ namespace Menus.MainMenu
 {
     public class MainMenuScene
     {
-        #region INSTANCE
+        private GameObject _catBoat;
 
-        public MainMenuScene()
-        {
-            _ = LightHouse;
-            _ = CatBoat;
-        }
+        private GameObject lightHouse;
 
-        public void SelfDestruct()
-        {
-            GameObject.Destroy(_parent.gameObject);
-            Resources.UnloadUnusedAssets();
-        }
-
-        private Transform _parent;
-        public Transform Parent => _parent != null ? _parent : _parent = new GameObject(nameof(MainMenuScene)).transform;
-
-        #endregion INSTANCE
-
-        private GameObject lightHouse; public GameObject LightHouse
+        public GameObject LightHouse
         {
             get
             {
@@ -35,9 +20,9 @@ namespace Menus.MainMenu
                     lh.transform.SetParent(Parent.transform);
                     lh.transform.position = new Vector3(0, 10, -8);
 
-                    for (int i = 0; i < 2; i++)
+                    for (var i = 0; i < 2; i++)
                     {
-                        Light light = new GameObject(nameof(Light) + i).AddComponent<Light>();
+                        var light = new GameObject(nameof(Light) + i).AddComponent<Light>();
                         light.lightmapBakeType = LightmapBakeType.Baked;
                         light.transform.SetParent(lh.transform);
                         light.transform.SetPositionAndRotation(
@@ -49,18 +34,16 @@ namespace Menus.MainMenu
                         light.intensity = 5;
                         light.shadows = LightShadows.Soft;
                         light.color = new Color(Random.Range(.85f, .95f),
-                                                Random.Range(.5f, .6f),
-                                                Random.Range(.05f, .15f));
+                            Random.Range(.5f, .6f),
+                            Random.Range(.05f, .15f));
                     }
 
                     return lh;
                 }
-
-
             }
         }
 
-        private GameObject _catBoat; public GameObject CatBoat
+        public GameObject CatBoat
         {
             get
             {
@@ -68,8 +51,7 @@ namespace Menus.MainMenu
 
                 GameObject SetUpCatBoat()
                 {
-                    GameObject go = Object.Instantiate(Assets.CatBoat);
-                    go.transform.SetParent(Parent.transform);
+                    var go = Object.Instantiate(Assets.CatBoat, Parent.transform);
                     go.transform.position = new Vector3(-2, -1.5f, 0);
                     go.transform.localScale = Vector3.one * 3;
                     return go;
@@ -77,6 +59,25 @@ namespace Menus.MainMenu
             }
         }
 
+        #region INSTANCE
 
+        public MainMenuScene()
+        {
+            _ = LightHouse;
+            _ = CatBoat;
+        }
+
+        public void SelfDestruct()
+        {
+            Object.Destroy(_parent.gameObject);
+            Resources.UnloadUnusedAssets();
+        }
+
+        private Transform _parent;
+
+        public Transform Parent =>
+            _parent != null ? _parent : _parent = new GameObject(nameof(MainMenuScene)).transform;
+
+        #endregion INSTANCE
     }
 }

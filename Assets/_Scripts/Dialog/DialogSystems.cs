@@ -1,6 +1,6 @@
 using System;
+using System.Collections;
 using UnityEngine;
-using System.Threading.Tasks;
 
 namespace Dialog
 {
@@ -13,13 +13,13 @@ namespace Dialog
             dialog.LetType = true;
             dialog.DialogCard.SetTextString(string.Empty);
 
-            TypeDialogViaColor(0, dialog, callback);
+            TypeDialogViaColor(0, dialog, callback).StartCoroutine();
 
-            static async void TypeDialogViaColor(int charMarker, Dialog dialog, Action callback)
+            static IEnumerator TypeDialogViaColor(int charMarker, Dialog dialog, Action callback)
             {
                 while (dialog.LetType)
                 {
-                    if (!Application.isPlaying) return;
+                    //if (!Application.isPlaying) return;
 
                     string printingDialogue = dialog.CurrentLine.SpeakerName;
 
@@ -35,8 +35,8 @@ namespace Dialog
                     {
                         dialog.LetType = false;
                     }
-                    await Task.Delay(30);
-                    //yield return new WaitForSecondsRealtime(.025f);
+                    //await Task.Delay(30);
+                    yield return new WaitForSecondsRealtime(.03f);
                 }
 
                 dialog.DialogCard.SetTextString(dialog.CurrentLine.SpeakerName + dialog.CurrentLine.SpeakerText);
@@ -53,8 +53,6 @@ namespace Dialog
         public static Line GoToLine(Response response) { return response.GoToLine; }
         public static bool HasGoToLine(this Response response) { return response.GoToLine != null; }
 
-        //public static bool HasPlayerAction(this Response response) { return response.PlayerAction != null; }
-
         public static bool HasResponses(this Dialog dialog) { return dialog.CurrentLine.Responses != null; }
         public static Response[] Responses(this Dialog dialog) { return dialog.CurrentLine.Responses; }
 
@@ -63,11 +61,6 @@ namespace Dialog
 
         public static bool HasNextDialogue(this Response response) { return response.GoToDialogue != null; }
         public static bool HasNextDialogue(this Dialog dialog) { return dialog.CurrentLine.NextDialogue != null; }
-
-        // public static PlayerAction? GetAction(this Response response)
-        // {
-        //     return response.PlayerAction;
-        // }
 
     }
 }
