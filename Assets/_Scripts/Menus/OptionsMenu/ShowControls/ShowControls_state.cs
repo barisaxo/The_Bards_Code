@@ -7,23 +7,24 @@ public class ShowControls_State : State
 {
     private readonly State RestoreState;
     private OptionsMenu Options;
+    private ShowControls Controls;
 
     public ShowControls_State(State restoreState)
     {
         RestoreState = restoreState;
     }
-
-
+    
     protected override void PrepareState(Action callback)
     {
-        // Options = new OptionsMenu().Initialize(OptionsMenu.OptionsItem.Controls);
-
+        Options = (OptionsMenu)new OptionsMenu().Initialize(OptionsMenu.OptionsItem.Controls);
+        Controls = new ShowControls();
         callback();
     }
 
     protected override void DisengageState()
     {
         Options.SelfDestruct();
+        Controls.SelfDestruct();
     }
 
     protected override void ClickedOn(GameObject go)

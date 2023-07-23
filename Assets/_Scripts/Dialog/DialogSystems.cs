@@ -19,23 +19,17 @@ namespace Dialog
             {
                 while (dialog.LetType)
                 {
-                    //if (!Application.isPlaying) return;
+                    var printingDialogue = dialog.CurrentLine.SpeakerName;
 
-                    string printingDialogue = dialog.CurrentLine.SpeakerName;
-
-                    for (int i = 0; i < dialog.CurrentLine.SpeakerText.Length; i++)
+                    for (var i = 0; i < dialog.CurrentLine.SpeakerText.Length; i++)
                     {
                         printingDialogue += dialog.CurrentLine.SpeakerText[i];
-                        if (charMarker == i) { printingDialogue += clearFlag; }
+                        if (charMarker == i) printingDialogue += clearFlag;
                     }
 
                     dialog.DialogCard.SetTextString(printingDialogue);
 
-                    if (++charMarker == dialog.CurrentLine.SpeakerText.Length)
-                    {
-                        dialog.LetType = false;
-                    }
-                    //await Task.Delay(30);
+                    if (++charMarker == dialog.CurrentLine.SpeakerText.Length) dialog.LetType = false;
                     yield return new WaitForSecondsRealtime(.03f);
                 }
 
@@ -44,23 +38,64 @@ namespace Dialog
             }
         }
 
-        public static void SetCurrentLine(this Dialog dialog, Line nextLine) { dialog.CurrentLine = nextLine; }
+        public static void SetCurrentLine(this Dialog dialog, Line nextLine)
+        {
+            dialog.CurrentLine = nextLine;
+        }
 
-        static Line NextLine(this Dialog dialog) { return dialog.CurrentLine.NextLine; }
-        public static void SetNextLine(this Dialog dialog) { dialog.CurrentLine = dialog.NextLine(); }
-        public static bool HasNextLine(this Dialog dialog) { return dialog.CurrentLine.NextLine != null; }
+        private static Line NextLine(this Dialog dialog)
+        {
+            return dialog.CurrentLine.NextLine;
+        }
 
-        public static Line GoToLine(Response response) { return response.GoToLine; }
-        public static bool HasGoToLine(this Response response) { return response.GoToLine != null; }
+        public static void SetNextLine(this Dialog dialog)
+        {
+            dialog.CurrentLine = dialog.NextLine();
+        }
 
-        public static bool HasResponses(this Dialog dialog) { return dialog.CurrentLine.Responses != null; }
-        public static Response[] Responses(this Dialog dialog) { return dialog.CurrentLine.Responses; }
+        public static bool HasNextLine(this Dialog dialog)
+        {
+            return dialog.CurrentLine.NextLine != null;
+        }
 
-        public static bool HasNextState(this Response response) { return response.NextState != null; }
-        public static bool HasNextState(this Dialog dialog) { return dialog.CurrentLine.NextState != null; }
+        public static Line GoToLine(Response response)
+        {
+            return response.GoToLine;
+        }
 
-        public static bool HasNextDialogue(this Response response) { return response.GoToDialogue != null; }
-        public static bool HasNextDialogue(this Dialog dialog) { return dialog.CurrentLine.NextDialogue != null; }
+        public static bool HasGoToLine(this Response response)
+        {
+            return response.GoToLine != null;
+        }
 
+        public static bool HasResponses(this Dialog dialog)
+        {
+            return dialog.CurrentLine.Responses != null;
+        }
+
+        public static Response[] Responses(this Dialog dialog)
+        {
+            return dialog.CurrentLine.Responses;
+        }
+
+        public static bool HasNextState(this Response response)
+        {
+            return response.NextState != null;
+        }
+
+        public static bool HasNextState(this Dialog dialog)
+        {
+            return dialog.CurrentLine.NextState != null;
+        }
+
+        public static bool HasNextDialogue(this Response response)
+        {
+            return response.GoToDialogue != null;
+        }
+
+        public static bool HasNextDialogue(this Dialog dialog)
+        {
+            return dialog.CurrentLine.NextDialogue != null;
+        }
     }
 }

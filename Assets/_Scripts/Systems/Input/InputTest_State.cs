@@ -1,10 +1,3 @@
-//////////////////////////////////////////////////////////////////
-///This test state allows us to play around with the input
-///understand some of the flow of a few of the systems, such as the
-///Card with a builder pattern, engaging of the states, etc
-//////////////////////////////////////////////////////////////////
-
-
 using UnityEngine;
 
 public class InputTest_State : State

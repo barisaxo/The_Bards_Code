@@ -68,7 +68,11 @@ public class MainMenu_State : State
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Continue) return;
 
-        if (MainMenu.Selection.Item == MainMenu.MainMenuItem.LoadGame) return;
+        if (MainMenu.Selection.Item == MainMenu.MainMenuItem.LoadGame)
+        {
+            SetStateDirectly(new LoadGameSelectSlot_State());
+            return;
+        }
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.NewGame)
         {

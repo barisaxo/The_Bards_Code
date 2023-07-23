@@ -21,6 +21,7 @@ namespace Menus.OptionsMenu
         {
             public static readonly OptionsItem Volume = new(0, "VOLUME");
             public static readonly OptionsItem GamePlay = new(1, "GAME PLAY");
+            public static OptionsItem Controls = new(2, "CONTROLS");
 
             public OptionsItem() : base(0, "")
             {
@@ -29,7 +30,6 @@ namespace Menus.OptionsMenu
             private OptionsItem(int id, string name) : base(id, name)
             {
             }
-            // public static OptionsItem Controls = new(2, "CONTROLS");
         }
     }
 }

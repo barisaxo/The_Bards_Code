@@ -3,7 +3,7 @@ using Dialog;
 public class MuscopaTutorial_Dialogue : Dialogue
 {
     private Response _exit;
-    private Response Exit => _exit ??= new Response("Exit", new HowToPlayMenu_State());
+    private Response Exit => _exit ??= new("Exit", new HowToPlayMenu_State());
 
     private static string[] _muscopa => new[]
     {
@@ -55,18 +55,18 @@ public class MuscopaTutorial_Dialogue : Dialogue
         var lines = new Line[muscopa.Length];
         for (var i = 0; i < lines.Length; i++) lines[i] = new Line(muscopa[i]);
 
-        lines[^1].SetResponses(new Response[2] { new("Previous", lines[^2]), Exit });
+        lines[^1].SetResponses(new[] { new("Previous", lines[^2]), Exit });
 
         for (var i = 1; i < lines.Length - 1; i++) lines[i].SetResponses(Replies(lines[i + 1], lines[i - 1]));
 
-        lines[0].SetResponses(new Response[2] { new("Next", lines[1]), Exit });
+        lines[0].SetResponses(new[] { new("Next", lines[1]), Exit });
 
         return lines[0];
     }
 
     private Response[] Replies(Line nextLine, Line prevLine)
     {
-        return new Response[3]
+        return new[]
         {
             new("Next", nextLine),
             new("Previous", prevLine),

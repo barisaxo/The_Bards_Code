@@ -34,33 +34,26 @@ namespace Dialog
             .SetImageColor(new Color(0f, .0f, 0f, .666f))
             .SetImageLayer(1);
 
-        private GameObject _npcIcon;
+        private Card[] _npcIcon;
         public void NPCIcon(Line line) => NPCIcon(line.SpeakerIcon, line.SpeakerColor);
-        void NPCIcon(Sprite[] sprites, Color c)
+        void NPCIcon(Sprite[] sprites, Color col)
         {
-            if (_npcIcon != null) UnityEngine.Object.DestroyImmediate(_npcIcon);
+            if (_npcIcon != null) foreach (Card c in _npcIcon) UnityEngine.Object.DestroyImmediate(c.GO);
             if (sprites != null) _npcIcon = SetUpNPCIcon();
 
-            GameObject SetUpNPCIcon()
+            Card[] SetUpNPCIcon()
             {
-                GameObject go = new GameObject(nameof(NPCIcon));
-                go.transform.SetParent(Parent.transform);
-
-                SpriteRenderer[] srs = new SpriteRenderer[sprites.Length];
-
-                for (int i = 0; i < srs.Length; i++)
+                Card[] cs = new Card[sprites.Length];
+                for (int i = 0; i < sprites.Length; i++)
                 {
-                    SpriteRenderer sr = new GameObject(nameof(Sprite)).AddComponent<SpriteRenderer>();
-                    sr.transform.SetParent(go.transform);
-                    sr.transform.position = DialogCard.GO.transform.position +
-                        new Vector3((-DialogCard.GO.transform.localScale.x * .5f) - .75f,
-                            (DialogCard.GO.transform.localScale.y * .35f),
-                            -4 - (i * .1f));
-                    sr.sprite = sprites[i];
-                    sr.transform.localScale = Vector3.one * 2f;
-                    sr.color = c;
+                    cs[i] = new Card(nameof(NPCIcon), Parent.transform)
+                          .SetImageSprite(sprites[i])
+                          .SetImageSize(Vector3.one * 2f)
+                          .SetImagePosition(new Vector3(-Cam.Io.OrthoX() + .75f, Cam.Io.OrthoY() - .75f))
+                          .SetImageColor(col)
+                          .SetImageLayer(i + 11);
                 }
-                return go;
+                return cs;
             }
         }
 

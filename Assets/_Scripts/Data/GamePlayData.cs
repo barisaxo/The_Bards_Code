@@ -17,20 +17,20 @@ public class GameplayData
     public GameDifficulty GameDifficulty = 0;
     public bool MediumModeWon = false;
 
+    public SheetMusic.Rhythms.CellShape RecentCell;
+
     public BatteryDifficulty Battery_Difficulty
     {
         get => _battery_Difficulty;
         set => _battery_Difficulty = _battery_Difficulty + (int)value < 0 || (int)(_battery_Difficulty + (int)value) > 5
-            ? _battery_Difficulty
-            : value;
+            ? _battery_Difficulty : value;
     }
 
     public CadenceDifficulty Cadence_Difficulty
     {
         get => _cadence_Difficulty;
         set => _cadence_Difficulty = _cadence_Difficulty + (int)value < 0 || (int)(_cadence_Difficulty + (int)value) > 3
-            ? _cadence_Difficulty
-            : value;
+            ? _cadence_Difficulty : value;
     }
 
     public int Latency
@@ -70,7 +70,7 @@ public class GameplayData
             "\nBb: Clarinet, trumpet, soprano & tenor saxophone" +
             "\nB: Guitar in Eb standard tuning");
 
-        public static DataItem Tuning = new(1, "TUNING NOTE: A 440",
+        public static DataItem Tuning = new(1, "TUNING NOTE A 440",
             "If your 'A' note doesn't match this \nyou might be out of tune, or in the wrong key");
 
         public static readonly DataItem Latency = new(2, "LATENCY",
@@ -89,7 +89,6 @@ public class GameplayData
         {
             Description = description;
         }
-        //public static DataItem ShowControls = new(3, "SHOW CONTROLS", "Shows current controls in the HUD");
     }
 
     //public CellShape RecentCell = 0;

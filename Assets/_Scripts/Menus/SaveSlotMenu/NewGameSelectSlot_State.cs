@@ -8,7 +8,7 @@ public class NewGameSelectSlot_State : State
 
     protected override void PrepareState(Action callback)
     {
-        SaveSlotMenu = (SaveSlotMenu)new SaveSlotMenu().Initialize();
+        SaveSlotMenu = (SaveSlotMenu)new SaveSlotMenu(Data.GamePlay).Initialize();
         base.PrepareState(callback);
     }
 
@@ -39,7 +39,6 @@ public class NewGameSelectSlot_State : State
     {
         if (dir == Dir.Reset) return;
         SaveSlotMenu.ScrollMenuItems(dir);
-
         SaveSlotMenu.UpdateTextColors();
     }
 

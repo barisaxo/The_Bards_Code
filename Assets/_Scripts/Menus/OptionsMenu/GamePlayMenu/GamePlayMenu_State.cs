@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class GamePlayMenu_State : State
 {
-    private readonly State RestoreState;
+    private readonly State ConsequentState;
     private GamePlayMenu GamePlayMenu;
     private OptionsMenu Options;
 
-    public GamePlayMenu_State(State restoreState)
+    public GamePlayMenu_State(State consequentState)
     {
-        RestoreState = restoreState;
+        ConsequentState = consequentState;
     }
 
     protected override void PrepareState(Action callback)
@@ -32,7 +32,7 @@ public class GamePlayMenu_State : State
     {
         if (go.transform.IsChildOf(Options.Back.Button.GO.transform))
         {
-            SetStateDirectly(RestoreState);
+            SetStateDirectly(ConsequentState);
             return;
         }
 
@@ -80,11 +80,10 @@ public class GamePlayMenu_State : State
     private void UpdateMenu()
     {
         if (Options.Selection == Options.MenuItems[OptionsMenu.OptionsItem.Volume])
-            SetStateDirectly(new VolumeMenu_State(RestoreState));
-        // else if (Options.Selection == Options.MenuItems[OptionsMenu.OptionsItem.Controls])
-        // {
-        //     SetStateDirectly(new ShowControls_State(RestoreState));
-        // }
+            SetStateDirectly(new VolumeMenu_State(ConsequentState));
+
+        else if (Options.Selection == Options.MenuItems[OptionsMenu.OptionsItem.Controls])
+            SetStateDirectly(new ShowControls_State(ConsequentState));
     }
 
     protected override void ConfirmPressed()
@@ -100,11 +99,11 @@ public class GamePlayMenu_State : State
 
     protected override void CancelPressed()
     {
-        SetStateDirectly(RestoreState);
+        SetStateDirectly(ConsequentState);
     }
 
     protected override void StartPressed()
     {
-        SetStateDirectly(RestoreState);
+        SetStateDirectly(ConsequentState);
     }
 }

@@ -8,6 +8,8 @@ namespace Menus.MainMenu
         {
         }
 
+        public int I { get; set; }
+        
         public MainMenuScene Scene => _scene ??= new MainMenuScene();
 
         public override MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;

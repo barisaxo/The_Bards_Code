@@ -1,4 +1,5 @@
 using Dialog;
+using UnityEngine;
 
 public class BatteryTutorial_Dialogue : Dialogue
 {
@@ -10,7 +11,7 @@ public class BatteryTutorial_Dialogue : Dialogue
         "Battery is a rhythm game emulating both the battery of a drum line, and the battery of a ships cannons.",
         "The goal is to sight-read rhythms with sheet music, and perform these rhythms by tapping.",
         "The key to this reading rhythms is understanding Rhythm Cells. Just like there are only 12 notes in music, there are only 12 rhythm shapes. Really!",
-        "By combining these 12 shapes we call rhythm cells with ties and rests, we can create any rhythm possible!",
+        "By combining these 12 shapes with ties and rests, we can create any rhythm!",
         "There are two main types of these 12 shapes, those with 4 counts, and those with 3 counts, sometimes called triplets.",
         "There are eight 4-count shapes, and four 3-count shapes. For now we will focus on the eight 4-count shapes.",
         "Let's take a look at them..."
@@ -27,7 +28,10 @@ public class BatteryTutorial_Dialogue : Dialogue
         var battery = _battery;
 
         var lines = new Line[battery.Length];
-        for (var i = 0; i < lines.Length; i++) lines[i] = new Line(battery[i]);
+        for (var i = 0; i < lines.Length; i++)
+            lines[i] = new Line(battery[i])
+                .SetSpeakerName(AL)
+                .SetSpeakerIcon(((FacialExpression)Random.Range(0, 9)).Sprites());
 
         lines[^1].SetResponses(new[]
         {

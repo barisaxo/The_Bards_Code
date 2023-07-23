@@ -25,6 +25,7 @@ namespace Audio
             _numOfAudioSources = numOfAudioSources;
             _name = name;
         }
+
         public virtual GameObject Parent
         {
             get
@@ -33,6 +34,7 @@ namespace Audio
                 return _parent != null ? _parent : _parent = new GameObject(_name);
             }
         }
+
         public virtual bool Muted
         {
             get => _muted;
@@ -42,6 +44,7 @@ namespace Audio
                 CurrentVolumeLevel = value ? 0 : VolumeLevelSetting;
             }
         }
+
         public virtual bool Loop
         {
             get => _loop;
@@ -51,6 +54,7 @@ namespace Audio
                 foreach (var a in AudioSources) a.loop = value;
             }
         }
+
         public virtual float VolumeLevelSetting
         {
             get => _volumeLevelSetting;
@@ -60,6 +64,7 @@ namespace Audio
                 CurrentVolumeLevel = value;
             }
         }
+
         public float CurrentVolumeLevel
         {
             get => _currentVolumeLevel;
@@ -67,13 +72,15 @@ namespace Audio
             {
                 _currentVolumeLevel = value;
 
-                if (_audioSources != null)
-                    foreach (var a in AudioSources)
-                        a.volume = value;
+                if (_audioSources == null) return;
+                foreach (var a in AudioSources)
+                    a.volume = value;
             }
         }
+
         protected double NextEventTime { get; set; }
-        public virtual AudioClipSettings? AudioClipSettings { get; set; }
+        public virtual AudioClipSettings AudioClipSettings { get; set; }
+
         public virtual AudioSource[] AudioSources
         {
             get
@@ -98,19 +105,26 @@ namespace Audio
                 }
             }
         }
+
         public virtual void ResetCues()
         {
             NextEventTime = AudioSettings.dspTime + .5D;
             _cuedAudioSource = 0;
             _cuedAudioClip = 0;
         }
+
         public virtual void Play(bool isSerial)
         {
             _ = Parent;
             CurrentVolumeLevel = 0f;
             ResetCues();
             Running = true;
-            if (isSerial) SerialAudioClipsUpdateLoop().StartCoroutine();
+            if (isSerial)
+            {
+                SerialAudioClipsUpdateLoop().StartCoroutine();
+                return;
+            }
+
             foreach (var a in AudioSources) a.Play();
             PlayAndFadeIn().StartCoroutine();
 
@@ -129,10 +143,12 @@ namespace Audio
                 }
             }
         }
+
         public virtual void Stop()
         {
             FadeOutAndStop().StartCoroutine();
         }
+
         private IEnumerator FadeOutAndStop()
         {
             while (CurrentVolumeLevel > .2f)
@@ -146,6 +162,7 @@ namespace Audio
             Running = false;
             Destruct();
         }
+
         private IEnumerator SerialAudioClipsUpdateLoop()
         {
             while (Running)
@@ -170,6 +187,7 @@ namespace Audio
                 yield return null;
             }
         }
+
         private void Destruct()
         {
             _audioSources = null;
@@ -178,11 +196,12 @@ namespace Audio
         }
     }
 
+
     public class AudioClipSettings
     {
+        public AudioClip[] AudioClips;
+        public float BeatsPerAudioClip;
         public float BPM;
         public float[] StartTimes;
-        public float BeatsPerAudioClip;
-        public AudioClip[] AudioClips;
     }
 }

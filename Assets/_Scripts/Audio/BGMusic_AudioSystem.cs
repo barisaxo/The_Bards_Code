@@ -13,10 +13,10 @@ public sealed class BGMusic_AudioSystem : AudioSystem
         foreach (var a in AudioSources)
             a.clip = Random.Range(1, 5) switch
             {
-                //2 => Assets.BGMus2,
-                //3 => Assets.BGMus3,
-                //4 => Assets.BGMus4,
-                //_ => Assets.BGMus1,
+                2 => Assets.BGMus2,
+                3 => Assets.BGMus3,
+                4 => Assets.BGMus4,
+                _ => Assets.BGMus1
             };
     }
 
@@ -25,11 +25,11 @@ public sealed class BGMusic_AudioSystem : AudioSystem
         foreach (var a in AudioSources)
             a.clip = a.clip switch
             {
-                //_ when a.clip == Assets.BGMus1 => Random.value < .5f ? Assets.BGMus2 : Assets.BGMus3,
-                //_ when a.clip == Assets.BGMus2 => Random.value < .5f ? Assets.BGMus4 : Assets.BGMus3,
-                //_ when a.clip == Assets.BGMus3 => Random.value < .5f ? Assets.BGMus4 : Assets.BGMus1,
-                //_ when a.clip == Assets.BGMus4 => Random.value < .5f ? Assets.BGMus2 : Assets.BGMus1,
-                //_ => Assets.BGMus1,
+                _ when a.clip == Assets.BGMus1 => Random.value < .5f ? Assets.BGMus2 : Assets.BGMus3,
+                _ when a.clip == Assets.BGMus2 => Random.value < .5f ? Assets.BGMus4 : Assets.BGMus3,
+                _ when a.clip == Assets.BGMus3 => Random.value < .5f ? Assets.BGMus4 : Assets.BGMus1,
+                _ when a.clip == Assets.BGMus4 => Random.value < .5f ? Assets.BGMus2 : Assets.BGMus1,
+                _ => Assets.BGMus1
             };
     }
 
@@ -55,12 +55,12 @@ public sealed class BGMusic_AudioSystem : AudioSystem
 
     public void Resume()
     {
-        //    CurrentVolumeLevel = CurrentVolumeLevel;
-        //    foreach (AudioSource a in AudioSources) { if (a.isPlaying) return; }
-
+        CurrentVolumeLevel = CurrentVolumeLevel;
+        foreach (var a in AudioSources)
+            if (a.isPlaying)
+                return;
 
         FadeInAndResume().StartCoroutine();
-        ;
 
         IEnumerator FadeInAndResume()
         {

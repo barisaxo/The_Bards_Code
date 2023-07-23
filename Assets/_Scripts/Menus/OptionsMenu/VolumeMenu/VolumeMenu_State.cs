@@ -92,16 +92,16 @@ public class VolumeMenu_State : State
     {
         Data.Volume.IncreaseLevel(item.Item);
         item.Card.SetTextString(item.Item.DisplayData(Data.Volume));
+        Audio.BGMusic.VolumeLevelSetting = Data.Volume.GetScaledLevel(VolumeData.DataItem.BGMusic);
+        Audio.SFX.VolumeLevelSetting = Data.Volume.GetScaledLevel(VolumeData.DataItem.SoundFX);
     }
 
     private void UpdateMenu()
     {
-        // if (Options.Selection == OptionsMenu.OptionsItem.Controls)
-        // {
-        //     SetStateDirectly(new ShowControls_State(ConsequentState));
-        // }
-        // else
-        if (Options.Selection == OptionsMenu.OptionsItem.GamePlay)
+        if (Options.Selection == OptionsMenu.OptionsItem.Controls)
+            SetStateDirectly(new ShowControls_State(ConsequentState));
+
+        else if (Options.Selection == OptionsMenu.OptionsItem.GamePlay)
             SetStateDirectly(new GamePlayMenu_State(ConsequentState));
     }
 }

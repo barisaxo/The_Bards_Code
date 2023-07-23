@@ -24,6 +24,7 @@ public class BackButton
         .SetImageSprite(Assets.SouthButton)
         .SetTextColor(new Color(1, 1, 1, .65f))
         .AutoSizeFont(true)
+        .AllowWordWrap(false)
         .SetTextAlignment(TextAlignmentOptions.Center)
         .SetFontScale(.5f, .5f);
 }

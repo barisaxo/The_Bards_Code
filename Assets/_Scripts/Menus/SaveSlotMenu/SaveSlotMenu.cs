@@ -4,7 +4,7 @@ public class SaveSlotMenu : Menu<SaveSlotMenu.SaveSlotItem, SaveSlotMenu>
 {
     private BackButton _back;
 
-    public SaveSlotMenu() : base(nameof(SaveSlotMenu))
+    public SaveSlotMenu(GameplayData data) : base(nameof(SaveSlotMenu))
     {
     }
 

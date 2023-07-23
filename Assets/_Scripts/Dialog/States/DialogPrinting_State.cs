@@ -60,7 +60,7 @@ public class DialogPrinting_State : State
 
         Audio.SFX.StopClip();
         if (Dialog.LetType) Dialog.LetType = false;
-        
+
         if (!waitingForInput) return;
 
         if (Dialog.HasNextLine())
@@ -72,7 +72,6 @@ public class DialogPrinting_State : State
 
         if (Dialog.HasNextState())
         {
-            Debug.Log("Dialog.HasOutcome");
             SetStateDirectly(new EndDialog_State(Dialog, Dialog.CurrentLine.NextState, Dialog.CurrentLine.FadeOut));
             return;
         }
@@ -96,7 +95,6 @@ public class DialogPrinting_State : State
         Audio.SFX.StopClip();
         if (Dialog.HasResponses())
         {
-            Debug.Log("Dialog.HasResponses");
             SetStateDirectly(new DialogResponse_State(Dialog, SubsequentState));
             return;
         }

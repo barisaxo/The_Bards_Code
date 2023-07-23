@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class BootStrap_State : State
 {
-    private BootStrap_State() { }
+    private BootStrap_State()
+    {
+    }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Initialize()
@@ -15,11 +17,14 @@ public class BootStrap_State : State
     protected override void PrepareState(Action callback)
     {
         _ = Cam.Io;
+        //Audio.BGMusic.Play(false);
         callback();
     }
 
     protected override void EngageState()
     {
-        SetStateDirectly(new MainMenu_State());
+        //SetStateDirectly(new MainMenu_State());
+
+        SetStateDirectly(new TestMusicSheet_State());
     }
 }
