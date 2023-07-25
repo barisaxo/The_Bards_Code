@@ -12,7 +12,8 @@ namespace SheetMusic
         }
 
         public RhythmSpecs RhythmSpecs;
-        public RhythmCell[][] Measures;
+        //public RhythmCell[][] Measures;
+        public Measure[] Measures;
         public List<Note> Notes;
 
         public List<MappedBeat> BeatMap;
@@ -22,7 +23,7 @@ namespace SheetMusic
 
         public Card[] ScribedStaves;
         public Card[] ScribedNotes;
-        public Card[] Counts;
+        public Card[] ScribedCounts;
 
         private Card _bg;
         private Card BG => _bg ??= new Card(nameof(BG), Parent)

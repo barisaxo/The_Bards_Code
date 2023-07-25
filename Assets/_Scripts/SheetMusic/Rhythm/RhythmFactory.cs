@@ -1,78 +1,100 @@
-
+using UnityEngine;
 namespace SheetMusic.Rhythms
 {
     public static class RhythmFactory
     {
-        public static RhythmCell[][] CreateRandomEmptyCells(this RhythmSpecs specs)
+        public static RhythmCell[][] CreateRandomEmptyCells(this MusicSheet ms)
         {
-            RhythmCell[][] measures = new RhythmCell[specs.NumberOfMeasures][];
+            RhythmCell[][] measures = new RhythmCell[ms.RhythmSpecs.NumberOfMeasures][];
 
-            for (int i = 0; i < measures.Length; i++)
+            for (int m = 0; m < measures.Length; m++)
             {
-                switch (specs.MetricLevel)
-                {//this is assuming 4/4
-                    case MetricLevel.Beat:
-                        switch (specs.Meter)
-                        {
-                            case BeatDivisor.Simple:
-                                switch (specs.TimeSignature.Quantity)
-                                {
-                                    //case 
-                                };
+                measures[m] = new RhythmCell[AssignRandomCellCount()];
 
-                                break;
-                        };
-                        break;
-
-                    case MetricLevel.Division1:
-                        if (specs.RhythmOptions.Contains(RhythmOption.SomeTrips))
-                        {
-                            measures[i] = new RhythmCell[UnityEngine.Random.Range(1, 5)];
-                            break;
-                        }
-                        if (specs.RhythmOptions.Contains(RhythmOption.TripsOnly))
-                        {
-                            measures[i] = new RhythmCell[4];
-                            break;
-                        }
-                        measures[i] = new RhythmCell[2];
-                        break;
-
-                    //case SubDivisionTier.QuartersAndEighths:
-                    //    if (specs.RhythmOptions.Contains(RhythmOption.SomeTrips))
-                    //    {
-                    //        measures[i] = new RhythmCell[UnityEngine.Random.Range(1, 5)];
-                    //        break;
-                    //    }
-                    //    if (specs.RhythmOptions.Contains(RhythmOption.TripsOnly))
-                    //    {
-                    //        measures[i] = new RhythmCell[UnityEngine.Random.Range(2, 5)];
-                    //        break;
-                    //    }
-                    //    measures[i] = new RhythmCell[UnityEngine.Random.Range(1, 3)];
-                    //    break;
-
-                    //case SubDivisionTier.EighthsAndSixteenths:
-                    //    if (specs.RhythmOptions.Contains(RhythmOption.TripsOnly))
-                    //    {
-                    //        measures[i] = new RhythmCell[4];
-                    //        break;
-                    //    }
-                    //    measures[i] = new RhythmCell[UnityEngine.Random.Range(2, 5)];
-                    //    break;
-
-                    case MetricLevel.Division2:
-                        measures[i] = new RhythmCell[4];
-                        break;
-                };
-
-                for (int ii = 0; ii < measures[i].Length; ii++)
-                {
-                    measures[i][ii] = new RhythmCell();
-                }
             }
 
+
             return measures;
+            int AssignRandomCellCount()
+            {
+                int i = ms.RhythmSpecs.Meter switch
+                {
+                    _ when ms.RhythmSpecs.Meter == Meter.SimpleDuple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            MetricLevel.Beat => 1,
+                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                            _ => Random.Range(3, 5),
+                        },
+                    _ when ms.RhythmSpecs.Meter == Meter.SimpleTriple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            MetricLevel.Beat => 1,
+                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                            _ => Random.Range(2, 5),
+                        },
+                    _ when ms.RhythmSpecs.Meter == Meter.SimpleQuadruple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            MetricLevel.Beat => 1,
+                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                            _ => Random.Range(2, 5),
+                        },
+
+                    _ when ms.RhythmSpecs.Meter == Meter.CompoundDuple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            _ => 2,
+                        },
+                    _ when ms.RhythmSpecs.Meter == Meter.CompoundTriple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            MetricLevel.Beat => 1,
+                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                            _ => Random.Range(2, 5),
+                        },
+                    _ when ms.RhythmSpecs.Meter == Meter.CompoundQuadruple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            MetricLevel.Beat => 1,
+                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                            _ => Random.Range(2, 5),
+                        },
+
+
+                    _ when ms.RhythmSpecs.Meter == Meter.IrregularDupleTriple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            MetricLevel.Beat => 1,
+                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                            _ => Random.Range(2, 5),
+                        },
+                    _ when ms.RhythmSpecs.Meter == Meter.IrregularQuadrupleTriple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            MetricLevel.Beat => 1,
+                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                            _ => Random.Range(2, 5),
+                        },
+                    _ when ms.RhythmSpecs.Meter == Meter.IrregularTripleDuple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            MetricLevel.Beat => 1,
+                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                            _ => Random.Range(2, 5),
+                        },
+                    _ when ms.RhythmSpecs.Meter == Meter.IrregularTripleQadruple =>
+                        ms.RhythmSpecs.SmallestMetricLevel switch
+                        {
+                            MetricLevel.Beat => 1,
+                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                            _ => Random.Range(2, 5),
+                        },
+
+                    _ => 0
+                };
+                return i;
+            }
         }
 
         public static void AssignRandomCellSubDivisions(this RhythmCell[][] measures, RhythmSpecs specs)
@@ -274,7 +296,7 @@ namespace SheetMusic.Rhythms
             {
                 for (int ii = 0; ii < measures[i].Length; ii++)
                 {
-                    measures[i][ii].RhythmicShape = measures[i][ii].Quantizement switch
+                    measures[i][ii].Shape = measures[i][ii].Quantizement switch
                     {
                         Quantizement.QuarterTrips => RandomTrips(),
 
@@ -304,29 +326,29 @@ namespace SheetMusic.Rhythms
                 {
                     case 1:
                         if (i == measures.Length - 1) { break; }//Last bar
-                        measures[i][0].Tied = RulesCheckAndRandomChance(i);
+                        measures[i][0].TiedTo = RulesCheckAndRandomChance(i);
                         break;
 
                     case 2:
-                        if (measures[i][0].RhythmicShape == CellShape.LL) break;
-                        measures[i][0].Tied = RulesCheckAndRandomChance(i);
+                        if (measures[i][0].Shape == CellShape.LL) break;
+                        measures[i][0].TiedTo = RulesCheckAndRandomChance(i);
                         if (i == measures.Length - 1) break; //Last bar
-                        measures[i][1].Tied = RulesCheckAndRandomChance(i);
+                        measures[i][1].TiedTo = RulesCheckAndRandomChance(i);
                         break;
 
                     case 3:
-                        measures[i][0].Tied = measures[i][0].LongCell && RulesCheckAndRandomChance(i);//if this cell is short, it cannot tie
-                        measures[i][1].Tied = !measures[i][0].LongCell && RulesCheckAndRandomChance(i);//if the first cell is long, this cannot tie
+                        measures[i][0].TiedTo = measures[i][0].LongCell && RulesCheckAndRandomChance(i);//if this cell is short, it cannot tie
+                        measures[i][1].TiedTo = !measures[i][0].LongCell && RulesCheckAndRandomChance(i);//if the first cell is long, this cannot tie
                         if (i == measures.Length - 1) { break; }//Last bar
-                        measures[i][2].Tied = RulesCheckAndRandomChance(i);
+                        measures[i][2].TiedTo = RulesCheckAndRandomChance(i);
                         break;
 
                     case 4:
-                        measures[i][0].Tied = RulesCheckAndRandomChance(i);
-                        measures[i][1].Tied = RulesCheckAndRandomChance(i);
-                        measures[i][2].Tied = RulesCheckAndRandomChance(i);
+                        measures[i][0].TiedTo = RulesCheckAndRandomChance(i);
+                        measures[i][1].TiedTo = RulesCheckAndRandomChance(i);
+                        measures[i][2].TiedTo = RulesCheckAndRandomChance(i);
                         if (i == measures.Length - 1) { break; }//Last bar
-                        measures[i][3].Tied = RulesCheckAndRandomChance(i);
+                        measures[i][3].TiedTo = RulesCheckAndRandomChance(i);
                         break;
                 }
             }
@@ -335,9 +357,9 @@ namespace SheetMusic.Rhythms
             {
                 //don't tie half note to half note.
                 if (measures[i][0].Quantizement == Quantizement.Eighth &&
-                    measures[i][0].RhythmicShape == CellShape.L &&
+                    measures[i][0].Shape == CellShape.L &&
                     measures[i][1].Quantizement == Quantizement.Eighth &&
-                    measures[i][1].RhythmicShape == CellShape.L)
+                    measures[i][1].Shape == CellShape.L)
                 {
                     return false;
                 }
@@ -353,10 +375,10 @@ namespace SheetMusic.Rhythms
             {
                 for (int ii = 0; ii < measures[i].Length; ii++)
                 {
-                    if (measures[i].Length == 1 && measures[i][ii].Tied) continue;//whole note check
-                    if (ii == 0 && i > 0 && measures[i - 1][^1].Tied) continue;//previous measure check
-                    if (ii > 0 && measures[i][ii - 1].Tied) continue;//previous cell check
-                    if (measures[i][ii].RhythmicShape != CellShape.L)//no long cell rests; having problems with ties to rests, this is an easy fix, hopefully
+                    if (measures[i].Length == 1 && measures[i][ii].TiedTo) continue;//whole note check
+                    if (ii == 0 && i > 0 && measures[i - 1][^1].TiedTo) continue;//previous measure check
+                    if (ii > 0 && measures[i][ii - 1].TiedTo) continue;//previous cell check
+                    if (measures[i][ii].Shape != CellShape.L)//no long cell rests; having problems with ties to rests, this is an easy fix, hopefully
                     {
                         measures[i][ii].Rest = UnityEngine.Random.value < .4f;
                     }
@@ -364,282 +386,282 @@ namespace SheetMusic.Rhythms
             }
         }
 
-        public static void AssignRhythmicNoteValues(this MusicSheet ms)
-        {
-            for (int m = 0; m < ms.Measures.Length; m++)
-            {
-                AssignCellRhythmicNoteValues(m);
-            }
+        //public static void AssignRhythmicNoteValues(this MusicSheet ms)
+        //{
+        //    for (int m = 0; m < ms.Measures.Length; m++)
+        //    {
+        //        AssignCellRhythmicNoteValues(m);
+        //    }
 
-            void AssignCellRhythmicNoteValues(int m)
-            {
-                for (int c = 0; c < ms.Measures[m].Length; c++)
-                {
-                    switch (ms.Measures[m][c].RhythmicShape)
-                    {
-                        case CellShape.L:
-                            ms.Notes.Add(new Note(
-                                 rest: ms.Measures[m][c].Rest,
-                                 tied: ms.Measures[m][c].Tied,
-                                 trip: false,
-                                 parentCell: ms.Measures[m][c],
-                                 beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                 rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Whole, ms.Measures[m][c].Quantizement)
-                                 ));
-                            break;
+        //    void AssignCellRhythmicNoteValues(int m)
+        //    {
+        //        for (int c = 0; c < ms.Measures[m].Length; c++)
+        //        {
+        //            switch (ms.Measures[m][c].Shape)
+        //            {
+        //                case CellShape.L:
+        //                    ms.Notes.Add(new Note(
+        //                         rest: ms.Measures[m][c].Rest,
+        //                         tied: ms.Measures[m][c].TiedTo,
+        //                         trip: false,
+        //                         parentCell: ms.Measures[m][c],
+        //                         beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                         rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Whole, ms.Measures[m][c].Quantizement)
+        //                         ));
+        //                    break;
 
 
-                        case CellShape.LS:
-                            ms.Notes.Add(new Note(
-                                rest: ms.Measures[m][c].Rest,
-                                tied: false,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.DotHalf, ms.Measures[m][c].Quantizement)
-                                ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: ms.Measures[m][c].Tied,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.For, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            break;
+        //                case CellShape.LS:
+        //                    ms.Notes.Add(new Note(
+        //                        rest: ms.Measures[m][c].Rest,
+        //                        tied: false,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.DotHalf, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: ms.Measures[m][c].TiedTo,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.For, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    break;
 
-                        case CellShape.LL:
-                            ms.Notes.Add(new Note(
-                                rest: ms.Measures[m][c].Rest,
-                                tied: false,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
-                                ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: ms.Measures[m][c].Tied,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
-                                ));
-                            break;
+        //                case CellShape.LL:
+        //                    ms.Notes.Add(new Note(
+        //                        rest: ms.Measures[m][c].Rest,
+        //                        tied: false,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: ms.Measures[m][c].TiedTo,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    break;
 
-                        case CellShape.SL:
-                            ms.Notes.Add(new Note(
-                                rest: ms.Measures[m][c].Rest,
-                                tied: false,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: ms.Measures[m][c].Tied,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.DotHalf, ms.Measures[m][c].Quantizement)
-                                ));
-                            break;
+        //                case CellShape.SL:
+        //                    ms.Notes.Add(new Note(
+        //                        rest: ms.Measures[m][c].Rest,
+        //                        tied: false,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: ms.Measures[m][c].TiedTo,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.DotHalf, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    break;
 
-                        case CellShape.LSS:
-                            ms.Notes.Add(new Note(
-                                rest: ms.Measures[m][c].Rest,
-                                tied: false,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
-                                ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: false,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: ms.Measures[m][c].Tied,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.For, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            break;
+        //                case CellShape.LSS:
+        //                    ms.Notes.Add(new Note(
+        //                        rest: ms.Measures[m][c].Rest,
+        //                        tied: false,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: false,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: ms.Measures[m][c].TiedTo,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.For, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    break;
 
-                        case CellShape.SLS:
-                            ms.Notes.Add(new Note(
-                                rest: ms.Measures[m][c].Rest,
-                                tied: false,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: false,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
-                                ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: ms.Measures[m][c].Tied,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.For, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            break;
+        //                case CellShape.SLS:
+        //                    ms.Notes.Add(new Note(
+        //                        rest: ms.Measures[m][c].Rest,
+        //                        tied: false,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: false,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: ms.Measures[m][c].TiedTo,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.For, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    break;
 
-                        case CellShape.SSL:
-                            ms.Notes.Add(new Note(
-                                  rest: ms.Measures[m][c].Rest,
-                                  tied: false,
-                                  trip: false,
-                                  parentCell: ms.Measures[m][c],
-                                  beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                  rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                  ));
-                            ms.Notes.Add(new Note(
-                                 rest: false,
-                                 tied: false,
-                                 trip: false,
-                                 parentCell: ms.Measures[m][c],
-                                 beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
-                                 rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                 ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: ms.Measures[m][c].Tied,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
-                                ));
-                            break;
+        //                case CellShape.SSL:
+        //                    ms.Notes.Add(new Note(
+        //                          rest: ms.Measures[m][c].Rest,
+        //                          tied: false,
+        //                          trip: false,
+        //                          parentCell: ms.Measures[m][c],
+        //                          beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                          rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                          ));
+        //                    ms.Notes.Add(new Note(
+        //                         rest: false,
+        //                         tied: false,
+        //                         trip: false,
+        //                         parentCell: ms.Measures[m][c],
+        //                         beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
+        //                         rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                         ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: ms.Measures[m][c].TiedTo,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Half, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    break;
 
-                        case CellShape.SSSS:
-                            ms.Notes.Add(new Note(
-                                 rest: ms.Measures[m][c].Rest,
-                                 tied: false,
-                                 trip: false,
-                                 parentCell: ms.Measures[m][c],
-                                 beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                 rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                 ));
-                            ms.Notes.Add(new Note(
-                                 rest: false,
-                                 tied: false,
-                                 trip: false,
-                                 parentCell: ms.Measures[m][c],
-                                 beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
-                                 rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                 ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: false,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            ms.Notes.Add(new Note(
-                                 rest: false,
-                                 tied: ms.Measures[m][c].Tied,
-                                 trip: false,
-                                 parentCell: ms.Measures[m][c],
-                                 beatLocation: GetBeatLocation(m, c, CellPosition.For, ms.Measures),
-                                 rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
-                                 ));
-                            break;
+        //                case CellShape.SSSS:
+        //                    ms.Notes.Add(new Note(
+        //                         rest: ms.Measures[m][c].Rest,
+        //                         tied: false,
+        //                         trip: false,
+        //                         parentCell: ms.Measures[m][c],
+        //                         beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                         rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                         ));
+        //                    ms.Notes.Add(new Note(
+        //                         rest: false,
+        //                         tied: false,
+        //                         trip: false,
+        //                         parentCell: ms.Measures[m][c],
+        //                         beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
+        //                         rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                         ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: false,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    ms.Notes.Add(new Note(
+        //                         rest: false,
+        //                         tied: ms.Measures[m][c].TiedTo,
+        //                         trip: false,
+        //                         parentCell: ms.Measures[m][c],
+        //                         beatLocation: GetBeatLocation(m, c, CellPosition.For, ms.Measures),
+        //                         rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.Quarter, ms.Measures[m][c].Quantizement)
+        //                         ));
+        //                    break;
 
-                        case CellShape.TLS:
-                            ms.Notes.Add(new Note(
-                                rest: ms.Measures[m][c].Rest,
-                                tied: false,
-                                trip: false,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripHalf, ms.Measures[m][c].Quantizement)
-                             ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: ms.Measures[m][c].Tied,
-                                trip: true,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            break;
+        //                case CellShape.TLS:
+        //                    ms.Notes.Add(new Note(
+        //                        rest: ms.Measures[m][c].Rest,
+        //                        tied: false,
+        //                        trip: false,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripHalf, ms.Measures[m][c].Quantizement)
+        //                     ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: ms.Measures[m][c].TiedTo,
+        //                        trip: true,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    break;
 
-                        case CellShape.TSL:
-                            ms.Notes.Add(new Note(
-                                rest: ms.Measures[m][c].Rest,
-                                tied: false,
-                                trip: true,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: ms.Measures[m][c].Tied,
-                                trip: true,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripHalf, ms.Measures[m][c].Quantizement)
-                                ));
-                            break;
+        //                case CellShape.TSL:
+        //                    ms.Notes.Add(new Note(
+        //                        rest: ms.Measures[m][c].Rest,
+        //                        tied: false,
+        //                        trip: true,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: ms.Measures[m][c].TiedTo,
+        //                        trip: true,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripHalf, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    break;
 
-                        case CellShape.TSSS:
-                            ms.Notes.Add(new Note(
-                                 rest: ms.Measures[m][c].Rest,
-                                 tied: false,
-                                 trip: true,
-                                 parentCell: ms.Measures[m][c],
-                                 beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                 rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
-                                 ));
-                            ms.Notes.Add(new Note(
-                                 rest: false,
-                                 tied: false,
-                                 trip: true,
-                                 parentCell: ms.Measures[m][c],
-                                 beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
-                                 rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
-                                 ));
-                            ms.Notes.Add(new Note(
-                                rest: false,
-                                tied: ms.Measures[m][c].Tied,
-                                trip: true,
-                                parentCell: ms.Measures[m][c],
-                                beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
-                                rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
-                                ));
-                            break;
+        //                case CellShape.TSSS:
+        //                    ms.Notes.Add(new Note(
+        //                         rest: ms.Measures[m][c].Rest,
+        //                         tied: false,
+        //                         trip: true,
+        //                         parentCell: ms.Measures[m][c],
+        //                         beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                         rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
+        //                         ));
+        //                    ms.Notes.Add(new Note(
+        //                         rest: false,
+        //                         tied: false,
+        //                         trip: true,
+        //                         parentCell: ms.Measures[m][c],
+        //                         beatLocation: GetBeatLocation(m, c, CellPosition.Two, ms.Measures),
+        //                         rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
+        //                         ));
+        //                    ms.Notes.Add(new Note(
+        //                        rest: false,
+        //                        tied: ms.Measures[m][c].TiedTo,
+        //                        trip: true,
+        //                        parentCell: ms.Measures[m][c],
+        //                        beatLocation: GetBeatLocation(m, c, CellPosition.Thr, ms.Measures),
+        //                        rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripQuarter, ms.Measures[m][c].Quantizement)
+        //                        ));
+        //                    break;
 
-                        case CellShape.TL:
-                            ms.Notes.Add(new Note(
-                                 rest: ms.Measures[m][c].Rest,
-                                 tied: ms.Measures[m][c].Tied,
-                                 trip: true,
-                                 parentCell: ms.Measures[m][c],
-                                 beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
-                                 rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripWhole, ms.Measures[m][c].Quantizement)
-                                 )); break;
-                    }
-                }
-            }
-        }
+        //                case CellShape.TL:
+        //                    ms.Notes.Add(new Note(
+        //                         rest: ms.Measures[m][c].Rest,
+        //                         tied: ms.Measures[m][c].TiedTo,
+        //                         trip: true,
+        //                         parentCell: ms.Measures[m][c],
+        //                         beatLocation: GetBeatLocation(m, c, CellPosition.One, ms.Measures),
+        //                         rhythmicNoteValue: QuantizedRhythmicNoteValue(RhythmicValue.TripWhole, ms.Measures[m][c].Quantizement)
+        //                         )); break;
+        //            }
+        //        }
+        //    }
+        //}
 
         private static RhythmicValue QuantizedRhythmicNoteValue(RhythmicValue nv, Quantizement q) => (nv, q) switch
         {

@@ -1,18 +1,22 @@
 
 namespace SheetMusic.Rhythms
 {
-    public struct RhythmCell
+    public class RhythmCell
     {
         public bool Rest;
-        public bool Tied;
+        public bool TiedTo;
+        public bool TiedFrom;
         public bool LongCell;
-        public CellShape RhythmicShape;
+        public CellShape Shape;
+        public MetricLevel MetricLevel;
         public Quantizement Quantizement;
 
         public RhythmCell SetRest(bool tf) { Rest = tf; return this; }
-        public RhythmCell SetTied(bool tf) { Tied = tf; return this; }
+        public RhythmCell SetTiedTo(bool tf) { TiedTo = tf; return this; }
+        public RhythmCell SetTiedFrom(bool tf) { TiedFrom = tf; return this; }
         public RhythmCell SetLongCell(bool tf) { LongCell = tf; return this; }
-        public RhythmCell SetRhythmicShape(CellShape shape) { RhythmicShape = shape; return this; }
+        public RhythmCell SetRhythmicShape(CellShape shape) { Shape = shape; return this; }
+        public RhythmCell SetMetricLevel(MetricLevel level) { MetricLevel = level; return this; }
         public RhythmCell SetQuantizement(Quantizement quantizement) { Quantizement = quantizement; return this; }
     }
 }
