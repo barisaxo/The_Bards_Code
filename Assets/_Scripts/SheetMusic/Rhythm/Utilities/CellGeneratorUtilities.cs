@@ -3,6 +3,11 @@ namespace SheetMusic.Rhythms
 {
     public static class CellGeneratorUtilities
     {
+        public static CellShape RandomDupleCell(this Time _) => Random.value > .5f ? CellShape.L : CellShape.LL;
+        public static CellShape RandomQuadCell(this Time _) => (CellShape)Random.Range(0, 8);
+        public static CellShape RandomTripCellNoTL(this Time _) => (CellShape)Random.Range(8, 11);
+        public static CellShape RandomTripCell(this Time _) => (CellShape)Random.Range(8, 12);
+
         public static RhythmCell PreviousCellOrDefault(this MusicSheet ms, int m, int c)
         {
             if (c == 0)
