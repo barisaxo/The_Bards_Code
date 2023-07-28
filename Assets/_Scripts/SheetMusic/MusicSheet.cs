@@ -10,7 +10,7 @@ namespace SheetMusic
         {
             Object.Destroy(_parent.gameObject);
         }
-
+        //public IGenerateRhythmCells TimeSignature;
         public RhythmSpecs RhythmSpecs;
         //public RhythmCell[][] Measures;
         public Measure[] Measures;

@@ -17,83 +17,179 @@ namespace SheetMusic.Rhythms
             return measures;
             int AssignRandomCellCount()
             {
-                int i = ms.RhythmSpecs.Meter switch
+
+                int i = 0;
+                i = ms.RhythmSpecs.Time switch
                 {
-                    _ when ms.RhythmSpecs.Meter == Meter.SimpleDuple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
+                    _ when ms.RhythmSpecs.Time.Signature == TimeSignature.TwoTwo =>
+                        ms.RhythmSpecs.SubDivisionTier switch
                         {
-                            MetricLevel.Beat => 1,
-                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
-                            _ => Random.Range(3, 5),
-                        },
-                    _ when ms.RhythmSpecs.Meter == Meter.SimpleTriple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
-                        {
-                            MetricLevel.Beat => 1,
-                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
-                            _ => Random.Range(2, 5),
-                        },
-                    _ when ms.RhythmSpecs.Meter == Meter.SimpleQuadruple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
-                        {
-                            MetricLevel.Beat => 1,
-                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
-                            _ => Random.Range(2, 5),
+                            SubDivisionTier.BeatAndD1 => ms.RhythmSpecs.HasTriplets ? Random.Range(1, 5) : Random.Range(1, 3),
+                            SubDivisionTier.D1Only => ms.RhythmSpecs.HasTriplets ? Random.Range(1, 5) : 2,
+                            SubDivisionTier.D1AndD2 => Random.Range(2, 5),
+                            SubDivisionTier.D2Only => 4,
+                            _ => 1,
                         },
 
-                    _ when ms.RhythmSpecs.Meter == Meter.CompoundDuple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
-                        {
-                            _ => 2,
-                        },
-                    _ when ms.RhythmSpecs.Meter == Meter.CompoundTriple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
-                        {
-                            MetricLevel.Beat => 1,
-                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
-                            _ => Random.Range(2, 5),
-                        },
-                    _ when ms.RhythmSpecs.Meter == Meter.CompoundQuadruple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
-                        {
-                            MetricLevel.Beat => 1,
-                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
-                            _ => Random.Range(2, 5),
-                        },
-
-
-                    _ when ms.RhythmSpecs.Meter == Meter.IrregularDupleTriple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
-                        {
-                            MetricLevel.Beat => 1,
-                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
-                            _ => Random.Range(2, 5),
-                        },
-                    _ when ms.RhythmSpecs.Meter == Meter.IrregularQuadrupleTriple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
-                        {
-                            MetricLevel.Beat => 1,
-                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
-                            _ => Random.Range(2, 5),
-                        },
-                    _ when ms.RhythmSpecs.Meter == Meter.IrregularTripleDuple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
-                        {
-                            MetricLevel.Beat => 1,
-                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
-                            _ => Random.Range(2, 5),
-                        },
-                    _ when ms.RhythmSpecs.Meter == Meter.IrregularTripleQadruple =>
-                        ms.RhythmSpecs.SmallestMetricLevel switch
-                        {
-                            MetricLevel.Beat => 1,
-                            MetricLevel.Division1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
-                            _ => Random.Range(2, 5),
-                        },
+                    _ when ms.RhythmSpecs.Time.Signature == TimeSignature.ThreeTwo =>
+                   ms.RhythmSpecs.SubDivisionTier switch
+                   {
+                       SubDivisionTier.BeatAndD1 => ms.RhythmSpecs.HasTriplets ? Random.Range(1, 5) : Random.Range(1, 3),
+                       SubDivisionTier.D1Only => ms.RhythmSpecs.HasTriplets ? Random.Range(1, 5) : 2,
+                       SubDivisionTier.D1AndD2 => Random.Range(2, 5),
+                       SubDivisionTier.D2Only => 4,
+                       _ => 1,
+                   },
 
                     _ => 0
                 };
                 return i;
+                //int x = 0;
+                //x += ms.RhythmSpecs.Meter switch
+                //{
+                //    _ when ms.RhythmSpecs.Meter == Meter.SimpleDuple => 1,// 2/*
+                //    _ when ms.RhythmSpecs.Meter == Meter.SimpleTriple => 1,// 3/*
+                //    _ when ms.RhythmSpecs.Meter == Meter.SimpleQuadruple => 1,// 4/*
+
+                //    _ when ms.RhythmSpecs.Meter == Meter.CompoundDuple => 2,// 6/*
+                //    _ when ms.RhythmSpecs.Meter == Meter.CompoundTriple => 3,// 9/*
+                //    _ when ms.RhythmSpecs.Meter == Meter.CompoundQuadruple => 4,// 12/*
+
+                //    _ when ms.RhythmSpecs.Meter == Meter.IrregularDupleTriple => 2,// 2+3/*
+                //    _ when ms.RhythmSpecs.Meter == Meter.IrregularTripleDuple => 2,// 3+2/*
+                //    _ when ms.RhythmSpecs.Meter == Meter.IrregularQuadrupleTriple => 2,// 4+3/*
+                //    _ when ms.RhythmSpecs.Meter == Meter.IrregularTripleQuadruple => 2,// 3+4/*
+                //    _ => 0,
+                //};
+
+                //x *= ms.RhythmSpecs.Meter.Pulses[0] switch
+                //{
+                //    PulseStress.Duple => ms.RhythmSpecs.SmallestMetricLevel switch
+                //    {
+                //        MetricLevel.Beat => 1,
+                //        MetricLevel.D1 => 2,
+                //    },
+                //};
+
+                //return x;
+
+                //(int min, int max) cellCount = ms.RhythmSpecs.Meter switch
+                //{
+                //    _ when ms.RhythmSpecs.Meter == Meter.SimpleDuple =>
+                //         ms.RhythmSpecs.SmallestMetricLevel switch
+                //         {
+                //             MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? (2, 4) :
+                //                ms.RhythmSpecs.SubDivisionTier == SubDivisionTier.BeatAndD1 ? (1, 2) : (2, 2),
+                //             MetricLevel.D2 => ms.RhythmSpecs.SubDivisionTier == SubDivisionTier.D2Only ? (4, 4) : (2, 4),
+                //             _ => (1, 1),
+                //         },
+
+                //    _ when ms.RhythmSpecs.Meter == Meter.SimpleTriple =>
+                //    ms.RhythmSpecs.SmallestMetricLevel switch
+                //    {
+                //        MetricLevel.D1 => ms.RhythmSpecs.SubDivisionTier == SubDivisionTier.BeatAndD1 ? (1, 3) : (3, 3),
+                //        MetricLevel.D2 => ms.RhythmSpecs.SubDivisionTier == SubDivisionTier.D2Only ? (4, 4) : (2, 4),
+                //        _ => (1, 1),
+                //    },
+
+
+                //    _ when ms.RhythmSpecs.Meter == Meter.SimpleQuadruple =>
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? (2, 4) :
+                //               ms.RhythmSpecs.SubDivisionTier == SubDivisionTier.BeatAndD1 ? (1, 2) : (2, 2),
+                //            MetricLevel.D2 => ms.RhythmSpecs.SubDivisionTier == SubDivisionTier.D2Only ? (4, 4) : (2, 4),
+                //            _ => (1, 1),
+                //        },
+
+                //    _ when ms.RhythmSpecs.Meter == Meter.CompoundDuple =>// 6/*
+                //   ms.RhythmSpecs.SmallestMetricLevel switch
+                //   {
+                //       MetricLevel.Beat => (2, 2),
+                //       MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 6,
+                //       _ => Random.Range(2, 5),
+                //   },
+                //};
+
+                //int i = ms.RhythmSpecs.Meter switch
+                //{
+                //    _ when ms.RhythmSpecs.Meter == Meter.SimpleDuple => // 2/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 1,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(3, 5),
+                //        },
+                //    _ when ms.RhythmSpecs.Meter == Meter.SimpleTriple => // 3/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 1,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(2, 5),
+                //        },
+                //    _ when ms.RhythmSpecs.Meter == Meter.SimpleQuadruple => // 4/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 1,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(2, 5),
+                //        },
+
+                //    _ when ms.RhythmSpecs.Meter == Meter.CompoundDuple =>// 6/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 2,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(2, 5),
+                //        },
+                //    _ when ms.RhythmSpecs.Meter == Meter.CompoundTriple => // 9/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 1,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(2, 5),
+                //        },
+                //    _ when ms.RhythmSpecs.Meter == Meter.CompoundQuadruple => // 12/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 4,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(2, 5),
+                //        },
+
+
+                //    _ when ms.RhythmSpecs.Meter == Meter.IrregularDupleTriple => // 2+3/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 1,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(2, 5),
+                //        },
+                //    _ when ms.RhythmSpecs.Meter == Meter.IrregularQuadrupleTriple => // 4+3/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 1,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(2, 5),
+                //        },
+                //    _ when ms.RhythmSpecs.Meter == Meter.IrregularTripleDuple => // 3+2/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 1,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(2, 5),
+                //        },
+                //    _ when ms.RhythmSpecs.Meter == Meter.IrregularTripleQuadruple => // 3+4/*
+                //        ms.RhythmSpecs.SmallestMetricLevel switch
+                //        {
+                //            MetricLevel.Beat => 1,
+                //            MetricLevel.D1 => ms.RhythmSpecs.HasTriplets ? Random.Range(2, 5) : 2,
+                //            _ => Random.Range(2, 5),
+                //        },
+
+                //    _ => 0
+                //};
+                //return i;
             }
         }
 
@@ -128,7 +224,7 @@ namespace SheetMusic.Rhythms
 
             void DoubleCellMeasure(int i)
             {
-                if (specs.SubDivisionTier == SubDivisionTier.QuartersOnly)//trips only implied
+                if (specs.SubDivisionTier == SubDivisionTier.BeatOnly)//trips only implied
                 {
                     measures[i][0].Quantizement = Quantizement.QuarterTrips;
                     measures[i][1].Quantizement = Quantizement.QuarterTrips;
@@ -151,7 +247,7 @@ namespace SheetMusic.Rhythms
             {
                 switch (specs.SubDivisionTier)
                 {
-                    case SubDivisionTier.QuartersAndEighths:
+                    case SubDivisionTier.BeatAndD1:
                         if (specs.RhythmOptions.Contains(RhythmOption.SomeTrips))
                         {
                             switch (UnityEngine.Random.value < .5f)
@@ -194,7 +290,7 @@ namespace SheetMusic.Rhythms
                         }
                         break;
 
-                    case SubDivisionTier.EighthsAndSixteenths:
+                    case SubDivisionTier.D1AndD2:
                         if (specs.RhythmOptions.Contains(RhythmOption.SomeTrips))
                         {
                             switch (UnityEngine.Random.value < .5f)
@@ -240,7 +336,7 @@ namespace SheetMusic.Rhythms
                         }
                         break;
 
-                    case SubDivisionTier.EighthsOnly://Some trips is implied
+                    case SubDivisionTier.D1Only://Some trips is implied
                         switch (UnityEngine.Random.value < .5f)
                         {
                             case true://long short short
@@ -263,8 +359,8 @@ namespace SheetMusic.Rhythms
 
             void QuadCellMeasure(int i)
             {
-                if (specs.SubDivisionTier == SubDivisionTier.EighthsOnly ||
-                     specs.SubDivisionTier == SubDivisionTier.QuartersAndEighths ||
+                if (specs.SubDivisionTier == SubDivisionTier.D1Only ||
+                     specs.SubDivisionTier == SubDivisionTier.BeatAndD1 ||
                      specs.RhythmOptions.Contains(RhythmOption.TripsOnly))
                 {
                     for (int ii = 0; ii < 4; ii++)

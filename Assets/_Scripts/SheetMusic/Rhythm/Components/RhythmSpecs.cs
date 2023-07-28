@@ -6,7 +6,8 @@ namespace SheetMusic.Rhythms
     {
         public float Tempo = 80;
         public int NumberOfMeasures = 4;
-        public TimeSignature TimeSignature = TimeSignature.FourFour;
+        //public TimeSignature TimeSignature = TimeSignature.FourFour;
+        public Time Time;
         public Meter Meter = Meter.SimpleQuadruple;
         public MetricLevel SmallestMetricLevel = MetricLevel.Beat;
 
@@ -14,12 +15,12 @@ namespace SheetMusic.Rhythms
         public bool HasRests;
         public bool HasTriplets;
 
-        public SubDivisionTier SubDivisionTier = SubDivisionTier.QuartersOnly;
+        public SubDivisionTier SubDivisionTier = SubDivisionTier.BeatOnly;
         public List<RhythmOption> RhythmOptions = new();
 
         public RhythmSpecs SetTempo(float tempo) { Tempo = tempo; return this; }
         public RhythmSpecs SetNumberOfMeasures(int numberOfMeasures) { NumberOfMeasures = numberOfMeasures; return this; }
-        public RhythmSpecs SetTimeSignature(TimeSignature timeSignature) { TimeSignature = timeSignature; return this; }
+        //public RhythmSpecs SetTimeSignature(TimeSignature timeSignature) { TimeSignature = timeSignature; return this; }
         public RhythmSpecs SetSubDivision(SubDivisionTier tier) { SubDivisionTier = tier; return this; }
         public RhythmSpecs SetMeter(Meter meter) { Meter = meter; return this; }
         public RhythmSpecs SetMetricLevel(MetricLevel level) { SmallestMetricLevel = level; return this; }

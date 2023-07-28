@@ -874,8 +874,8 @@ namespace SheetMusic
         {
             Vector3 pos = Vector3.zero;
             pos += MeasurePos(bl.MeasureNumber);
-            pos += CountPos(bl.Count, ms.RhythmSpecs.TimeSignature.Quantity);
-            pos += SubBeatPos(bl.SubBeatAssignment, ms.RhythmSpecs.TimeSignature.Quantity);
+            pos += CountPos(bl.Count, ms.RhythmSpecs.Time.Signature.Quantity);
+            pos += SubBeatPos(bl.SubBeatAssignment, ms.RhythmSpecs.Time.Signature.Quantity);
             return pos;
         }
 
@@ -950,7 +950,7 @@ namespace SheetMusic
 
         private static void SetUpCounts(this MusicSheet ms, SubBeatAssignment[] beats)
         {
-            ms.Counts = new Card[beats.Length];
+            ms.ScribedCounts = new Card[beats.Length];
 
             for (int i = 0; i < ms.Measures.Length; i++)
             {
@@ -959,7 +959,7 @@ namespace SheetMusic
                 for (int ii = 0; ii < beats.Length; ii++)
                 {
                     if (beats[c] == SubBeatAssignment.D) count++;
-                    ms.Counts[c] = new Card(nameof(Count) + ": " + count + beats[c].ToString(), ms.Parent)
+                    ms.ScribedCounts[c] = new Card(nameof(Count) + ": " + count + beats[c].ToString(), ms.Parent)
                         .SetTextString(beats[c] == SubBeatAssignment.D ? count.ToString() : beats[c].ToString())
                         .SetTMPPosition(ms.NotePosition(new BeatLocation() { Count = (Count)count, MeasureNumber = (MeasureNumber)i + 1, SubBeatAssignment = beats[c] }))
                         .SetFontScale(.4f, .4f);
@@ -976,30 +976,30 @@ namespace SheetMusic
             {
                 switch (ms.RhythmSpecs.SubDivisionTier)
                 {
-                    case SubDivisionTier.QuartersOnly:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.BeatOnly:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                         };
                         break;
 
-                    case SubDivisionTier.QuartersAndEighths:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.BeatAndD1:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                             beats.Add(SubBeatAssignment.N);
                         };
                         break;
 
-                    case SubDivisionTier.EighthsOnly:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.D1Only:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                             beats.Add(SubBeatAssignment.N);
                         };
                         break;
-                    case SubDivisionTier.EighthsAndSixteenths:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.D1AndD2:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                             beats.Add(SubBeatAssignment.E);
@@ -1007,8 +1007,8 @@ namespace SheetMusic
                             beats.Add(SubBeatAssignment.A);
                         };
                         break;
-                    case SubDivisionTier.SixteenthsOnly:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.D2Only:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                             beats.Add(SubBeatAssignment.E);
@@ -1023,15 +1023,15 @@ namespace SheetMusic
             {
                 switch (ms.RhythmSpecs.SubDivisionTier)
                 {
-                    case SubDivisionTier.QuartersOnly:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.BeatOnly:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                         };
                         break;
 
-                    case SubDivisionTier.QuartersAndEighths:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.BeatAndD1:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                             beats.Add(SubBeatAssignment.T);
@@ -1040,8 +1040,8 @@ namespace SheetMusic
                         };
                         break;
 
-                    case SubDivisionTier.EighthsOnly:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.D1Only:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                             beats.Add(SubBeatAssignment.T);
@@ -1056,15 +1056,15 @@ namespace SheetMusic
             {
                 switch (ms.RhythmSpecs.SubDivisionTier)
                 {
-                    case SubDivisionTier.QuartersOnly:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.BeatOnly:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                         };
                         break;
 
-                    case SubDivisionTier.QuartersAndEighths:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.BeatAndD1:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                             beats.Add(SubBeatAssignment.T);
@@ -1072,8 +1072,8 @@ namespace SheetMusic
                         };
                         break;
 
-                    case SubDivisionTier.EighthsOnly:
-                        for (int i = 0; i < (int)ms.RhythmSpecs.TimeSignature.Quantity; i++)
+                    case SubDivisionTier.D1Only:
+                        for (int i = 0; i < (int)ms.RhythmSpecs.Time.Signature.Quantity; i++)
                         {
                             beats.Add(SubBeatAssignment.D);
                             beats.Add(SubBeatAssignment.T);
