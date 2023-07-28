@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using UnityEngine;
+
 namespace SheetMusic.Rhythms
 {
     //Whole note = 240 / BPM
@@ -79,42 +79,6 @@ namespace SheetMusic.Rhythms
         public SubBeatAssignment SubBeatAssignment;
     }
 
-    public struct TimeSignature
-    {
-        public Count Quantity;
-        public SubCount Quality;
-        public Meter Meter;
-        public RhythmicValue BeatLevelValue;
-
-        public static TimeSignature TwoTwo => new() { Quantity = Count.Two, Quality = SubCount.Two, Meter = Meter.SimpleDuple, BeatLevelValue = RhythmicValue.Half };
-        public static TimeSignature ThreeTwo => new() { Quantity = Count.Thr, Quality = SubCount.Two, Meter = Meter.SimpleTriple, BeatLevelValue = RhythmicValue.Half };
-
-        public static TimeSignature TwoFour => new() { Quantity = Count.Two, Quality = SubCount.For, Meter = Meter.SimpleDuple, BeatLevelValue = RhythmicValue.Quarter };
-        public static TimeSignature ThreeFour => new() { Quantity = Count.Thr, Quality = SubCount.For, Meter = Meter.SimpleTriple, BeatLevelValue = RhythmicValue.Quarter };
-        public static TimeSignature FourFour => new() { Quantity = Count.For, Quality = SubCount.For, Meter = Meter.SimpleQuadruple, BeatLevelValue = RhythmicValue.Quarter };
-
-        public static TimeSignature FiveFour23 => new() { Quantity = Count.Fiv, Quality = SubCount.For, Meter = Meter.IrregularDupleTriple, BeatLevelValue = RhythmicValue.Quarter };
-        public static TimeSignature FiveFour32 => new() { Quantity = Count.Fiv, Quality = SubCount.For, Meter = Meter.IrregularTripleDuple, BeatLevelValue = RhythmicValue.Quarter };
-
-        public static TimeSignature SixFour => new() { Quantity = Count.Six, Quality = SubCount.For, Meter = Meter.CompoundDuple, BeatLevelValue = RhythmicValue.DotHalf };
-        public static TimeSignature SevenFour43 => new() { Quantity = Count.Sev, Quality = SubCount.For, Meter = Meter.IrregularQuadrupleTriple, BeatLevelValue = RhythmicValue.Quarter };
-        public static TimeSignature SevenFour34 => new() { Quantity = Count.Sev, Quality = SubCount.For, Meter = Meter.IrregularTripleDuple, BeatLevelValue = RhythmicValue.Quarter };
-
-        public static TimeSignature ThreeEight => new() { Quantity = Count.Thr, Quality = SubCount.Eht, Meter = Meter.SimpleTriple, BeatLevelValue = RhythmicValue.Eighth };
-        public static TimeSignature FiveEight23 => new() { Quantity = Count.Fiv, Quality = SubCount.Eht, Meter = Meter.IrregularDupleTriple, BeatLevelValue = RhythmicValue.Eighth };
-        public static TimeSignature FiveEight32 => new() { Quantity = Count.Fiv, Quality = SubCount.Eht, Meter = Meter.IrregularTripleDuple, BeatLevelValue = RhythmicValue.Eighth };
-        public static TimeSignature SixEight => new() { Quantity = Count.Six, Quality = SubCount.Eht, Meter = Meter.CompoundDuple, BeatLevelValue = RhythmicValue.DotQuarter };
-        public static TimeSignature SevenEight43 => new() { Quantity = Count.Sev, Quality = SubCount.Eht, Meter = Meter.IrregularQuadrupleTriple, BeatLevelValue = RhythmicValue.Eighth };
-        public static TimeSignature SevenEight34 => new() { Quantity = Count.Sev, Quality = SubCount.Eht, Meter = Meter.IrregularQuadrupleTriple, BeatLevelValue = RhythmicValue.Eighth };
-        public static TimeSignature NineEight => new() { Quantity = Count.Nin, Quality = SubCount.Eht, Meter = Meter.CompoundTriple, BeatLevelValue = RhythmicValue.DotHalf };
-        public static TimeSignature TwelveEight => new() { Quantity = Count.Tlv, Quality = SubCount.Eht, Meter = Meter.CompoundQuadruple, BeatLevelValue = RhythmicValue.DotHalf };
-
-        public static bool operator ==(TimeSignature a, TimeSignature b) => a.Quality == b.Quality && a.Quantity == b.Quantity;
-        public static bool operator !=(TimeSignature a, TimeSignature b) => a.Quality != b.Quality || a.Quantity != b.Quantity;
-        public override readonly bool Equals(object obj) => obj is TimeSignature t && Quality == t.Quality && Quantity == t.Quantity;
-        public override readonly int GetHashCode() => System.HashCode.Combine(Quality, Quantity);
-    }
-
     //unnecessary to define is the 'Multiple Levels' as in the combined beat level eg half & whole notes in 4/4
     //D1 is the fist division level, eg 8th notes in 4/4
     //D1T is triplets at the first division, eg trip 8ths in 4/4
@@ -127,43 +91,6 @@ namespace SheetMusic.Rhythms
     public enum PulseStress { Duple, Triple, Quadruple }
     //Unnecessary to define is the 'Irregular' as it is a combination of simple & compound and is implied as such.
     public enum BeatDivisor { Simple, Compound }
-
-    public struct Meter
-    {
-        public readonly BeatDivisor Divisor => Divisors[0];
-        public readonly PulseStress Pulse => Pulses[0];
-
-        public BeatDivisor[] Divisors;
-        public PulseStress[] Pulses;
-
-        public static Meter SimpleDuple => new() { Divisors = new[] { BeatDivisor.Simple }, Pulses = new[] { PulseStress.Duple } };// 2/2, 2/4, 2/8...
-        public static Meter SimpleTriple => new() { Divisors = new[] { BeatDivisor.Simple, }, Pulses = new[] { PulseStress.Triple } };// 3/2, 3/4, 3/8...
-        public static Meter SimpleQuadruple => new() { Divisors = new[] { BeatDivisor.Simple, }, Pulses = new[] { PulseStress.Quadruple } };// 4/2, 4/4, 4/8...
-
-        public static Meter CompoundDuple => new() { Divisors = new[] { BeatDivisor.Compound, }, Pulses = new[] { PulseStress.Duple } };// 6/2, 6/4, 6/8
-        public static Meter CompoundTriple => new() { Divisors = new[] { BeatDivisor.Compound, }, Pulses = new[] { PulseStress.Triple } };// 9/2, 9/4, 9/8
-        public static Meter CompoundQuadruple => new() { Divisors = new[] { BeatDivisor.Compound, }, Pulses = new[] { PulseStress.Quadruple } };// 12/2, 12/4, 12/8
-
-        public static Meter IrregularDupleTriple => new() { Divisors = new[] { BeatDivisor.Simple, BeatDivisor.Simple }, Pulses = new[] { PulseStress.Duple, PulseStress.Triple } };// 2 + 3
-        public static Meter IrregularTripleDuple => new() { Divisors = new[] { BeatDivisor.Simple, BeatDivisor.Simple }, Pulses = new[] { PulseStress.Triple, PulseStress.Duple } };// 3 + 2
-        public static Meter IrregularQuadrupleTriple => new() { Divisors = new[] { BeatDivisor.Simple, BeatDivisor.Simple }, Pulses = new[] { PulseStress.Quadruple, PulseStress.Triple } };// 4 + 3
-        public static Meter IrregularTripleQuadruple => new() { Divisors = new[] { BeatDivisor.Simple, BeatDivisor.Simple }, Pulses = new[] { PulseStress.Triple, PulseStress.Quadruple } };// 3 + 4
-
-        public static bool operator ==(Meter a, Meter b) => a.Divisors == b.Divisors && a.Pulses == b.Pulses;
-        public static bool operator !=(Meter a, Meter b) => a.Divisors != b.Divisors || a.Pulses != b.Pulses;
-        public override readonly bool Equals(object obj) => obj is Meter m && Divisors == m.Divisors && Pulses == m.Pulses;
-        public override readonly int GetHashCode() => System.HashCode.Combine(Divisors, Pulses);
-    }
-
-
-    public struct Measure
-    {
-        public RhythmSpecs Specs;
-        public RhythmCell[] Cells;
-
-        public Measure SetSpecs(RhythmSpecs specs) { Specs = specs; return this; }
-        public Measure SetCells(RhythmCell[] cells) { Cells = cells; return this; }
-    }
 
     public static class RhythmUtilities
     {

@@ -8,10 +8,8 @@ public class TestMusicSheet_State : State
 {
     protected override void PrepareState(Action callback)
     {
-
         MusicSheet ms = new()
         {
-            //Measures = new Measure[4],
             RhythmSpecs = new()
             {
                 Time = new TwoTwo(),
@@ -19,7 +17,6 @@ public class TestMusicSheet_State : State
                 HasTies = true,
                 HasRests = true,
                 NumberOfMeasures = 4,
-
             },
         };
 
@@ -38,7 +35,6 @@ public class TestMusicSheet_State : State
         //ms.RhythmSpecs.AddRhythmOption(RhythmOption.TripsOnly);
 
         //ms.DrawRhythms();
-
         base.PrepareState(callback);
     }
 }

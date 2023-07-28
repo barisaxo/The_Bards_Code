@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SheetMusic.Rhythms
 {
-    public class TwoTwo : Time
+    public class ThreeTwo : Time
     {
-        public TwoTwo() { Signature = TimeSignature.TwoTwo; }
+        public ThreeTwo() { Signature = TimeSignature.ThreeTwo; }
+
         protected override void GetRhythmCells(MusicSheet ms)
         {
             ms.Measures = new Measure[ms.RhythmSpecs.NumberOfMeasures];
@@ -23,6 +24,8 @@ namespace SheetMusic.Rhythms
                         if (Random.value > .5f)
                         {
                             cells.Add(Quarter);
+                            cells.Add(Quarter);
+                            cells.Add(Quarter);
                         }
                         else
                         {
@@ -32,21 +35,18 @@ namespace SheetMusic.Rhythms
 
                     case SubDivisionTier.D1Only:
                         cells.Add(Quarter);
+                        cells.Add(Quarter);
+                        cells.Add(Quarter);
                         break;
 
                     case SubDivisionTier.D1AndD2:
-                        if (Random.value > .5f)
-                        {
-                            cells.Add(Quarter);
-                        }
-                        else
-                        {
-                            cells.Add(Eighth);
-                            cells.Add(Eighth);
-                        }
-
+                        cells.Add(Random.value > .5f ? Quarter : Eighth);
+                        cells.Add(Random.value > .5f ? Quarter : Eighth);
+                        cells.Add(Random.value > .5f ? Quarter : Eighth);
                         break;
+
                     case SubDivisionTier.D2Only:
+                        cells.Add(Eighth);
                         cells.Add(Eighth);
                         cells.Add(Eighth);
                         break;
@@ -54,18 +54,18 @@ namespace SheetMusic.Rhythms
 
                 ms.Measures[m].Cells = cells.ToArray();
             }
-
         }
+
         RhythmCell Half => new RhythmCell()
                             .SetMetricLevel(MetricLevel.Beat)
                             .SetQuantizement(Quantizement.Half)
-                            .SetRhythmicShape(this.RandomDupleCell());
+                            .SetRhythmicShape(this.RandomTripCell());
         RhythmCell Quarter => new RhythmCell()
                                 .SetMetricLevel(MetricLevel.D1)
                                 .SetQuantizement(Quantizement.Quarter)
-                                .SetRhythmicShape(this.RandomQuadCell());
+                                .SetRhythmicShape(this.RandomDupleCell());
         RhythmCell Eighth => new RhythmCell()
-                                .SetMetricLevel(MetricLevel.D2)
+                                .SetMetricLevel(MetricLevel.Beat)
                                 .SetQuantizement(Quantizement.Eighth)
                                 .SetRhythmicShape(this.RandomQuadCell());
     }

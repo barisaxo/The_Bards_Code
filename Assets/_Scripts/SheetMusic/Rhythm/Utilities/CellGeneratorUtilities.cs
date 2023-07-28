@@ -8,6 +8,33 @@ namespace SheetMusic.Rhythms
         public static CellShape RandomTripCellNoTL(this Time _) => (CellShape)Random.Range(8, 11);
         public static CellShape RandomTripCell(this Time _) => (CellShape)Random.Range(8, 12);
 
+        public static void GetRestsAndTies(this MusicSheet ms)
+        {
+            for (int m = 0; m < ms.Measures.Length; m++)
+            {
+                for (int c = 0; c < ms.Measures[m].Cells.Length; c++)
+                {
+                    ms.Measures[m].Cells[c].SetTiedTo(ms.GetTiedTo(m, c));
+                }
+            }
+
+            for (int m = 0; m < ms.Measures.Length; m++)
+            {
+                for (int c = 0; c < ms.Measures[m].Cells.Length; c++)
+                {
+                    ms.Measures[m].Cells[c].SetTiedFrom(ms.GetTiedFrom(m, c));
+                }
+            }
+
+            for (int m = 0; m < ms.Measures.Length; m++)
+            {
+                for (int c = 0; c < ms.Measures[m].Cells.Length; c++)
+                {
+                    ms.Measures[m].Cells[c].SetRest(ms.GetRest(m, c));
+                }
+            }
+        }
+
         public static RhythmCell PreviousCellOrDefault(this MusicSheet ms, int m, int c)
         {
             if (c == 0)
@@ -25,16 +52,10 @@ namespace SheetMusic.Rhythms
         {
             if (!ms.RhythmSpecs.HasTies) return false;
             if (m == ms.Measures.Length - 1 && c == ms.Measures[^1].Cells.Length - 1) return false;//don't tie last cell to nothing
-            if (ms.Measures[m].Cells?.Length == 2 &&
-                c == 0 &&
-                ms.Measures[m].Cells?[0].Quantizement == Quantizement.Eighth &&
+            if (c == 0 &&
+                ms.Measures[m].Cells?.Length == 2 &&
                 ms.Measures[m].Cells?[0].Shape == CellShape.L &&
-                ms.Measures[m].Cells?[1].Quantizement == Quantizement.Eighth &&
-                ms.Measures[m].Cells?[1].Shape == CellShape.L)
-            {
-                return false;//don't tie half note to half note.
-            }
-
+                ms.Measures[m].Cells?[1].Shape == CellShape.L) return false;//don't tie long to long in same measure.
             return Random.value > .666f;
         }
 
