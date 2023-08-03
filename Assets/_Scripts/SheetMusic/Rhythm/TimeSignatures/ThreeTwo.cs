@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SheetMusic.Rhythms
+
+using SheetMusic;
+
+namespace MusicTheory.Rhythms
 {
     public class ThreeTwo : Time
     {
@@ -17,38 +20,38 @@ namespace SheetMusic.Rhythms
                 switch (ms.RhythmSpecs.SubDivisionTier)
                 {
                     case SubDivisionTier.BeatOnly:
-                        cells.Add(Half);
+                        cells.Add(Half.SetCount(1));
                         break;
 
                     case SubDivisionTier.BeatAndD1:
                         if (Random.value > .5f)
                         {
-                            cells.Add(Quarter);
-                            cells.Add(Quarter);
-                            cells.Add(Quarter);
+                            cells.Add(DupQuarter.SetCount(1));
+                            cells.Add(DupQuarter.SetCount(2));
+                            cells.Add(DupQuarter.SetCount(3));
                         }
                         else
                         {
-                            cells.Add(Half);
+                            cells.Add(Half.SetCount(1));
                         }
                         break;
 
                     case SubDivisionTier.D1Only:
-                        cells.Add(Quarter);
-                        cells.Add(Quarter);
-                        cells.Add(Quarter);
+                        cells.Add(DupQuarter.SetCount(1));
+                        cells.Add(DupQuarter.SetCount(2));
+                        cells.Add(DupQuarter.SetCount(3));
                         break;
 
                     case SubDivisionTier.D1AndD2:
-                        cells.Add(Random.value > .5f ? Quarter : Eighth);
-                        cells.Add(Random.value > .5f ? Quarter : Eighth);
-                        cells.Add(Random.value > .5f ? Quarter : Eighth);
+                        cells.Add(Random.value > .5f ? DupQuarter.SetCount(1) : Eighth.SetCount(1));
+                        cells.Add(Random.value > .5f ? DupQuarter.SetCount(2) : Eighth.SetCount(2));
+                        cells.Add(Random.value > .5f ? DupQuarter.SetCount(3) : Eighth.SetCount(3));
                         break;
 
                     case SubDivisionTier.D2Only:
-                        cells.Add(Eighth);
-                        cells.Add(Eighth);
-                        cells.Add(Eighth);
+                        cells.Add(Eighth.SetCount(1));
+                        cells.Add(Eighth.SetCount(2));
+                        cells.Add(Eighth.SetCount(3));
                         break;
                 }
 
@@ -60,7 +63,7 @@ namespace SheetMusic.Rhythms
                             .SetMetricLevel(MetricLevel.Beat)
                             .SetQuantizement(Quantizement.Half)
                             .SetRhythmicShape(this.RandomTripCell());
-        RhythmCell Quarter => new RhythmCell()
+        RhythmCell DupQuarter => new RhythmCell()
                                 .SetMetricLevel(MetricLevel.D1)
                                 .SetQuantizement(Quantizement.Quarter)
                                 .SetRhythmicShape(this.RandomDupleCell());

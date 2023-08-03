@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SheetMusic.Rhythms
+
+using SheetMusic;
+
+namespace MusicTheory.Rhythms
 {
     public class FourFour : Time
     {
@@ -17,41 +20,41 @@ namespace SheetMusic.Rhythms
                 switch (ms.RhythmSpecs.SubDivisionTier)
                 {
                     case SubDivisionTier.BeatOnly:
-                        cells.Add(Quarter);
+                        cells.Add(QuadQuarter.SetCount(1));
                         break;
 
                     case SubDivisionTier.BeatAndD1:
                         switch (Random.Range(1, ms.RhythmSpecs.HasTriplets ? 4 : 3))
                         {
                             case 1:
-                                cells.Add(Quarter);
+                                cells.Add(QuadQuarter.SetCount(1));
                                 break;
 
                             case 2:
-                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripQuarter : Eighth);
-                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripQuarter : Eighth);
+                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripQuarter.SetCount(1) : QuadEighth.SetCount(1));
+                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripQuarter.SetCount(3) : QuadEighth.SetCount(3));
                                 break;
 
                             case 3:
-                                switch (Random.Range(0, 3))
+                                switch (Random.Range(0, 2))
                                 {
                                     case 0:
-                                        cells.Add(TripEighth);
-                                        cells.Add(TripEighth);
-                                        cells.Add(Random.value > .5f ? TripQuarter : Eighth);
+                                        cells.Add(TripEighth.SetCount(1));
+                                        cells.Add(TripEighth.SetCount(2));
+                                        cells.Add(Random.value > .5f ? TripQuarter.SetCount(3) : QuadEighth.SetCount(3));
                                         break;
 
                                     case 1:
-                                        cells.Add(Random.value > .5f ? TripQuarter : Eighth);
-                                        cells.Add(TripEighth);
-                                        cells.Add(TripEighth);
+                                        cells.Add(Random.value > .5f ? TripQuarter.SetCount(1) : QuadEighth.SetCount(1));
+                                        cells.Add(TripEighth.SetCount(3));
+                                        cells.Add(TripEighth.SetCount(4));
                                         break;
 
-                                    case 2:
-                                        cells.Add(TripEighth);
-                                        cells.Add(Random.value > .5f ? TripQuarter : Eighth);
-                                        cells.Add(TripEighth);
-                                        break;
+                                        //case 2:
+                                        //    cells.Add(TripEighth.SetCount(1));
+                                        //    cells.Add(Random.value > .5f ? TripQuarter.SetCount(2) : QuadEighth.SetCount(2));
+                                        //    cells.Add(TripEighth.SetCount(4));
+                                        //    break;
                                 };
                                 break;
                         }
@@ -63,29 +66,29 @@ namespace SheetMusic.Rhythms
                             switch (Random.Range(0, 3))
                             {
                                 case 0:
-                                    cells.Add(TripEighth);
-                                    cells.Add(TripEighth);
-                                    cells.Add(Eighth);
+                                    cells.Add(TripEighth.SetCount(1));
+                                    cells.Add(TripEighth.SetCount(2));
+                                    cells.Add(QuadEighth.SetCount(3));
                                     break;
 
                                 case 1:
-                                    cells.Add(Eighth);
-                                    cells.Add(TripEighth);
-                                    cells.Add(TripEighth);
+                                    cells.Add(QuadEighth.SetCount(1));
+                                    cells.Add(TripEighth.SetCount(3));
+                                    cells.Add(TripEighth.SetCount(4));
                                     break;
 
                                 case 2:
-                                    cells.Add(TripEighth);
-                                    cells.Add(Eighth);
-                                    cells.Add(TripEighth);
+                                    cells.Add(TripEighth.SetCount(1));
+                                    cells.Add(QuadEighth.SetCount(2));
+                                    cells.Add(TripEighth.SetCount(4));
                                     break;
                             };
                             break;
                         }
                         else
                         {
-                            cells.Add(Eighth);
-                            cells.Add(Eighth);
+                            cells.Add(QuadEighth.SetCount(1));
+                            cells.Add(QuadEighth.SetCount(3));
                         }
                         break;
 
@@ -93,40 +96,40 @@ namespace SheetMusic.Rhythms
                         switch (Random.Range(3, 5))
                         {
                             case 3:
-                                switch (Random.Range(0, 3))
+                                switch (Random.Range(0, 2))
                                 {
                                     case 0:
-                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
-                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
-                                        cells.Add(Eighth);
+                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(1) : QuadSixteenth.SetCount(1));
+                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(2) : QuadSixteenth.SetCount(2));
+                                        cells.Add(QuadEighth.SetCount(3));
                                         break;
                                     case 1:
-                                        cells.Add(Eighth);
-                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
-                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
+                                        cells.Add(QuadEighth.SetCount(1));
+                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(3) : QuadSixteenth.SetCount(3));
+                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(4) : QuadSixteenth.SetCount(4));
                                         break;
-                                    case 2:
-                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
-                                        cells.Add(Eighth);
-                                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
-                                        break;
+                                        //case 2:
+                                        //    cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(1) : QuadSixteenth.SetCount(1));
+                                        //    cells.Add(QuadEighth.SetCount(2));
+                                        //    cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(4) : QuadSixteenth.SetCount(4));
+                                        //    break;
                                 };
                                 break;
 
                             case 4:
-                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
-                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
-                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
-                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
+                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(1) : QuadSixteenth.SetCount(1));
+                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(2) : QuadSixteenth.SetCount(2));
+                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(3) : QuadSixteenth.SetCount(3));
+                                cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(4) : QuadSixteenth.SetCount(4));
                                 break;
                         };
                         break;
 
                     case SubDivisionTier.D2Only:
-                        cells.Add(Sixteenth);
-                        cells.Add(Sixteenth);
-                        cells.Add(Sixteenth);
-                        cells.Add(Sixteenth);
+                        cells.Add(QuadSixteenth.SetCount(1));
+                        cells.Add(QuadSixteenth.SetCount(2));
+                        cells.Add(QuadSixteenth.SetCount(3));
+                        cells.Add(QuadSixteenth.SetCount(4));
                         break;
                 }
 
@@ -134,7 +137,7 @@ namespace SheetMusic.Rhythms
             }
         }
 
-        RhythmCell Quarter => new RhythmCell()
+        RhythmCell QuadQuarter => new RhythmCell()
                                     .SetMetricLevel(MetricLevel.Beat)
                                     .SetQuantizement(Quantizement.Quarter)
                                     .SetRhythmicShape(this.RandomQuadCell());
@@ -142,7 +145,7 @@ namespace SheetMusic.Rhythms
                                     .SetMetricLevel(MetricLevel.BeatT)
                                     .SetQuantizement(Quantizement.QuarterTrips)
                                     .SetRhythmicShape(this.RandomTripCellNoTL());
-        RhythmCell Eighth => new RhythmCell()
+        RhythmCell QuadEighth => new RhythmCell()
                                     .SetMetricLevel(MetricLevel.D1)
                                     .SetQuantizement(Quantizement.Eighth)
                                     .SetRhythmicShape(this.RandomQuadCell());
@@ -150,7 +153,7 @@ namespace SheetMusic.Rhythms
                                     .SetMetricLevel(MetricLevel.D1T)
                                     .SetQuantizement(Quantizement.EighthTrips)
                                     .SetRhythmicShape(this.RandomTripCellNoTL());
-        RhythmCell Sixteenth => new RhythmCell()
+        RhythmCell QuadSixteenth => new RhythmCell()
                                     .SetMetricLevel(MetricLevel.D2)
                                     .SetQuantizement(Quantizement.Sixteenth)
                                     .SetRhythmicShape(this.RandomQuadCell());

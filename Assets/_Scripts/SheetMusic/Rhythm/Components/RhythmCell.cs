@@ -1,5 +1,5 @@
 
-namespace SheetMusic.Rhythms
+namespace MusicTheory.Rhythms
 {
     public class RhythmCell
     {
@@ -10,6 +10,7 @@ namespace SheetMusic.Rhythms
         public CellShape Shape;
         public MetricLevel MetricLevel;
         public Quantizement Quantizement;
+        public Count Count;
 
         public RhythmCell SetRest(bool tf) { Rest = tf; return this; }
         public RhythmCell SetTiedTo(bool tf) { TiedTo = tf; return this; }
@@ -18,5 +19,8 @@ namespace SheetMusic.Rhythms
         public RhythmCell SetRhythmicShape(CellShape shape) { Shape = shape; return this; }
         public RhythmCell SetMetricLevel(MetricLevel level) { MetricLevel = level; return this; }
         public RhythmCell SetQuantizement(Quantizement quantizement) { Quantizement = quantizement; return this; }
+
+        public RhythmCell SetCount(Count c) { Count = c; return this; }
+        public RhythmCell SetCount(int c) { Count = (Count)c; return this; }
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SheetMusic.Rhythms
+namespace MusicTheory.Rhythms
 {
     //Whole note = 240 / BPM
     //Half note = 120 / BPM
@@ -38,29 +38,16 @@ namespace SheetMusic.Rhythms
     //    //||1 . . e . . + . . a . . 2 . . e . . + . . a . . 3 . . e . . + . . a . . 4 . . e . . + . . a . . |SIXTEENTH
 
 
-    public enum Count { One = 1, Two = 2, Thr = 3, For = 4, Fiv = 5, Six = 6, Sev = 7, Eht = 8, Nin = 9, Ten = 10, Elv = 11, Tlv = 12 }
-    public enum SubCount { One = 1, Two = 2, For = 4, Eht = 8 }
-    public enum SubBeatAssignment
-    {
-        D = 1, E = 4, T = 5, N = 7, L = 9, A = 10
-        //Down   e      tup    +      let    a
 
-        //pass    the  god  damn  but-ter
-        //|1  .  .  e  T  .  +  .  L  a  .  . 
-        //|1  2  3  4  5  6  7  8  9  10 11 12 
-    }
     public enum Quantizement { Half, Quarter, QuarterTrips, Eighth, EighthTrips, Sixteenth }
-
 
     // Rhythm Cell Shapes:
     // Duple has 2 shapes: L & LL(or SS relatively)
     // Triple has 4 shapes: TL, TLS, TSL, TSSS
     // Quadruple has 8 shapes: L, LL, SL, LSS, SSL, SLS, SSSS.
     // The first two quadruple cells are not unqiue as they overlap with the duple cells.
-    public enum CellShape { L, LL, LS, SL, LSS, SSL, SLS, SSSS, TLS, TSL, TSSS, TL, }
+    public enum CellShape { L, LL, LS, SL, LSS, SSL, SLS, SSSS, TLS, TSL, TSSS, TL, DLL, DL }
 
-
-    public enum CellPosition { One = 1, Two = 2, Thr = 3, For = 4 }
     public enum RhythmicValue
     {
         Whole = 48, Half = 24, Quarter = 12, Eighth = 6, Sixteenth = 3,
@@ -71,13 +58,6 @@ namespace SheetMusic.Rhythms
     public enum SubDivisionTier { BeatOnly, BeatAndD1, D1Only, D1AndD2, D2Only, }
     public enum NoteFunction { Attack, Hold, Rest, Ignore }
     public enum MeasureNumber { One = 1, Two = 2, Thr = 3, For = 4 }
-
-    public struct BeatLocation
-    {
-        public MeasureNumber MeasureNumber;
-        public Count Count;
-        public SubBeatAssignment SubBeatAssignment;
-    }
 
     //unnecessary to define is the 'Multiple Levels' as in the combined beat level eg half & whole notes in 4/4
     //D1 is the fist division level, eg 8th notes in 4/4
@@ -91,6 +71,25 @@ namespace SheetMusic.Rhythms
     public enum PulseStress { Duple, Triple, Quadruple }
     //Unnecessary to define is the 'Irregular' as it is a combination of simple & compound and is implied as such.
     public enum BeatDivisor { Simple, Compound }
+
+
+    public struct BeatLocation
+    {
+        public MeasureNumber MeasureNumber;
+        public Count Count;
+        public SubBeatAssignment SubBeatAssignment;
+    }
+    public enum Count { One = 1, Two = 2, Thr = 3, For = 4, Fiv = 5, Six = 6, Sev = 7, Eht = 8, Nin = 9, Ten = 10, Elv = 11, Tlv = 12 }
+    public enum SubCount { One = 1, Two = 2, For = 4, Eht = 8 }
+    public enum SubBeatAssignment
+    {
+        D = 1, E = 4, T = 5, N = 7, L = 9, A = 10
+        //Down   e      tup    +      let    a
+
+        //pass    the  god  damn  but-ter
+        //|1  .  .  e  T  .  +  .  L  a  .  . 
+        //|1  2  3  4  5  6  7  8  9  10 11 12 
+    }
 
     public static class RhythmUtilities
     {
@@ -166,7 +165,8 @@ namespace SheetMusic.Rhythms
 
 
 //public enum CellShape { w, dhq, hh, qdh, hqq, qqh, qhq, qqqq, thq, tqh, tqqq, tw, }
-
+//
+//public enum CellPosition { One = 1, Two = 2, Thr = 3, For = 4 }
 
 //
 //Whole note             = 64 : 240 / BPM

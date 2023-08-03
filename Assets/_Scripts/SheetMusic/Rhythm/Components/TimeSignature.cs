@@ -1,4 +1,4 @@
-﻿namespace SheetMusic.Rhythms
+﻿namespace MusicTheory.Rhythms
 {
     public struct TimeSignature
     {
@@ -13,10 +13,8 @@
         public static TimeSignature TwoFour => new() { Quantity = Count.Two, Quality = SubCount.For, Meter = Meter.SimpleDuple, BeatLevelValue = RhythmicValue.Quarter };
         public static TimeSignature ThreeFour => new() { Quantity = Count.Thr, Quality = SubCount.For, Meter = Meter.SimpleTriple, BeatLevelValue = RhythmicValue.Quarter };
         public static TimeSignature FourFour => new() { Quantity = Count.For, Quality = SubCount.For, Meter = Meter.SimpleQuadruple, BeatLevelValue = RhythmicValue.Quarter };
-
         public static TimeSignature FiveFour23 => new() { Quantity = Count.Fiv, Quality = SubCount.For, Meter = Meter.IrregularDupleTriple, BeatLevelValue = RhythmicValue.Quarter };
         public static TimeSignature FiveFour32 => new() { Quantity = Count.Fiv, Quality = SubCount.For, Meter = Meter.IrregularTripleDuple, BeatLevelValue = RhythmicValue.Quarter };
-
         public static TimeSignature SixFour => new() { Quantity = Count.Six, Quality = SubCount.For, Meter = Meter.CompoundDuple, BeatLevelValue = RhythmicValue.DotHalf };
         public static TimeSignature SevenFour43 => new() { Quantity = Count.Sev, Quality = SubCount.For, Meter = Meter.IrregularQuadrupleTriple, BeatLevelValue = RhythmicValue.Quarter };
         public static TimeSignature SevenFour34 => new() { Quantity = Count.Sev, Quality = SubCount.For, Meter = Meter.IrregularTripleDuple, BeatLevelValue = RhythmicValue.Quarter };
@@ -36,13 +34,6 @@
         public override readonly int GetHashCode() => System.HashCode.Combine(Quality, Quantity);
     }
 }
-
-
-
-
-
-//public enum CellShape { w, dhq, hh, qdh, hqq, qqh, qhq, qqqq, thq, tqh, tqqq, tw, }
-
 
 //
 //Whole note             = 64 : 240 / BPM

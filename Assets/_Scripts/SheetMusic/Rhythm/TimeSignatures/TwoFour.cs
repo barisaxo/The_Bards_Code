@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SheetMusic.Rhythms
+
+using SheetMusic;
+
+namespace MusicTheory.Rhythms
 {
     public class TwoFour : Time
     {
@@ -17,7 +20,7 @@ namespace SheetMusic.Rhythms
                 switch (ms.RhythmSpecs.SubDivisionTier)
                 {
                     case SubDivisionTier.BeatOnly:
-                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripQuarter : Quarter);
+                        cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripQuarter.SetCount(1) : Quarter.SetCount(1));
                         break;
 
                     case SubDivisionTier.BeatAndD1:
@@ -25,47 +28,47 @@ namespace SheetMusic.Rhythms
                         {
                             if (ms.RhythmSpecs.HasTriplets && Random.value > .5f)
                             {
-                                cells.Add(TripEighth);
-                                cells.Add(TripEighth);
+                                cells.Add(TripEighth.SetCount(1));
+                                cells.Add(TripEighth.SetCount(2));
                             }
                             else
                             {
-                                cells.Add(Eighth);
+                                cells.Add(Eighth.SetCount(1));
                             }
                         }
                         else
                         {
-                            cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripQuarter : Quarter);
+                            cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripQuarter.SetCount(1) : Quarter.SetCount(1));
                         }
                         break;
 
                     case SubDivisionTier.D1Only:
                         if (ms.RhythmSpecs.HasTriplets && Random.value > .5f)
                         {
-                            cells.Add(TripEighth);
-                            cells.Add(TripEighth);
+                            cells.Add(TripEighth.SetCount(1));
+                            cells.Add(TripEighth.SetCount(2));
                         }
                         else
                         {
-                            cells.Add(Eighth);
+                            cells.Add(Eighth.SetCount(1));
                         }
                         break;
 
                     case SubDivisionTier.D1AndD2:
                         if (Random.value > .5f)
                         {
-                            cells.Add(Eighth);
+                            cells.Add(Eighth.SetCount(1));
                         }
                         else
                         {
-                            cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
-                            cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth : Sixteenth);
+                            cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(1) : Sixteenth.SetCount(1));
+                            cells.Add(ms.RhythmSpecs.HasTriplets && Random.value > .5f ? TripEighth.SetCount(2) : Sixteenth.SetCount(2));
                         }
                         break;
 
                     case SubDivisionTier.D2Only:
-                        cells.Add(Sixteenth);
-                        cells.Add(Sixteenth);
+                        cells.Add(Sixteenth.SetCount(1));
+                        cells.Add(Sixteenth.SetCount(2));
                         break;
                 }
 

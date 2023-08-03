@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SheetMusic.Rhythms
+
+using SheetMusic;
+
+namespace MusicTheory.Rhythms
 {
     public class FiveFour23 : Time
     {
@@ -17,32 +20,32 @@ namespace SheetMusic.Rhythms
                 switch (ms.RhythmSpecs.SubDivisionTier)
                 {
                     case SubDivisionTier.BeatOnly:
-                        cells.Add(DupQuarter);
+                        cells.Add(DupQuarter.SetCount(1));
 
-                        cells.Add(TripQuarter);
+                        cells.Add(TripQuarter.SetCount(3));
                         break;
 
                     case SubDivisionTier.BeatAndD1:
-                        cells.Add(Random.value > .5f ? DupQuarter : QuadEighth);
+                        cells.Add(Random.value > .5f ? DupQuarter.SetCount(1) : QuadEighth.SetCount(1));
 
                         if (Random.value > .5f)
                         {
-                            cells.Add(TripQuarter);
+                            cells.Add(TripQuarter.SetCount(3));
                         }
                         else
                         {
-                            cells.Add(DupEighth);
-                            cells.Add(DupEighth);
-                            cells.Add(DupEighth);
+                            cells.Add(DupEighth.SetCount(3));
+                            cells.Add(DupEighth.SetCount(4));
+                            cells.Add(DupEighth.SetCount(5));
                         }
                         break;
 
                     case SubDivisionTier.D1Only:
-                        cells.Add(QuadEighth);
+                        cells.Add(QuadEighth.SetCount(1));
 
-                        cells.Add(DupEighth);
-                        cells.Add(DupEighth);
-                        cells.Add(DupEighth);
+                        cells.Add(DupEighth.SetCount(3));
+                        cells.Add(DupEighth.SetCount(4));
+                        cells.Add(DupEighth.SetCount(5));
                         break;
                 }
 

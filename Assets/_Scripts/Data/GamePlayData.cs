@@ -1,4 +1,5 @@
 using MusicTheory;
+using MusicTheory.Rhythms;
 
 public class GameplayData
 {
@@ -17,7 +18,7 @@ public class GameplayData
     public GameDifficulty GameDifficulty = 0;
     public bool MediumModeWon = false;
 
-    public SheetMusic.Rhythms.CellShape RecentCell;
+    public CellShape RecentCell;
 
     public BatteryDifficulty Battery_Difficulty
     {

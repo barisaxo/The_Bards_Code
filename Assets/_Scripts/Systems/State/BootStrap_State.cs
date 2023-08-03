@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class BootStrap_State : State
 {
@@ -17,14 +18,14 @@ public class BootStrap_State : State
     protected override void PrepareState(Action callback)
     {
         _ = Cam.Io;
-        //Audio.BGMusic.Play(false);
+        Audio.BGMusic.Play(isSerial: false);
         callback();
     }
 
     protected override void EngageState()
     {
-        //SetStateDirectly(new MainMenu_State());
+        SetStateDirectly(new MainMenu_State());
 
-        SetStateDirectly(new TestMusicSheet_State());
+        //SetStateDirectly(new TestMusicSheet_State());
     }
 }

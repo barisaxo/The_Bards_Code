@@ -1,6 +1,7 @@
-using SheetMusic.Rhythms;
+
 using UnityEngine;
 using System.Collections.Generic;
+using MusicTheory.Rhythms;
 
 namespace SheetMusic
 {
@@ -10,17 +11,16 @@ namespace SheetMusic
         {
             Object.Destroy(_parent.gameObject);
         }
-        //public IGenerateRhythmCells TimeSignature;
+
         public RhythmSpecs RhythmSpecs;
-        //public RhythmCell[][] Measures;
         public Measure[] Measures;
         public List<Note> Notes;
-
-        public List<MappedBeat> BeatMap;
+        //public List<MappedBeat> BeatMap;
 
         private Transform _parent;
         public Transform Parent => _parent != null ? _parent : _parent = new GameObject(nameof(MusicSheet)).transform;
 
+        public Card TimeSig;
         public Card[] ScribedStaves;
         public Card[] ScribedNotes;
         public Card[] ScribedCounts;

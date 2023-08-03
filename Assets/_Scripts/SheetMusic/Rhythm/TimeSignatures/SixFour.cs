@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SheetMusic.Rhythms
+using SheetMusic;
+
+namespace MusicTheory.Rhythms
 {
     public class SixFour : Time
     {
@@ -19,7 +21,7 @@ namespace SheetMusic.Rhythms
                     case SubDivisionTier.BeatOnly:
                         for (int i = 0; i < 2; i++)
                         {
-                            cells.Add(Quarter);
+                            cells.Add(Quarter.SetCount(1 + (3 * i)));
                         }
                         break;
 
@@ -28,13 +30,13 @@ namespace SheetMusic.Rhythms
                         {
                             if (Random.value > .5f)
                             {
-                                cells.Add(Eighth);
-                                cells.Add(Eighth);
-                                cells.Add(Eighth);
+                                cells.Add(Eighth.SetCount(1 + (3 * i)));
+                                cells.Add(Eighth.SetCount(2 + (3 * i)));
+                                cells.Add(Eighth.SetCount(3 + (3 * i)));
                             }
                             else
                             {
-                                cells.Add(Quarter);
+                                cells.Add(Quarter.SetCount(1 + (3 * i)));
                             }
                         }
                         break;
@@ -42,9 +44,9 @@ namespace SheetMusic.Rhythms
                     case SubDivisionTier.D1Only:
                         for (int i = 0; i < 2; i++)
                         {
-                            cells.Add(Eighth);
-                            cells.Add(Eighth);
-                            cells.Add(Eighth);
+                            cells.Add(Eighth.SetCount(1 + (3 * i)));
+                            cells.Add(Eighth.SetCount(2 + (3 * i)));
+                            cells.Add(Eighth.SetCount(3 + (3 * i)));
                         }
                         break;
                 }

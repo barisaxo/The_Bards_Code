@@ -42,11 +42,11 @@ public static class Assets
 
     #region SHEET MUSIC SPRITES
     public static Sprite Staff => Resources.Load<Sprite>("SheetMusic/Staff");
-    public static Sprite StaffDoubleLeft => Resources.Load<Sprite>("SheetMusic/StaffDoubleLeft");
-    public static Sprite StaffDoubleRight => Resources.Load<Sprite>("SheetMusic/StaffDoubleRight");
+    public static Sprite StaffDoubleLeft => Resources.Load<Sprite>("SheetMusic/Staff");
+    public static Sprite StaffDoubleRight => Resources.Load<Sprite>("SheetMusic/Staff");
 
     public static Sprite Dot => Resources.Load<Sprite>("SheetMusic/Dot");
-    public static Sprite Tie => Resources.Load<Sprite>("SheetMusic/Tie");
+    public static Sprite Tie => Resources.Load<Sprite>("SheetMusic/tie4");
 
     public static Sprite Triplet3 => Resources.Load<Sprite>("SheetMusic/Triplet3");
     public static Sprite TripletBracket => Resources.Load<Sprite>("SheetMusic/TripletBracket");
@@ -59,6 +59,16 @@ public static class Assets
     public static Sprite EighthFlag => Resources.Load<Sprite>("SheetMusic/EighthFlag");
     public static Sprite SixteenthFlag => Resources.Load<Sprite>("SheetMusic/SixteenthFlag");
 
+    public static Sprite EighthBoth => Resources.Load<Sprite>("SheetMusic/8thBoth");
+    public static Sprite SixteenthBoth => Resources.Load<Sprite>("SheetMusic/SixteenthNoteBoth");
+    public static Sprite EighthForward => Resources.Load<Sprite>("SheetMusic/8thNoteForward");
+    public static Sprite EighthReverse => Resources.Load<Sprite>("SheetMusic/8thNoteReversed");
+    public static Sprite SixteenthForward => Resources.Load<Sprite>("SheetMusic/SixteenthForward");
+    public static Sprite SixteenthReverse => Resources.Load<Sprite>("SheetMusic/SixteenthReverse");
+    public static Sprite SixteenthReverseEighthForward => Resources.Load<Sprite>("SheetMusic/SixteenthReverseEighthForward");
+    public static Sprite SixteenthForwardEighthReverse => Resources.Load<Sprite>("SheetMusic/SixteenthForwardEighthReverse");
+    //public static Sprite Eighth_Beam => Resources.Load<Sprite>("SheetMusic/Eighth_Beam");
+    //public static Sprite Sixteenth_Beam => Resources.Load<Sprite>("SheetMusic/Sixteenth_Beam");
     public static Sprite EighthBeam => Resources.Load<Sprite>("SheetMusic/EighthBeam");
     public static Sprite EighthBeamReverse => Resources.Load<Sprite>("SheetMusic/EighthBeamReverse");
     public static Sprite SixteenthBeam => Resources.Load<Sprite>("SheetMusic/SixteenthBeam");

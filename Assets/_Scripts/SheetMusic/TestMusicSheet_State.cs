@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SheetMusic;
-using SheetMusic.Rhythms;
+using MusicTheory.Rhythms;
+
 public class TestMusicSheet_State : State
 {
     protected override void PrepareState(Action callback)
@@ -12,15 +11,17 @@ public class TestMusicSheet_State : State
         {
             RhythmSpecs = new()
             {
-                Time = new TwoTwo(),
-                SubDivisionTier = SubDivisionTier.D1AndD2,
+                Time = new SevenEight34(),
+                NumberOfMeasures = 4,
+                SubDivisionTier = SubDivisionTier.BeatOnly,
                 HasTies = true,
                 HasRests = true,
-                NumberOfMeasures = 4,
+                HasTriplets = false,
             },
         };
 
         ms.RhythmSpecs.Time.GenerateRhythmCells(ms);
+        ms.GetNotes();
 
         for (int m = 0; m < ms.Measures.Length; m++)
         {
@@ -32,9 +33,8 @@ public class TestMusicSheet_State : State
                     ", ties to next cell " + ms.Measures[m].Cells[c].TiedTo);
             }
         }
-        //ms.RhythmSpecs.AddRhythmOption(RhythmOption.TripsOnly);
 
-        //ms.DrawRhythms();
+        ms.DrawRhythms();
         base.PrepareState(callback);
     }
 }

@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace SheetMusic.Rhythms
+
+using SheetMusic;
+
+namespace MusicTheory.Rhythms
 {
     public class SevenFour34 : Time
     {

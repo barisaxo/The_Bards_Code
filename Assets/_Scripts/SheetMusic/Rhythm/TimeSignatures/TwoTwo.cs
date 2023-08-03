@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace SheetMusic.Rhythms
+using SheetMusic;
+
+namespace MusicTheory.Rhythms
 {
     public class TwoTwo : Time
     {
@@ -16,55 +18,52 @@ namespace SheetMusic.Rhythms
                 switch (ms.RhythmSpecs.SubDivisionTier)
                 {
                     case SubDivisionTier.BeatOnly:
-                        cells.Add(Half);
+                        cells.Add(DupHalf.SetCount(1));
                         break;
-
                     case SubDivisionTier.BeatAndD1:
                         if (Random.value > .5f)
                         {
-                            cells.Add(Quarter);
+                            cells.Add(QuadQuarter.SetCount(1));
                         }
                         else
                         {
-                            cells.Add(Half);
+                            cells.Add(DupHalf.SetCount(1));
                         }
                         break;
-
                     case SubDivisionTier.D1Only:
-                        cells.Add(Quarter);
+                        cells.Add(QuadQuarter.SetCount(1));
                         break;
-
                     case SubDivisionTier.D1AndD2:
                         if (Random.value > .5f)
                         {
-                            cells.Add(Quarter);
+                            cells.Add(QuadQuarter.SetCount(1));
                         }
                         else
                         {
-                            cells.Add(Eighth);
-                            cells.Add(Eighth);
+                            cells.Add(QuadEighth.SetCount(1));
+                            cells.Add(QuadEighth.SetCount(2));
                         }
 
                         break;
                     case SubDivisionTier.D2Only:
-                        cells.Add(Eighth);
-                        cells.Add(Eighth);
+                        cells.Add(QuadEighth.SetCount(1));
+                        cells.Add(QuadEighth.SetCount(2));
                         break;
                 }
 
                 ms.Measures[m].Cells = cells.ToArray();
             }
-
         }
-        RhythmCell Half => new RhythmCell()
+
+        RhythmCell DupHalf => new RhythmCell()
                             .SetMetricLevel(MetricLevel.Beat)
                             .SetQuantizement(Quantizement.Half)
                             .SetRhythmicShape(this.RandomDupleCell());
-        RhythmCell Quarter => new RhythmCell()
+        RhythmCell QuadQuarter => new RhythmCell()
                                 .SetMetricLevel(MetricLevel.D1)
                                 .SetQuantizement(Quantizement.Quarter)
                                 .SetRhythmicShape(this.RandomQuadCell());
-        RhythmCell Eighth => new RhythmCell()
+        RhythmCell QuadEighth => new RhythmCell()
                                 .SetMetricLevel(MetricLevel.D2)
                                 .SetQuantizement(Quantizement.Eighth)
                                 .SetRhythmicShape(this.RandomQuadCell());
